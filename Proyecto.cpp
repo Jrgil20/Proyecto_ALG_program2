@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <windows.h>
-
+/*JG,AG,GC*/
 
 typedef struct fecha{
 	int anio;
