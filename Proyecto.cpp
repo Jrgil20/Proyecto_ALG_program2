@@ -640,7 +640,6 @@ void ingCredito(int *credito)
 		fflush(stdin);
 		scanf_s ("%s",&copiacredito);
 		valn=validar_num(copiacredito);
-		/*
 		if ((strlen(copiacredito)<1)||(valn!=0))
 		{
 		
@@ -648,12 +647,11 @@ void ingCredito(int *credito)
 		else 
 			if ((atoi(copiacredito)>1) && (atoi(copiacredito)<6))
 			{
-				*tipo=atoi(copiacredito);
+				*credito=atoi(copiacredito);
 				ver = true;
 			}
 			if (ver==false)
 				printf(" \n OPCION INVALIDA, INGRESE DE NUEVO -> ");
-		*/
 	} while (ver == false);
 	fflush(stdin);
 }
