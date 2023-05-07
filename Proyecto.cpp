@@ -4,7 +4,8 @@
 #include <ctype.h>
 #include <time.h>
 #include <windows.h>
-/*JG,AG,GC*/
+
+const int maxEntero=32767; // maximo numero para un ENTERO
 
 typedef struct fecha{
 	int anio;
@@ -13,17 +14,17 @@ typedef struct fecha{
 } Fecha;
 
 typedef struct materias{
-	int codigomateria;
-	char nombre[30];
+	int codigoMat;
+	char nombreMat[30];
 	char descripcion[100];
-	char semestre[3];
+	char semestre[3]; //DEL 1 AL 10 EN NUMEROS ROMANOS
 	int creditos; //DE 2 A 5
 	materias *prx;
 } Materias;
 
 typedef struct cursos{
 	int codigocurso;
-	materias codigomateria;
+	materias codigoMat;
 	fecha anio; 
 	int lapso; // DE 1 A 3
 	cursos *prx;
@@ -36,14 +37,26 @@ typedef struct personas{
 	char direccion[40];
 	Materias *prx;
 	Cursos *aba;
+	personas *sig;
 } Personas;
 
 //DECLARACION DE FUNCIONES
 
 void introduciropcion(int *opcion);
 int validar_num (char numero[]);
+void AgregaMateria (Materias **p);
+void ingcodigo(int *codigo);
+void ingnombre(char *Matnombre);
+void ingDescripcion(char *Matdescripcion);
+Materias *buscarMateria(Materias *mat, int codigo, char nombre[]);
+void  BloqMayus ( char s[] );
+void ingCredito(int *credito);
 
 int main (){
+	Materias *mat = NULL;
+	Cursos *cur = NULL;
+	Personas *per = NULL;
+
 	int op, aux, aux2;
 	do {
 		printf("\t MENU\n\n");
@@ -80,6 +93,11 @@ int main (){
 										break;
 									//Agregar Materia
 									case 1: printf("\n\tAGREGAR\n\n");
+											AgregaMateria(&mat);
+											fflush(stdin);
+
+											printf("\n\n\tMATERIA AGREGADA CON EXITO!!!\n\n");
+											system("cls");
 											break;
 									//Modificar Materia
 									case 2 : printf("\n\tMODIFICAR\n\n");
@@ -209,7 +227,7 @@ int main (){
 									/*if (personas) {
 									} else printf(" NO EXISTE NINGUNA PERSONA EN EL SISTEMA \n\n");*/
 								break;
-							//Eliminar Materia
+							//Eliminar Persona
 							case 4: printf("\n\tELIMINAR\n\n");
 									/*if (personas)
 									{
@@ -314,4 +332,121 @@ int validar_num (char numero[])	{
 		
 	}
 	return sw;
+}
+
+void AgregaMateria (Materias **mat){
+	Materias *ax;
+	ax = new Materias;
+	fflush(stdin);
+	do{
+		printf(" INTRODUZCA EL CODIGO DE LA MATERIA : ");
+		ingcodigo(&ax->codigoMat);
+		if (buscarMateria(*mat, ax->codigoMat, ax->nombreMat) != NULL) {//Se valida que el codigo de la Materia sea unico
+			printf("\n EL CODIGO INTRODUCIDO YA SE ENCUENTRA EN EL SISTEMA \n");
+			Sleep(1); printf("\n\n");
+		}
+	}	while (buscarMateria(*mat, ax->codigoMat, ax->nombreMat) != NULL);
+	printf("\n");
+	printf (" INTRODUZCA EL NOMBRE DE LA MATERIA [30 CARACTERES]: ");
+	ingnombre(ax->nombreMat);
+	printf (" INTRODUZCA UNA BREVE DESCRIPCION DE LA MATERIA [100 CARACTERES]: ");
+	ingDescripcion(ax->descripcion);
+	fflush(stdin);
+	printf (" INTRODUZCA LAS UNIDADES CREDITO [2-5]: ");
+	ingCredito(&ax->creditos);
+
+	ax->prx = NULL;
+	printf(" %i -- %s -- %s -- %i\n\n", ax->codigoMat , ax->nombreMat, ax->descripcion, ax->creditos);
+	system("pause");
+	if (mat==NULL) {
+		*mat = ax;
+	}else {
+		ax->prx = *mat;
+		*mat = ax;
+	}
+}
+
+
+void ingcodigo(int *codigo){
+	char copia[5];
+	int valn;
+	do{
+		scanf("%s",&copia);
+		valn=validar_num(copia);
+		*codigo=atoi(copia);
+		if((*codigo>=maxEntero)||(*codigo==0)||(valn!=0)){
+			printf("\n EL NUMERO INGRESADO NO ES VALIDO (INGRESE OTRO): ");
+		}
+	}while ((*codigo>=maxEntero)||(*codigo==0)||(valn!=0));
+	fflush(stdin);
+	*codigo=atoi(copia);
+}
+
+/*funcion para validar que el nombre no excede la cantidad de 30 caracteres*/
+void ingnombre(char *Matnombre) {
+	do{
+		fflush(stdin);
+		scanf (" %[^\n]s",&*Matnombre);
+		if (!(strlen(Matnombre)<=30))
+			printf(" LA CADENA DEBE SER MENOR A 30 CARACTERES: ");
+		} while (!(strlen(Matnombre)<=30));
+		BloqMayus(Matnombre);
+		printf  (" \n");
+		fflush(stdin);
+}
+
+/*funcion para validar que la descripcion no excede la cantidad de 100 caracteres*/
+void ingDescripcion(char *Matdescripcion) {
+	do{
+		fflush(stdin);
+		scanf (" %[^\n]s",&*Matdescripcion);
+		if (!(strlen(Matdescripcion)<=100))
+			printf(" LA CADENA DEBE SER MENOR A 100 CARACTERES: ");
+		} while (!(strlen(Matdescripcion)<=100));
+		BloqMayus(Matdescripcion);
+		printf  (" \n");
+		fflush(stdin);
+}
+
+Materias *buscarMateria(Materias *mat, int codigo, char nombre[]) {
+	Materias *temp = mat;
+	for ( ; temp ; temp=temp->prx) {
+		if (codigo == 0) {
+			if (strcmp(temp->nombreMat, nombre)==0) return temp; //Se encontro una materia con el mismo nombre
+		} else {
+			if (temp->codigoMat == codigo)  return temp;	//Se encontro una materia con el mismo codigo
+		}		      
+	}
+	return NULL;
+}
+
+/*Rutina que convierte todas las letras de un string en mayusculas*/
+void  BloqMayus ( char s[] ){
+	int i;
+	for (i = 0; s[i]!='\0'; i++){
+		if(s[i] >= 'a' && s[i] <= 'z')
+			{
+			s[i] = s[i] - 32;
+			}
+	}
+}
+
+/*funcion para validar las unidades credito de la materia*/
+void ingCredito(int *credito){
+	char copiacredito[5];
+	int valn;
+	bool ver = false;
+	do {
+		fflush(stdin);
+		scanf ("%s",&copiacredito);
+		valn=validar_num(copiacredito);
+		if ((strlen(copiacredito)<1)||(valn!=0)) {
+		}	else if ((atoi(copiacredito)>1) && (atoi(copiacredito)<6)){
+			*tipo=atoi(copiacredito);
+			ver = true;
+			}
+			if (ver==false)
+				printf(" \n OPCION INVALIDA, INGRESE DE NUEVO -> ");
+	} while (ver == false);
+		fflush(stdin);
 }
