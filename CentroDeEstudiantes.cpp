@@ -136,16 +136,226 @@ struct Personas
 	Personas *prx;
 };
 
+
 int main ()
 {
-	Personas AlumnoA= {28073553,"J",{2002,8,16},"los teques",NULL};
-	Materias Calculo2={30125,"calculo","Geometria analitica y derivacion","II",5,NULL};
-	Cursos geometria_analitica={1225,Calculo2.Codigo_de_la_Materia,2020,3,NULL};
+	int opciones=0; 
 
-	printf("%i",AlumnoA.Fecha_de_Nacimiento.yyyy);
-	printf("%i",Calculo2.Codigo_de_la_Materia);
-	printf("%i",geometria_analitica.Codigo_de_la_Materia);
+	do
+	{//Menu
+		system("cls");
+		printf("\t MENU\n\n");
+		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n ");
+		scanf_s("%d",&opciones);
+		switch(opciones)
+		{
+			case 1://Mantenimiento del sistema
+			{
+				int opciones_mantenimiento=0; 
+				do
+				{//Menu de Mantenimiento del sistema
+					system("cls");
+					printf("\t Menu de Mantenimiento\n\n");
+					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n ");
+					scanf_s("%d",&opciones_mantenimiento);
+					switch(opciones_mantenimiento)
+					{
+						case 1:
+						{
+							int opciones_mantenimiento_Materias=0; 
+							do
+							{//Menu de Mantenimiento Materias
+								system("cls");
+								printf("\t Menu de mantenimiento de materias\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								scanf_s("%d",&opciones_mantenimiento_Materias);
+								switch(opciones_mantenimiento_Materias)
+									{
+										case 1://Agregar
+											break;
+		
+										case 2://Modificar
+											break;
+
+										case 3://Consultar
+											break;
+
+										case 4://Eliminar
+											break;
+
+										default:
+											if (opciones_mantenimiento_Materias)
+											{
+												printf("\n\nEsta opcion no es valida\n");
+												system("pause");break;
+											}
+									}
+							}while (opciones_mantenimiento_Materias);
+							break;
+						}
+		
+						case 2:
+						{
+							int opciones_mantenimiento_Cursos=0; 
+							do
+							{//Menu de Mantenimiento Cursos
+								system("cls");
+								printf("\t Menu de mantenimiento de cursos\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								scanf_s("%d",&opciones_mantenimiento_Cursos);
+								switch(opciones_mantenimiento_Cursos)
+								{
+									case 1://Agregar
+										break;
+
+									case 2://Modificar
+										break;
+
+									case 3://Consultar
+										break;
+
+									case 4://Eliminar
+										break;
+
+									default:
+										if (opciones_mantenimiento_Cursos)
+										{
+											printf("\n\nEsta opcion no es valida\n");
+											system("pause");break;
+										}
+								}
+							}while (opciones_mantenimiento_Cursos);
+							break;
+						}
+		
+						case 3:
+						{
+							int opciones_mantenimiento_Personas=0; 
+							do
+							{//Menu de Mantenimiento Cursos
+								system("cls");
+								printf("\t Menu de mantenimiento de personas\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								scanf_s("%d",&opciones_mantenimiento_Personas);
+								switch(opciones_mantenimiento_Personas)
+								{
+									case 1://Agregar
+										break;
+
+									case 2://Modificar
+										break;
+
+									case 3://Consultar
+										break;
+
+									case 4://Eliminar personas (sin datos de cursos)
+										break;
+
+									default:
+										if (opciones_mantenimiento_Personas)
+										{
+											printf("\n\nEsta opcion no es valida\n");
+											system("pause");break;
+										}
+								}
+							}while (opciones_mantenimiento_Personas);
+							break;
+						}	
+
+						default:
+							if (opciones_mantenimiento)
+							{
+								printf("\n\nEsta opcion no es valida\n");
+								system("pause");break;
+							}
+						}
+					}while (opciones_mantenimiento);
+					break;
+				}
+		
+			case 2:
+			{
+				int opciones_control_estudios=0;
+				do
+				{//Menu Control de Estudios
+					system("cls");
+					printf("\t Menu Control de Estudios\n\n");
+					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n  ");
+					scanf_s("%d",&opciones_control_estudios);
+					switch(opciones_control_estudios)
+					{
+						case 1://Agregar alumnos
+							break;
+		
+						case 2://Modificar alumnos
+							break;
+
+						case 3://eliminar alumnos en cursos con sus notas correspondientes.
+							break;
+
+						default:
+							if (opciones_control_estudios)
+							{
+								printf("\n\nEsta opcion no es valida\n");
+								system("pause");break;
+							}
+					}
+				}while (opciones_control_estudios);
+			}
+
+			case 3:
+			{
+				int opciones_consultas=0;
+				do
+				{//Menu Control de Estudios
+					system("cls");
+					printf("\t Menu Control de Estudios\n\n");
+					printf(" \n\n 0- SALIR\n\n  ");
+					scanf_s("%d",&opciones_consultas);
+					switch(opciones_consultas)
+					{
+						case 1://Dado un nombre de curso buscar su código.
+							break;
+		
+						case 2://Dado un nombre de alumno buscar su(s) cédula(s) asociada(s) y demás datos (sinónimos para ubicar la cédula que nos interesa).
+							break;
+
+						case 3://Dado un año y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+							break;
+
+						case 4: //Dado un código de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+							break;
+
+						case 5://Dado un código de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+							break;
+
+						case 6://Dada una materia ( código ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+							break;
+
+						case 7://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
+							break;
+
+						case 8://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
+							break;
+
+						default:
+							if (opciones_consultas)
+							{
+								printf("\n\nEsta opcion no es valida\n");
+								system("pause");break;
+							}
+					}
+				}while (opciones_consultas);
+			}
+
+			default:
+				if (opciones)
+				{
+					printf("\n\nEsta opcion no es valida\n");
+					system("pause");break;
+				}
+		}
+	}while (opciones);
 	system("pause");
 	return 0;
 }
-
