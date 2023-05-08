@@ -86,9 +86,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
 
 /*estructuras y tipos secundarios*/
-typedef int year;	typedef int month;	typedef int day; typedef int Codigo_curso; typedef int Codigo_Materia;
+typedef int year;	typedef int month;	typedef int day; typedef unsigned int Codigo_curso; typedef unsigned int Codigo_Materia;
+const unsigned int maxEntero=4294967295;
 
 struct fecha
 {
@@ -132,13 +136,20 @@ struct Personas
 	char nombre_apellido[30];
 	fecha Fecha_de_Nacimiento;
 	char direccion[40];
+	Participacion Record;
 	/*Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.*/
 	Personas *prx;
 };
 
+/*Rutinas*/
+
+void Agregar_Materia(Materias **Nueva_materia);
+void Ingresar_codigo(unsigned int *codigo,char De[7]);
+int validar_numero (char numero[]);
 
 int main ()
 {
+	Materias *Materia=NULL;
 	int opciones=0; 
 
 	do
@@ -171,9 +182,12 @@ int main ()
 								scanf_s("%d",&opciones_mantenimiento_Materias);
 								switch(opciones_mantenimiento_Materias)
 									{
-										case 1://Agregar
+										case 1://Agregar Materia
+										{	
+											Agregar_Materia(&Materia);
 											break;
-		
+										}
+
 										case 2://Modificar
 											break;
 
@@ -232,7 +246,7 @@ int main ()
 						{
 							int opciones_mantenimiento_Personas=0; 
 							do
-							{//Menu de Mantenimiento Cursos
+							{//Menu de Mantenimiento Personas
 								system("cls");
 								printf("\t Menu de mantenimiento de personas\n\n");
 								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
@@ -358,4 +372,46 @@ int main ()
 	}while (opciones);
 	system("pause");
 	return 0;
+}
+
+void Agregar_Materia(Materias **Nueva_materia)
+{
+	Materias *Aux; Aux= new Materias; fflush(stdin);
+	do
+	{
+		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"La Materia");
+
+	}while(false);
+
+}
+
+void Ingresar_codigo(unsigned int *codigo,char De[10])
+{
+	char copia[10];
+	int Numero_valido;
+	do
+	{
+		printf("Codigo de %s:",De);
+		scanf_s("%s",&copia);
+		//Explota apartir de aca
+		Numero_valido=validar_numero(copia);
+		*codigo=atoi(copia);
+		if( (*codigo>=maxEntero) || (*codigo==0) || (Numero_valido) )	
+			printf("\n EL NUMERO INGRESADO NO ES VALIDO (INGRESE OTRO): ");
+
+	}while ( (*codigo>=maxEntero) || (*codigo==0) || (Numero_valido) );
+	fflush(stdin); 
+	*codigo=atoi(copia);
+}
+
+int validar_numero (char numero[])	
+{/*Funcion que nos permite validar dado un string, saber si tiene solo numeros o contiene letras*/
+	int i=0, sw=0,j;
+	j=strlen(numero);
+	while((i<j)&&(sw==0))
+		if(isdigit(numero[i])!=0)
+			i++;
+		else
+			sw=1;
+	return sw;
 }
