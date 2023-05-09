@@ -91,8 +91,8 @@
 
 
 /*estructuras y tipos secundarios*/
-typedef int year;	typedef int month;	typedef int day; typedef unsigned int Codigo_curso; typedef unsigned int Codigo_Materia;
-const unsigned int maxEntero=4294967295;
+typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia;
+const  int maxEntero=1294967295;
 
 struct fecha
 {
@@ -144,8 +144,11 @@ struct Personas
 /*Rutinas*/
 
 void Agregar_Materia(Materias **Nueva_materia);
-void Ingresar_codigo(unsigned int *codigo,char De[7]);
+void Ingresar_codigo( int *codigo,char De[7]);
+int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
+void Modificar_Materia(Materias **materia);
+void Consultar_materia(Materias *Las_materias);
 
 int main ()
 {
@@ -184,16 +187,22 @@ int main ()
 									{
 										case 1://Agregar Materia
 										{	
-											Agregar_Materia(&Materia);
+											Agregar_Materia(&Materia); 
+											printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->Semestre,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
+											/*lo anteriror es solo una verificacion de datos */system("pause");
 											break;
 										}
 
 										case 2://Modificar
+										{
+											Modificar_Materia(&Materia);
 											break;
-
+										}
 										case 3://Consultar
+										{
+											Consultar_materia(Materia);
 											break;
-
+										}
 										case 4://Eliminar
 											break;
 
@@ -379,39 +388,120 @@ void Agregar_Materia(Materias **Nueva_materia)
 	Materias *Aux; Aux= new Materias; fflush(stdin);
 	do
 	{
-		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"La Materia");
-
+		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de La Materia");
+		/* verificar : que el codigo de la materia sea unico*/
+		printf("\nIngrese el nombre de la materia: ");
+		gets_s(Aux->Nombre_de_la_Materia);
+		/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+		printf("\nIngrese la Descripcion de la materia: ");
+		gets_s(Aux->Descripcion_de_la_Materia);
+		/* verificar : que la descripcion tenga un maximo de 100 carcteres*/
+		printf("\nIngrese el semestre de la materia: ");
+		gets_s(Aux->Semestre);
+		/* verificar : que este en el rango {I,II,III..X}*/
+		printf("\nIngrese las unidades de credito de la materia: ");
+		scanf_s("%d",&Aux->Creditos_de_la_Materia);
+		/* verificar : que este en el rango {2..5}*/
+		Aux->prx=*Nueva_materia;
+		*Nueva_materia=Aux;
 	}while(false);
 
 }
 
-void Ingresar_codigo(unsigned int *codigo,char De[10])
+void Modificar_Materia(Materias **materia)
+{
+	Materias *Respaldo; Respaldo= *materia; int Elegido;
+	Ingresar_codigo(&Elegido," de La materia a modificar");
+	while(*materia)
+	{
+		if (Elegido==(*materia)->Codigo_de_la_Materia)
+			break;
+		*materia=(*materia)->prx;
+	}
+	if (Elegido==(*materia)->Codigo_de_la_Materia)
+	{
+		int opciones_de_Modificacion=0; 
+		do
+		{//Menu de Mantenimiento Cursos
+			system("cls");
+			printf("\t Que desea modificar?\n\n");
+			printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n ");
+			scanf_s("%d",&opciones_de_Modificacion);
+			switch(opciones_de_Modificacion)
+			{
+				case 1://Nombre
+				{
+					
+					gets_s((*materia)->Nombre_de_la_Materia);
+					/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+					break;
+				}
+				case 2://Descripcion
+					break;
+
+				case 3://Semestre
+					break;
+
+				case 4://Creditos
+					break;
+
+				default:
+					if (opciones_de_Modificacion)
+					{
+						printf("\n\nEsta opcion no es valida\n");
+						system("pause");break;
+					}
+			}
+		}while (opciones_de_Modificacion);
+		*materia=Respaldo;
+	}
+	else
+		printf("\n no existe ninguna materia con ese codigo\n");
+	system("pause");
+}
+
+void Ingresar_codigo( int *codigo,char De[15])
 {
 	char copia[10];
 	int Numero_valido;
 	do
 	{
-		printf("Codigo de %s:",De);
-		scanf_s("%s",&copia);
-		//Explota apartir de aca
+		printf("Codigo  %s:",De);
+		gets_s(copia);
 		Numero_valido=validar_numero(copia);
 		*codigo=atoi(copia);
-		if( (*codigo>=maxEntero) || (*codigo==0) || (Numero_valido) )	
-			printf("\n EL NUMERO INGRESADO NO ES VALIDO (INGRESE OTRO): ");
-
-	}while ( (*codigo>=maxEntero) || (*codigo==0) || (Numero_valido) );
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)) )	
+			printf("\n este codigo no es valido (INGRESE OTRO)\n");
+	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)) );
 	fflush(stdin); 
 	*codigo=atoi(copia);
 }
 
+int Existe_codigo(int codigo,Materias **En_Materias)
+{
+	return 0;
+}
+
 int validar_numero (char numero[])	
-{/*Funcion que nos permite validar dado un string, saber si tiene solo numeros o contiene letras*/
-	int i=0, sw=0,j;
-	j=strlen(numero);
-	while((i<j)&&(sw==0))
-		if(isdigit(numero[i])!=0)
-			i++;
-		else
-			sw=1;
-	return sw;
+{/*Funcion que nos permite validar dado un string, saber si tiene solo numeros*/
+	int i;
+	for(i=0;i<strlen(numero);i++)
+	{
+		char letra=numero[i];
+		if (isdigit(letra))
+			continue;
+		return 0;
+	}
+	return true;
+}
+
+void Consultar_materia(Materias *Las_materias)
+{
+	Materias *consulta=Las_materias;
+	while(consulta)
+	{
+		printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->Semestre,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+		consulta=consulta->prx;
+	}
+	system("pause");
 }
