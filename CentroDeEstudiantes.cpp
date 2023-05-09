@@ -1,4 +1,4 @@
-/*
+*
 	Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
@@ -139,12 +139,14 @@ struct Personas
 	Participacion Record;
 	/*Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.*/
 	Personas *prx;
+
 };
 
 /*Rutinas*/
 
 void Agregar_Materia(Materias **Nueva_materia);
-void Ingresar_codigo( int *codigo,char De[7]);
+void Ingresar_codigo( int *codigo,char De[15]);
+void Ingresar_Semestre( char *Semestre[4]);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
@@ -398,7 +400,7 @@ void Agregar_Materia(Materias **Nueva_materia)
 		/* verificar : que la descripcion tenga un maximo de 100 carcteres*/
 		printf("\nIngrese el semestre de la materia: ");
 		gets_s(Aux->Semestre);
-		/* verificar : que este en el rango {I,II,III..X}*/
+		/* Ingresar_Semestre(&Aux->Semestre);*/
 		printf("\nIngrese las unidades de credito de la materia: ");
 		scanf_s("%d",&Aux->Creditos_de_la_Materia);
 		/* verificar : que este en el rango {2..5}*/
@@ -431,7 +433,6 @@ void Modificar_Materia(Materias **materia)
 			{
 				case 1://Nombre
 				{
-					
 					fflush(stdin);
 					printf("\t Ingrese el nuevo nombre: ");
 					gets_s((*materia)->Nombre_de_la_Materia);
@@ -483,6 +484,17 @@ void Ingresar_codigo( int *codigo,char De[15])
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
 	return 0;
+}
+
+void Ingresar_Semestre( char *Semestre[4])
+{
+	char Aux[4];
+	do 
+	{	printf("\nIngrese el semestre de la materia: ");
+		gets_s(Aux);
+		
+	}while( (Aux != "I")&&(Aux!="II")&&(Aux!="III")&&(Aux != "V")&&(Aux!="V")&&(Aux != "VI")&&(Aux!="VII")&&(Aux!="VIII")&&(Aux != "IX")&&(Aux!="X"));
+	*Semestre=Aux;
 }
 
 int validar_numero (char numero[])	
