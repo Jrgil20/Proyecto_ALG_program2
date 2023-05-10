@@ -1,4 +1,4 @@
-*
+*/
 	Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
