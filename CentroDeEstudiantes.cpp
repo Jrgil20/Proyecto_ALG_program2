@@ -1,5 +1,5 @@
 /*
-	Nombre:
+    Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
 		Se desea crear un programa que maneje el control de estudios de un centro educativo.
@@ -91,7 +91,7 @@
 
 
 /*estructuras y tipos secundarios*/
-typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; typedef char string[];
+typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia;
 const  int maxEntero=1294967295;
 
 struct fecha
@@ -144,8 +144,10 @@ struct Personas
 
 /*Rutinas*/
 
+void Verificar_semestre( Materias **);
 void Agregar_Materia(Materias **Nueva_materia);
-void Ingresar_codigo( int *codigo,char De[15]);
+void Ingresar_codigo( int *codigo,char De[15], Materias **);
+void Ingresar_codigo_aux(int *codigo, char De[15]);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
@@ -386,35 +388,21 @@ int main ()
 
 void Agregar_Materia(Materias **Nueva_materia)
 {
-	Materias *Aux; Aux= new Materias; fflush(stdin);
+	Materias *Aux= new Materias; fflush(stdin);
 	do
 	{
-		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de La Materia");
+		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de La Materia", Nueva_materia);
 		/* verificar : que el codigo de la materia sea unico*/
-		fflush(stdin);
 		printf("\nIngrese el nombre de la materia: ");
-		fgets(Aux->Nombre_de_la_Materia, 30, stdin);
-		fflush(stdin);
+		fgets(Aux->Nombre_de_la_Materia,30,stdin);
 		printf("\nIngrese la Descripcion de la materia: ");
-		fgets(Aux->Descripcion_de_la_Materia, 100, stdin);
+		fgets(Aux->Descripcion_de_la_Materia,100,stdin);
 		fflush(stdin);
 		printf("\nIngrese el semestre de la materia: ");
-		fgets(Aux->Semestre, 4, stdin);
-		/* Genera ciclo infinito y no entiendo por que
-		do 
-		{	
-			printf("\nIngrese el semestre de la materia: ");
-			fgets(Aux->Semestre, 4, stdin);
-			printf("%s",Aux->Semestre);
-		}while( (Aux->Semestre!="I")&&((Aux->Semestre!="II")&&(Aux->Semestre!="III")&&(Aux->Semestre!= "V")&&(Aux->Semestre!="V")&&(Aux->Semestre!="VI")&&(Aux->Semestre!="VII")&&(Aux->Semestre!="VIII")&&(Aux->Semestre!= "IX")&&(Aux->Semestre!="X")) );
-	    */
-		do 
-		{/*esto deberia ser una funcion aparte*/
-			printf("\nIngrese las unidades de credito de la materia: ");
-			scanf_s("%d",&Aux->Creditos_de_la_Materia);
-			if ((Aux->Creditos_de_la_Materia <2)||(Aux->Creditos_de_la_Materia >5))
-				printf("\n El numero de creditos no esta en el ranco aceptado (2,5)\n por favor intente denuevo \n");
-		}while ((Aux->Creditos_de_la_Materia <2)||(Aux->Creditos_de_la_Materia >5));
+		fgets(Aux->Semestre,4,stdin);
+		fflush(stdin);
+		printf("\nIngrese las unidades de credito de la materia: ");
+		scanf_s("%d",&Aux->Creditos_de_la_Materia);
 		Aux->prx=*Nueva_materia;
 		*Nueva_materia=Aux;
 	}while(false);
@@ -423,8 +411,9 @@ void Agregar_Materia(Materias **Nueva_materia)
 
 void Modificar_Materia(Materias **materia)
 {
-	Materias *Respaldo; Respaldo= *materia; int Elegido;
-	Ingresar_codigo(&Elegido," de La materia a modificar");
+	Materias *Respaldo, *Respaldo2; Respaldo= *materia; Respaldo2=*materia; int Elegido;
+	if(*materia){
+	Ingresar_codigo_aux(&Elegido," de La materia a modificar");
 	while(*materia)
 	{
 		if (Elegido==(*materia)->Codigo_de_la_Materia)
@@ -452,23 +441,13 @@ void Modificar_Materia(Materias **materia)
 					break;
 				}
 				case 2://Descripcion
-				{
+					break;
 
-					/* verificar : que la descripcion solo tenga un maximo de 100 carcteres*/
-					break;
-				}
 				case 3://Semestre
-				{
-	
-					/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
 					break;
-				}
 
 				case 4://Creditos
-				{
-
 					break;
-				}
 
 				default:
 					if (opciones_de_Modificacion)
@@ -483,9 +462,14 @@ void Modificar_Materia(Materias **materia)
 	else
 		printf("\n no existe ninguna materia con ese codigo\n");
 	system("pause");
+ }
+	else{
+		printf("No hay materias para modificar\n");
+		system("pause");
+	}
 }
 
-void Ingresar_codigo( int *codigo,char De[15])
+void Ingresar_codigo( int *codigo,char De[15], Materias **q)
 {
 	char copia[10];
 	int Numero_valido;
@@ -495,16 +479,78 @@ void Ingresar_codigo( int *codigo,char De[15])
 		gets_s(copia);
 		Numero_valido=validar_numero(copia);
 		*codigo=atoi(copia);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)) )	
-			printf("\n este codigo no es valido (INGRESE OTRO)\n");
-	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)) );
+		int z;
+			z= Existe_codigo(*codigo,q);
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))
+			printf("\n Este codigo no es valido (INGRESE OTRO)\n");
+	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_codigo(*codigo,q)));
+	fflush(stdin); 
+	*codigo=atoi(copia);
+}
+
+void Ingresar_codigo_aux( int *codigo,char De[15])
+{
+	char copia[10];
+	int Numero_valido;
+	do
+	{
+		printf("Codigo  %s:",De);
+		gets_s(copia);
+		Numero_valido=validar_numero(copia);
+		*codigo=atoi(copia);
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)))
+			printf("\n Este codigo no es valido (INGRESE OTRO)\n");
+	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)));
 	fflush(stdin); 
 	*codigo=atoi(copia);
 }
 
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
-	return 0;
+	if(*En_Materias){
+		if((*En_Materias)->prx){
+            Materias *aux=*En_Materias;
+			while(aux){
+				if(aux->Codigo_de_la_Materia == codigo)
+					return 1;
+				else
+					aux=aux->prx;}
+			return 0;	
+ 		}
+		else{
+			Materias *aux=*En_Materias;
+			if(aux->Codigo_de_la_Materia == codigo)
+				return 1;
+			else
+				return 0;
+		}
+	}
+	else
+		return 0;
+}
+
+void Veificar_Semestre( Materias **q)
+{
+	char i[]="I";
+	char l[]="II";
+	char u[]="III";
+	char w[]="IV";
+	char e[]="V";
+	char a[]="VI";
+	char b[]="VII";
+	char c[]="VIII";
+	char d[]="IX";
+	char f[]="X";
+	char aux[4];
+	fgets(aux,4,stdin);
+	if((!(strcmp(aux,i)))&&(!(strcmp(aux,l)))&&(!(strcmp(aux,u)))&&(!(strcmp(aux,w)))&&(!(strcmp(aux,e)))&&(!(strcmp(aux,a)))&&(!(strcmp(aux,b)))&&(!(strcmp(aux,d)))&&(!(strcmp(aux,f)))){
+	 do{
+		 printf("Opcion invalida, ingrese nuevamente el semestre");
+		 fgets(aux,4,stdin);
+		 fflush(stdin);
+
+	 }while((!strcmp(aux,i))||(!(strcmp(aux,l)))||(!(strcmp(aux,u)))||(!(strcmp(aux,w)))||(!(strcmp(aux,e)))||(!(strcmp(aux,a)))||(!(strcmp(aux,b)))||(!(strcmp(aux,c)))||(!(strcmp(aux,d)))||(!(strcmp(aux,f))));
+	}
 }
 
 int validar_numero (char numero[])	
@@ -522,11 +568,17 @@ int validar_numero (char numero[])
 
 void Consultar_materia(Materias *Las_materias)
 {
-	Materias *consulta=Las_materias;
-	while(consulta)
-	{
+	if(Las_materias){
+	 Materias *consulta=Las_materias;
+	 while(consulta)
+	 { 
 		printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->Semestre,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
 		consulta=consulta->prx;
+	 }
+	 system("pause");
 	}
-	system("pause");
+	else
+	{
+		printf("No hay materias para consultar\n");system("pause");
+	}
 }
