@@ -1,4 +1,4 @@
-*/
+/*
 	Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
@@ -91,7 +91,7 @@
 
 
 /*estructuras y tipos secundarios*/
-typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia;
+typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; typedef char string[];
 const  int maxEntero=1294967295;
 
 struct fecha
@@ -146,7 +146,6 @@ struct Personas
 
 void Agregar_Materia(Materias **Nueva_materia);
 void Ingresar_codigo( int *codigo,char De[15]);
-void Ingresar_Semestre( char *Semestre[4]);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
@@ -392,18 +391,30 @@ void Agregar_Materia(Materias **Nueva_materia)
 	{
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de La Materia");
 		/* verificar : que el codigo de la materia sea unico*/
+		fflush(stdin);
 		printf("\nIngrese el nombre de la materia: ");
-		gets_s(Aux->Nombre_de_la_Materia);
-		/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+		fgets(Aux->Nombre_de_la_Materia, 30, stdin);
+		fflush(stdin);
 		printf("\nIngrese la Descripcion de la materia: ");
-		gets_s(Aux->Descripcion_de_la_Materia);
-		/* verificar : que la descripcion tenga un maximo de 100 carcteres*/
+		fgets(Aux->Descripcion_de_la_Materia, 100, stdin);
+		fflush(stdin);
 		printf("\nIngrese el semestre de la materia: ");
-		gets_s(Aux->Semestre);
-		/* Ingresar_Semestre(&Aux->Semestre);*/
-		printf("\nIngrese las unidades de credito de la materia: ");
-		scanf_s("%d",&Aux->Creditos_de_la_Materia);
-		/* verificar : que este en el rango {2..5}*/
+		fgets(Aux->Semestre, 4, stdin);
+		/* Genera ciclo infinito y no entiendo por que
+		do 
+		{	
+			printf("\nIngrese el semestre de la materia: ");
+			fgets(Aux->Semestre, 4, stdin);
+			printf("%s",Aux->Semestre);
+		}while( (Aux->Semestre!="I")&&((Aux->Semestre!="II")&&(Aux->Semestre!="III")&&(Aux->Semestre!= "V")&&(Aux->Semestre!="V")&&(Aux->Semestre!="VI")&&(Aux->Semestre!="VII")&&(Aux->Semestre!="VIII")&&(Aux->Semestre!= "IX")&&(Aux->Semestre!="X")) );
+	    */
+		do 
+		{/*esto deberia ser una funcion aparte*/
+			printf("\nIngrese las unidades de credito de la materia: ");
+			scanf_s("%d",&Aux->Creditos_de_la_Materia);
+			if ((Aux->Creditos_de_la_Materia <2)||(Aux->Creditos_de_la_Materia >5))
+				printf("\n El numero de creditos no esta en el ranco aceptado (2,5)\n por favor intente denuevo \n");
+		}while ((Aux->Creditos_de_la_Materia <2)||(Aux->Creditos_de_la_Materia >5));
 		Aux->prx=*Nueva_materia;
 		*Nueva_materia=Aux;
 	}while(false);
@@ -441,13 +452,23 @@ void Modificar_Materia(Materias **materia)
 					break;
 				}
 				case 2://Descripcion
-					break;
+				{
 
-				case 3://Semestre
+					/* verificar : que la descripcion solo tenga un maximo de 100 carcteres*/
 					break;
+				}
+				case 3://Semestre
+				{
+	
+					/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+					break;
+				}
 
 				case 4://Creditos
+				{
+
 					break;
+				}
 
 				default:
 					if (opciones_de_Modificacion)
@@ -484,17 +505,6 @@ void Ingresar_codigo( int *codigo,char De[15])
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
 	return 0;
-}
-
-void Ingresar_Semestre( char *Semestre[4])
-{
-	char Aux[4];
-	do 
-	{	printf("\nIngrese el semestre de la materia: ");
-		gets_s(Aux);
-		
-	}while( (Aux != "I")&&(Aux!="II")&&(Aux!="III")&&(Aux != "V")&&(Aux!="V")&&(Aux != "VI")&&(Aux!="VII")&&(Aux!="VIII")&&(Aux != "IX")&&(Aux!="X"));
-	*Semestre=Aux;
 }
 
 int validar_numero (char numero[])	
