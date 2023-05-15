@@ -148,6 +148,7 @@ void Verificar_semestre( Materias **);
 void Agregar_Materia(Materias **Nueva_materia);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
 void Ingresar_codigo_aux(int *codigo, char De[15]);
+void ingresar_Creditos(int *Rango,int max,int min);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
@@ -401,8 +402,7 @@ void Agregar_Materia(Materias **Nueva_materia)
 		printf("\nIngrese el semestre de la materia: ");
 		fgets(Aux->Semestre,4,stdin);
 		fflush(stdin);
-		printf("\nIngrese las unidades de credito de la materia: ");
-		scanf_s("%d",&Aux->Creditos_de_la_Materia);
+		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
 		Aux->prx=*Nueva_materia;
 		*Nueva_materia=Aux;
 	}while(false);
@@ -503,6 +503,21 @@ void Ingresar_codigo_aux( int *codigo,char De[15])
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)));
 	fflush(stdin); 
 	*codigo=atoi(copia);
+}
+
+void ingresar_Creditos(int *Rango,int max,int min)
+{
+	char copia[10];
+	int Numero_valido;
+	do{
+		printf("\nIngrese las unidades de credito de la materia: ");
+		gets_s(copia);
+		Numero_valido=validar_numero(copia);
+		*Rango=atoi(copia);
+		if ((*Rango <min)||(*Rango >max))
+			printf("\n El numero de creditos no esta en el ranco aceptado (%i,%i)\n por favor intente denuevo \n",min,max);
+	}while ((*Rango<min)||(*Rango >max));
+	fflush(stdin); 	
 }
 
 int Existe_codigo(int codigo,Materias **En_Materias)
