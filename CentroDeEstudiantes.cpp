@@ -401,7 +401,6 @@ void Agregar_Materia(Materias **Nueva_materia)
 		fflush(stdin);
 		printf("\nIngrese el semestre de la materia: ");
 		fgets(Aux->Semestre,4,stdin);
-		fflush(stdin);
 		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
 		Aux->prx=*Nueva_materia;
 		*Nueva_materia=Aux;
@@ -411,7 +410,7 @@ void Agregar_Materia(Materias **Nueva_materia)
 
 void Modificar_Materia(Materias **materia)
 {
-	Materias *Respaldo, *Respaldo2; Respaldo= *materia; Respaldo2=*materia; int Elegido;
+	Materias *Respaldo= *materia, *Respaldo2=*materia; int Elegido;
 	if(*materia){
 	Ingresar_codigo_aux(&Elegido," de La materia a modificar");
 	while(*materia)
@@ -447,8 +446,11 @@ void Modificar_Materia(Materias **materia)
 					break;
 
 				case 4://Creditos
+				{
+					ingresar_Creditos(&(*materia)->Creditos_de_la_Materia,5,2);
+					printf("Creditos de %s modificados exitosamente",(*materia)->Nombre_de_la_Materia); _sleep(500);
 					break;
-
+				}
 				default:
 					if (opciones_de_Modificacion)
 					{
@@ -511,6 +513,7 @@ void ingresar_Creditos(int *Rango,int max,int min)
 	int Numero_valido;
 	do{
 		printf("\nIngrese las unidades de credito de la materia: ");
+		fflush(stdin);
 		gets_s(copia);
 		Numero_valido=validar_numero(copia);
 		*Rango=atoi(copia);
@@ -546,17 +549,7 @@ int Existe_codigo(int codigo,Materias **En_Materias)
 
 void Veificar_Semestre( Materias **q)
 {
-	char i[]="I";
-	char l[]="II";
-	char u[]="III";
-	char w[]="IV";
-	char e[]="V";
-	char a[]="VI";
-	char b[]="VII";
-	char c[]="VIII";
-	char d[]="IX";
-	char f[]="X";
-	char aux[4];
+	char i[]="I";char l[]="II";char u[]="III";char w[]="IV";char e[]="V";char a[]="VI";char b[]="VII";char c[]="VIII";char d[]="IX";char f[]="X";char aux[4];
 	fgets(aux,4,stdin);
 	if((!(strcmp(aux,i)))&&(!(strcmp(aux,l)))&&(!(strcmp(aux,u)))&&(!(strcmp(aux,w)))&&(!(strcmp(aux,e)))&&(!(strcmp(aux,a)))&&(!(strcmp(aux,b)))&&(!(strcmp(aux,d)))&&(!(strcmp(aux,f)))){
 	 do{
