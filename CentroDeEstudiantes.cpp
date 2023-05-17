@@ -413,14 +413,11 @@ void Modificar_Materia(Materias **materia)
 	Materias *Respaldo= *materia, *Respaldo2=*materia; int Elegido;
 	if(*materia){
 	Ingresar_codigo_aux(&Elegido," de La materia a modificar");
-	while(*materia)
-	{
-		if (Elegido==(*materia)->Codigo_de_la_Materia)
-			break;
-		*materia=(*materia)->prx;
-	}
-	if (Elegido==(*materia)->Codigo_de_la_Materia)
-	{
+	while((Respaldo)&&(Respaldo->Codigo_de_la_Materia != Elegido))
+		Respaldo=Respaldo->prx;
+	if (!Respaldo){
+		printf("\n\tLa materia [%i] no se encuentra\n", Elegido);system("pause");
+	}else{
 		int opciones_de_Modificacion=0; 
 		do
 		{//Menu de Mantenimiento Cursos
@@ -434,7 +431,7 @@ void Modificar_Materia(Materias **materia)
 				{
 					fflush(stdin);
 					printf("\t Ingrese el nuevo nombre: ");
-					gets_s((*materia)->Nombre_de_la_Materia);
+					gets_s(Respaldo->Nombre_de_la_Materia);
 					fflush(stdin);
 					/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
 					break;
@@ -447,8 +444,8 @@ void Modificar_Materia(Materias **materia)
 
 				case 4://Creditos
 				{
-					ingresar_Creditos(&(*materia)->Creditos_de_la_Materia,5,2);
-					printf("Creditos de %s modificados exitosamente",(*materia)->Nombre_de_la_Materia); _sleep(500);
+					ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
+					printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 					break;
 				}
 				default:
@@ -459,15 +456,12 @@ void Modificar_Materia(Materias **materia)
 					}
 			}
 		}while (opciones_de_Modificacion);
-		*materia=Respaldo;
+		Respaldo = *materia;
+			
 	}
-	else
-		printf("\n no existe ninguna materia con ese codigo\n");
+}else{
+	printf("\n\tNO HAY MATERIAS PARA ELIMINAR\n");
 	system("pause");
- }
-	else{
-		printf("No hay materias para modificar\n");
-		system("pause");
 	}
 }
 
