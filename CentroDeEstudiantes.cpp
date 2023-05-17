@@ -153,6 +153,8 @@ int Existe_codigo(int codigo,Materias **En_Materias);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
 void Consultar_materia(Materias *Las_materias);
+void Eliminar_materia (Materias **Las_materias);
+void Limitar_Caracteres (char *copia, int max);
 
 int main ()
 {
@@ -395,9 +397,9 @@ void Agregar_Materia(Materias **Nueva_materia)
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de La Materia", Nueva_materia);
 		/* verificar : que el codigo de la materia sea unico*/
 		printf("\nIngrese el nombre de la materia: ");
-		fgets(Aux->Nombre_de_la_Materia,30,stdin);
+		Limitar_Caracteres(Aux->Nombre_de_la_Materia,30);
 		printf("\nIngrese la Descripcion de la materia: ");
-		fgets(Aux->Descripcion_de_la_Materia,100,stdin);
+		Limitar_Caracteres(Aux->Descripcion_de_la_Materia,100);
 		fflush(stdin);
 		printf("\nIngrese el semestre de la materia: ");
 		fgets(Aux->Semestre,4,stdin);
@@ -411,57 +413,65 @@ void Agregar_Materia(Materias **Nueva_materia)
 void Modificar_Materia(Materias **materia)
 {
 	Materias *Respaldo= *materia, *Respaldo2=*materia; int Elegido;
-	if(*materia){
-	Ingresar_codigo_aux(&Elegido," de La materia a modificar");
-	while((Respaldo)&&(Respaldo->Codigo_de_la_Materia != Elegido))
-		Respaldo=Respaldo->prx;
-	if (!Respaldo){
-		printf("\n\tLa materia [%i] no se encuentra\n", Elegido);system("pause");
-	}else{
-		int opciones_de_Modificacion=0; 
-		do
-		{//Menu de Mantenimiento Cursos
-			system("cls");
-			printf("\t Que desea modificar?\n\n");
-			printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n ");
-			scanf_s("%d",&opciones_de_Modificacion);
-			switch(opciones_de_Modificacion)
-			{
-				case 1://Nombre
+	char copia[10];
+	if (*materia){
+		Materias *consulta=*materia, *temp=NULL;
+		Ingresar_codigo_aux(&Elegido," de La materia a modificar");
+		/*printf("\n\t INSERTE EL CODIGO DE LA MATERIA A MODIFICAR = ");
+		scanf_s("%i",&Elegido);*/
+		while((Respaldo)&&(Respaldo->Codigo_de_la_Materia != Elegido))
+			Respaldo=Respaldo->prx;
+		if (!Respaldo){
+			printf("\n\tLa materia [%i] no se encuentra\n", Elegido);system("pause");
+		}else{
+			int opciones_de_Modificacion=0; 
+			do
+			{//Menu de Mantenimiento Cursos
+				system("cls");
+				printf("\t Que desea modificar?\n\n");
+				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n ");
+				scanf_s("%d",&opciones_de_Modificacion);
+				switch(opciones_de_Modificacion)
 				{
-					fflush(stdin);
-					printf("\t Ingrese el nuevo nombre: ");
-					gets_s(Respaldo->Nombre_de_la_Materia);
-					fflush(stdin);
-					/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
-					break;
-				}
-				case 2://Descripcion
-					break;
-
-				case 3://Semestre
-					break;
-
-				case 4://Creditos
-				{
-					ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
-					printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
-					break;
-				}
-				default:
-					if (opciones_de_Modificacion)
+					case 1://Nombre
 					{
-						printf("\n\nEsta opcion no es valida\n");
-						system("pause");break;
+						fflush(stdin);
+						printf("\nIngrese el nuevo nombre de la materia: ");
+						Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);
+						fflush(stdin);
+						/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+						break;
 					}
-			}
-		}while (opciones_de_Modificacion);
-		Respaldo = *materia;
+					case 2://Descripcion
+						fflush(stdin);
+						printf("\nIngrese la nueva Descripcion de la materia: ");
+						Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);
+						fflush(stdin);
+						break;
+
+					case 3://Semestre
+						break;
+
+					case 4://Creditos
+					{
+						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
+						printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						break;
+					}
+					default:
+						if (opciones_de_Modificacion)
+						{
+							printf("\n\nEsta opcion no es valida\n");
+							system("pause");break;
+						}
+				}
+			}while (opciones_de_Modificacion);
+			Respaldo = *materia;
 			
-	}
-}else{
-	printf("\n\tNO HAY MATERIAS PARA ELIMINAR\n");
-	system("pause");
+		}
+	}else{
+		printf("\n\tNO HAY MATERIAS PARA ELIMINAR\n");
+		system("pause");
 	}
 }
 
@@ -541,7 +551,7 @@ int Existe_codigo(int codigo,Materias **En_Materias)
 		return 0;
 }
 
-void Veificar_Semestre( Materias **q)
+void Verificar_Semestre( Materias **q)
 {
 	char i[]="I";char l[]="II";char u[]="III";char w[]="IV";char e[]="V";char a[]="VI";char b[]="VII";char c[]="VIII";char d[]="IX";char f[]="X";char aux[4];
 	fgets(aux,4,stdin);
@@ -584,3 +594,51 @@ void Consultar_materia(Materias *Las_materias)
 		printf("No hay materias para consultar\n");system("pause");
 	}
 }
+
+void Eliminar_materia (Materias **Las_materias)
+{
+	char copia[10];
+	int codigo_mat;
+
+	if (*Las_materias){
+		Materias *consulta=*Las_materias, *temp=NULL;
+		printf("\n\t INSERTE EL CODIGO DE LA MATERIA A ELIMINAR = ");
+		scanf_s("%i",&codigo_mat);
+		if ((consulta->Codigo_de_la_Materia) == codigo_mat){
+			temp = *Las_materias;
+			*Las_materias = (*Las_materias)->prx;
+			delete temp;
+		}
+		else{
+			while(consulta->prx)
+			{
+				if (consulta->prx->Codigo_de_la_Materia == codigo_mat){
+					temp = consulta->prx;
+					consulta->prx = temp->prx;
+					delete temp;
+					printf("\n\tMATERIA ELIMINADA CORRECTAMENTE!\n"); system("pause");
+				}
+				else
+					consulta = consulta->prx;
+			
+			}
+			printf("\n\tLa materia [%i] no se encuentra\n", codigo_mat);system("pause");
+		}
+	}else{
+		printf("\n\tNO HAY MATERIAS PARA ELIMINAR\n");
+		system("pause");
+	}
+}
+
+void Limitar_Caracteres (char *copia, int max){
+	do{
+		fflush(stdin);
+		scanf (" %[^\n]s",&*copia);
+		if (!(strlen(copia)>0)||!(strlen(copia)<=max)){
+			printf(" LA CADENA DEBE SER MENOR A %i Y MAYOR A 0 CARACTERES \n", max);
+			printf(" INGRESE DE NUEVO = ");
+		}
+	} while (!(strlen(copia)>0)||!(strlen(copia)<=max));
+	printf  ("\n");
+	fflush(stdin);
+}	
