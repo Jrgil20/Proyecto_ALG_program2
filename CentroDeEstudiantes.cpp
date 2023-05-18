@@ -4,40 +4,40 @@
 	Objetivo:
 		Se desea crear un programa que maneje el control de estudios de un centro educativo.
 	Descripcion:
-		`En la institución se dictan clases semestralmente, se tienen tres lapsos (1,2,3) anuales, el período corresponde al curso de verano anual.
-		`Las materias a dictar están guardadas en el sistema. Se pueden modificar, consultar o eliminar materias. 
+		`En la instituciÃ³n se dictan clases semestralmente, se tienen tres lapsos (1,2,3) anuales, el perÃ­odo corresponde al curso de verano anual.
+		`Las materias a dictar estÃ¡n guardadas en el sistema. Se pueden modificar, consultar o eliminar materias. 
 		`Cuando se elimina una materia se deben borrar del sistema todos los cursos con esa materia como contenido. 
-		`El código de materia es único y no se puede modificar una vez creado.
-		`Para registrar un curso deben preexistir la materia (código) y los alumnos (cédula).
+		`El cÃ³digo de materia es Ãºnico y no se puede modificar una vez creado.
+		`Para registrar un curso deben preexistir la materia (cÃ³digo) y los alumnos (cÃ©dula).
 		`Un alumno puede solo puede tener aprobada una materia una vez, luego de ello no puede reinscribirla.
-		`Puede haber reprobado la materia un máximo de 4 (cuatro) veces. En caso de reprobar ya no puede volver a inscribirse en el instituto.
+		`Puede haber reprobado la materia un mÃ¡ximo de 4 (cuatro) veces. En caso de reprobar ya no puede volver a inscribirse en el instituto.
 		`Puede haber retirado la materia infinita cantidad de veces. 
-		`El código del curso es único y no puede ser modificado una vez creado.
+		`El cÃ³digo del curso es Ãºnico y no puede ser modificado una vez creado.
 			-Cuando se elimina un curso, deben borrarse todas sus referencias en el sistema
 			-Cuando se elimina un alumno deben borrarse todas sus referencias en el sistema.
-			-El sistema debe manejarse en listas dinámicas en memoria principal y almacenarse en memoria secundaria.
+			-El sistema debe manejarse en listas dinÃ¡micas en memoria principal y almacenarse en memoria secundaria.
 		Se tienen tres listas principales:
 			*Materias:
-				 código dela materia (entero),
+				 cÃ³digo dela materia (entero),
 				 nombre (hasta 30 caracteres),
-				 descripción(máximo 100 caracteres),
-				 semestre al que pertenece (I,II, …, X),
-				 numero de créditos ( 2 a 5 ).
+				 descripciÃ³n(mÃ¡ximo 100 caracteres),
+				 semestre al que pertenece (I,II, â€¦, X),
+				 numero de crÃ©ditos ( 2 a 5 ).
 			*Cursos:
-				Código del curso ( entero ),
-				código materia, año ( XXXX), 
+				CÃ³digo del curso ( entero ),
+				cÃ³digo materia, aÃ±o ( XXXX), 
 				Lapso (1..3: indica primer semestre, segundo o verano).
 			*Personas:
-				Cédula de identidad ( entero largo ),
+				CÃ©dula de identidad ( entero largo ),
 				nombres y apellidos,
 				fecha de nacimiento,
-				dirección.
-				La cedula es única y no puede ser modificada. 
+				direcciÃ³n.
+				La cedula es Ãºnica y no puede ser modificada. 
 				Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.
 				Igual mente cada estudiante tiene una lista de los cursos en que ha participado.
-				Allí se almacenan: código de curso y la nota correspondiente.
-	Características del sistema:
-		El sistema tiene un menú principal que tiene tres (03) opciones principales
+				AllÃ­ se almacenan: cÃ³digo de curso y la nota correspondiente.
+	CaracterÃ­sticas del sistema:
+		El sistema tiene un menÃº principal que tiene tres (03) opciones principales
 		+Mantenimiento: (tablas base del sistema)
 			-Materias:                             
 				*agregar
@@ -63,25 +63,25 @@
 			-No se puede inscribir a un alumno en una materia que ya tenga aprobada. 
             -Se puede modificar la nota en un curso y alumnos dados
 		+Consultas:
-			- Dado un nombre de curso buscar su código.
-			- Dado un nombre de alumno buscar su(s) cédula(s) asociada(s) y demás datos (sinónimos para ubicar la cédula que nos interesa).
-			- Dado un año y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-			- Dado un código de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-			-Dado un código de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
-			-Dada una materia ( código ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+			- Dado un nombre de curso buscar su cÃ³digo.
+			- Dado un nombre de alumno buscar su(s) cÃ©dula(s) asociada(s) y demÃ¡s datos (sinÃ³nimos para ubicar la cÃ©dula que nos interesa).
+			- Dado un aÃ±o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+			- Dado un cÃ³digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+			-Dado un cÃ³digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+			-Dada una materia ( cÃ³digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
 			-Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
 			-Dada una cedula mostrar todos los cursos con sus notas tomadas por esapersona
 */
 /*
-	Entrega inicial: 01 de junio 2023 vía módulo 7 (archivo comprimido con todos los fuentesy archivos de datos).
-	Grupos de un máximo de 04 (cuatro) personas. (misma sección).
+	Entrega inicial: 01 de junio 2023 vÃ­a mÃ³dulo 7 (archivo comprimido con todos los fuentesy archivos de datos).
+	Grupos de un mÃ¡ximo de 04 (cuatro) personas. (misma secciÃ³n).
 	
 	Contenido de la entrega: 
 	todo el mantenimiento del sistema (tablas):
 		-materias
 		-cursos 
 		-personas 
-		(agregar, modificar y eliminar, así como el almacenamiento y recuperación de la información con archivos).
+		(agregar, modificar y eliminar, asÃ­ como el almacenamiento y recuperaciÃ³n de la informaciÃ³n con archivos).
 */
 
 #include <stdio.h>
@@ -122,7 +122,7 @@ struct Materias
 struct Cursos
 {
 	Codigo_curso Codigo_del_curso;
-	/*Para registrar un curso deben preexistir la materia (código) */
+	/*Para registrar un curso deben preexistir la materia (cÃ³digo) */
 	Codigo_Materia Codigo_de_la_Materia; 
 	year AAAA;
 	int lapso;// se debe restringir al rango de 1 a 3
@@ -234,7 +234,7 @@ int main ()
 							}while (opciones_mantenimiento_Materias);
 							break;
 						}
-		
+
 						case 2:
 						{
 							int opciones_mantenimiento_Cursos=0; 
@@ -276,7 +276,7 @@ int main ()
 							}while (opciones_mantenimiento_Cursos);
 							break;
 						}
-		
+
 						case 3:
 						{
 							int opciones_mantenimiento_Personas=0; 
@@ -321,7 +321,7 @@ int main ()
 					}while (opciones_mantenimiento);
 					break;
 				}
-		
+
 			case 2:
 			{
 				int opciones_control_estudios=0;
@@ -335,7 +335,7 @@ int main ()
 					{
 						case 1://Agregar alumnos
 							break;
-		
+
 						case 2://Modificar alumnos
 							break;
 
@@ -363,22 +363,22 @@ int main ()
 					scanf_s("%d",&opciones_consultas);
 					switch(opciones_consultas)
 					{
-						case 1://Dado un nombre de curso buscar su código.
-							break;
-		
-						case 2://Dado un nombre de alumno buscar su(s) cédula(s) asociada(s) y demás datos (sinónimos para ubicar la cédula que nos interesa).
+						case 1://Dado un nombre de curso buscar su cÃ³digo.
 							break;
 
-						case 3://Dado un año y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case 2://Dado un nombre de alumno buscar su(s) cÃ©dula(s) asociada(s) y demÃ¡s datos (sinÃ³nimos para ubicar la cÃ©dula que nos interesa).
 							break;
 
-						case 4: //Dado un código de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case 3://Dado un aÃ±o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							break;
 
-						case 5://Dado un código de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+						case 4: //Dado un cÃ³digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							break;
 
-						case 6://Dada una materia ( código ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+						case 5://Dado un cÃ³digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+							break;
+
+						case 6://Dada una materia ( cÃ³digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
 							break;
 
 						case 7://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
@@ -496,6 +496,7 @@ void Modificar_Materia(Materias **materia)
 						printf("\nIngrese el nuevo nombre de la materia: ");
 						Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);
 						fflush(stdin);
+						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
 						break;
 					}
@@ -504,9 +505,13 @@ void Modificar_Materia(Materias **materia)
 						printf("\nIngrese la nueva Descripcion de la materia: ");
 						Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);
 						fflush(stdin);
+						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						break;
 
 					case 3://Semestre
+							Respaldo->Semestre=Verificar_Semestre();
+							fflush(stdin);
+							printf("\nSemestre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						break;
 
 					case 4://Creditos
@@ -524,7 +529,7 @@ void Modificar_Materia(Materias **materia)
 				}
 			}while (opciones_de_Modificacion);
 			Respaldo = *materia;
-			
+
 		}
 	}else{
 		printf("\n\tNO HAY MATERIAS PARA MODIFICAR\n");
@@ -553,7 +558,7 @@ void Modificar_Curso(Cursos **curso)
 				scanf_s("%d",&opciones_de_Modificacion);
 				switch(opciones_de_Modificacion)
 				{
-					case 1://Año
+					case 1://AÃ±o
 						fflush(stdin);
 						Ingresar_codigo_aux(&Respaldo->AAAA,"Ingrese el nuevo anio");
 						break;
@@ -571,7 +576,7 @@ void Modificar_Curso(Cursos **curso)
 			}
 			}while (opciones_de_Modificacion);
 			Respaldo = *curso;
-			
+
 		}
 	}else{
 		printf("\n\tNO HAY CURSOS PARA MODIFICAR\n");
@@ -717,11 +722,11 @@ int Existe_codigo_curso(int codigo,Cursos **En_Cursos)
 }
 
 int Verificar_Semestre()
-{// lee roamanos devuelve entero
+{// lee romanos devuelve entero
 	char aux[5];
 	do
 	{
-		printf(" ingrese el semestre: ");
+		printf("\nIngrese el semestre de la materia: ");
 		fflush(stdin);
 		fgets(aux,4,stdin);
 		cambio(aux);
@@ -742,7 +747,7 @@ int Verificar_Semestre()
 
 void imprimir_Romano(int Numero)
 {// dado un numero lo imprime en romano
-	
+
 	switch (Numero) 
 	{
 		case 1: printf ("I"); break;
@@ -833,7 +838,7 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 				}
 				else
 					consulta = consulta->prx;
-			
+
 			}
 			if(cont != 1)
 			 printf("\n\tLa materia [%i] no se encuentra\n", codigo_mat);
@@ -869,7 +874,7 @@ void Eliminar_curso (Cursos **Los_cursos)
 				}
 				else
 					consulta = consulta->prx;
-			
+
 			}
 			if(cont != 1)
 			 printf("\n\tEl curso [%i] no se encuentra\n", codigo_mat);
@@ -900,7 +905,7 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 				}
 				else
 					consulta = consulta->prx;
-			
+
 			}
 		}
 	}
