@@ -145,6 +145,7 @@ struct Personas
 /*Rutinas*/
 
 int Verificar_Semestre();
+void imprimir_Romano(int Numero);
 void Agregar_Materia(Materias **Nueva_materia);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
@@ -737,6 +738,25 @@ int Verificar_Semestre()
 		if (((aux[0]=='X')||(aux[0]=='x'))&&(aux[1]=='\0')){return 10;}
 		fflush(stdin);
 	}while(true);
+}
+
+void imprimir_Romano(int Numero)
+{// dado un numero lo imprime en romano
+	
+	switch (Numero) 
+	{
+		case 1: printf ("I"); break;
+		case 2: printf ("II"); break;
+		case 3: printf ("III"); break;
+		case 4: printf ("IV"); break;
+		case 5: printf ("V"); break;
+		case 6: printf ("VI"); break;
+		case 7: printf ("VII"); break;
+		case 8: printf ("VIII"); break;
+		case 9: printf ("IX"); break;
+		case 10: printf ("X"); break;
+		default: break;
+	}
 }
 
 int validar_numero (char numero[])	
