@@ -167,6 +167,7 @@ void Eliminar_curso (Cursos **Los_cursos);
 void Limitar_Caracteres (char *copia, int max);
 void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
+int Importar_Materias(Materias **nodos);
 
 int main ()
 {
@@ -965,6 +966,38 @@ int Exportar_Materias(Materias *nodos)
 		nodos=nodos->prx;
 	}
 	fprintf (Nuevo_archivo," ->NULL\n");
+	fclose(Nuevo_archivo);
+	return 1;
+}
+
+int Importar_Materias(Materias **nodos)
+{
+	FILE *Nuevo_archivo = NULL;
+	Nuevo_archivo = fopen("E:/archivo.txt","r");
+	if(Nuevo_archivo == NULL ) 
+	{
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	Materias *Nuevo_nodo= new Materias; fflush(stdin);
+	do
+	{
+		/*
+		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia", Nueva_materia);
+		printf("\nIngrese el nombre de la materia: ");
+		fgets(Aux->Nombre_de_la_Materia,30,stdin);
+		cambio(Aux->Nombre_de_la_Materia);
+		fflush(stdin);
+		printf("\nIngrese la Descripcion de la materia: ");
+		fgets(Aux->Descripcion_de_la_Materia,100,stdin);
+		cambio(Aux->Descripcion_de_la_Materia);
+		fflush(stdin);
+		Aux->Semestre=Verificar_Semestre();
+		fflush(stdin);
+		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
+		insertar_MateriaOrdenadamente( nodos, &Aux);
+		*/
+	}while(false);
 	fclose(Nuevo_archivo);
 	return 1;
 }
