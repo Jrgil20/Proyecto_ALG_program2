@@ -89,10 +89,8 @@
 #include <string.h>
 #include <ctype.h>
 
-
 /*estructuras y tipos secundarios*/
-typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia;
-const  int maxEntero=1294967295;
+typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; const int maxEntero=1294967295;
 
 struct fecha
 {
@@ -144,7 +142,6 @@ struct Personas
 };
 
 /*Rutinas*/
-
 int Verificar_Semestre();
 void Semestre_Romano(int Numero,Materias **Nodo);
 void Agregar_Materia(Materias **Nueva_materia);
@@ -414,32 +411,22 @@ int main ()
 	return 0;
 }
 
-void Agregar_Materia(Materias **Nueva_materia)
-{
+void Agregar_Materia(Materias **Lista_materia)
+{/*Crea un nodo llamado aux y lo ingresa en la lista de materias*/
 	Materias *Aux= new Materias; fflush(stdin);
-	do
-	{
-		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia", Nueva_materia);
-		/* verificar : que el codigo de la materia sea unico*/
+		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia",Lista_materia);
 		printf("\nIngrese el nombre de la materia: ");
-		fgets(Aux->Nombre_de_la_Materia,30,stdin);
-		cambio(Aux->Nombre_de_la_Materia);
-		fflush(stdin);
+		fgets(Aux->Nombre_de_la_Materia,30,stdin);cambio(Aux->Nombre_de_la_Materia);fflush(stdin);
 		printf("\nIngrese la Descripcion de la materia: ");
-		fgets(Aux->Descripcion_de_la_Materia,100,stdin);
-		cambio(Aux->Descripcion_de_la_Materia);
-		fflush(stdin);
+		fgets(Aux->Descripcion_de_la_Materia,100,stdin);cambio(Aux->Descripcion_de_la_Materia);fflush(stdin);
 		Aux->Semestre=Verificar_Semestre();
-		Semestre_Romano(Aux->Semestre,&Aux);
-		fflush(stdin);
+		Semestre_Romano(Aux->Semestre,&Aux);fflush(stdin);
 		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
-		insertar_MateriaOrdenadamente( Nueva_materia, &Aux);
-	}while(false);
-
+		insertar_MateriaOrdenadamente( Lista_materia, &Aux);
 }
 
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo)
-{
+{/*Inserta el nodo materia de manera ordenada en la lista ordenada*/
 	if (*lista==NULL || (*Nuevo_nodo)->Semestre<(*lista)->Semestre)//mientras el nuevo nodo sea la nueva cabeza
 	{
 		(*Nuevo_nodo)->prx = *lista;//apunta a lo que apuntaba p
@@ -454,125 +441,96 @@ void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo)
 	}
 }
 
-void Agregar_Curso(Cursos **c,Materias **Materia){
-	Cursos *Aux=*c;
-	if(*Materia){
-	 int cod;
-	 Ingresar_codigo_aux(&cod,"Codigo de la materia");
-     if(Existe_codigo(cod,Materia)){
-	  Cursos *Aux= new Cursos;
-	  do
-	  {
-		  printf("\n");
-		  Aux->Codigo_de_la_Materia = cod;
-		  Ingresar_codigo_curso(&Aux->Codigo_del_curso,"del Curso", c);
-		  printf("\n");
-		  Ingresar_codigo_aux(&Aux->AAAA,"Ingrese el anio");
-		  printf("\n");
-		  Ingresar_lapso(&Aux->lapso,3,1);
-		  Aux->prx=*c;
-		  *c=Aux;
-	   }while(false);
-	 }
-	 else
-	 {
-		 printf("La materia no existe, por lo que no se creara el curso\n");
-		 system("pause");
-	 }
-	}
-	else
-	{
-		printf("No existen materias, por lo que no se pueden crear cursos\n");
-		system("pause");
-	}
-
+void Agregar_Curso(Cursos **c,Materias **Materia)
+{/*Dado un codigo de materia  permite Ingresar un curso*/
+	Cursos *Aux=*c;int cod;
+	if(*Materia)
+	{/*si existen materias procede a generar*/
+		Ingresar_codigo_aux(&cod,"Codigo de la materia");
+		if(Existe_codigo(cod,Materia))
+		{
+			Cursos *Aux= new Cursos;printf("\n");
+			Aux->Codigo_de_la_Materia = cod;
+			Ingresar_codigo_curso(&Aux->Codigo_del_curso,"del Curso", c);printf("\n");
+			Ingresar_codigo_aux(&Aux->AAAA,"Ingrese el anio");printf("\n");
+			Ingresar_lapso(&Aux->lapso,3,1);
+			Aux->prx=*c;
+			*c=Aux;
+		}else
+			{printf("La materia no existe, por lo que no se creara el curso\n");_sleep(500);}
+	}else
+		{printf("No existen materias, por lo que no se pueden crear cursos\n");_sleep(500);}
 }
 
 void Modificar_Materia(Materias **materia)
 {
-	Materias *Respaldo= *materia; int Elegido;
-	char copia[10];
-	if (*materia){
+	Materias *Respaldo= *materia; int Elegido;char copia[10];
+	if (*materia)
+	{
 		Materias *consulta=*materia, *temp=NULL;
 		Ingresar_codigo_aux(&Elegido," Codigo de La materia a modificar");
-		/*printf("\n\t INSERTE EL CODIGO DE LA MATERIA A MODIFICAR = ");
-		scanf_s("%i",&Elegido);*/
 		while((Respaldo)&&(Respaldo->Codigo_de_la_Materia != Elegido))
 			Respaldo=Respaldo->prx;
-		if (!Respaldo){
-			printf("\n\tLa materia [%i] no se encuentra\n", Elegido);system("pause");
-		}else{
+		if (!Respaldo)
+		{printf("\n\tLa materia [%i] no se encuentra\n", Elegido);system("pause");}
+		else
+		{
 			int opciones_de_Modificacion=0; 
 			do
 			{//Menu de Mantenimiento Cursos
-				system("cls");
-				printf("\t Que desea modificar?\n\n");
+				system("cls");printf("\t Que desea modificar?\n\n");
 				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n ");
 				scanf_s("%d",&opciones_de_Modificacion);
 				switch(opciones_de_Modificacion)
 				{
 					case 1://Nombre
-					{
-						fflush(stdin);
 						printf("\nIngrese el nuevo nombre de la materia: ");
-						Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);
-						fflush(stdin);
+						fflush(stdin);Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);fflush(stdin);
 						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
 						break;
-					}
+					
 					case 2://Descripcion
-						fflush(stdin);
 						printf("\nIngrese la nueva Descripcion de la materia: ");
-						Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);
-						fflush(stdin);
+						fflush(stdin);Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);fflush(stdin);
 						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						break;
 
 					case 3://Semestre
-							Respaldo->Semestre=Verificar_Semestre();
-							fflush(stdin);
+							Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
 							printf("\nSemestre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						break;
 
 					case 4://Creditos
-					{
 						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
 						printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
 						break;
-					}
+					
 					default:
 						if (opciones_de_Modificacion)
-						{
-							printf("\n\nEsta opcion no es valida\n");
-							system("pause");break;
-						}
+						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 				}
 			}while (opciones_de_Modificacion);
 			Respaldo = *materia;
-
 		}
-	}else{
-		printf("\n\tNO HAY MATERIAS PARA MODIFICAR\n");
-		system("pause");
-	}
+	}else
+	 {printf("\n\tNO HAY MATERIAS PARA MODIFICAR\n");system("pause");}
 }
 
 void Modificar_Curso(Cursos **curso)
 {
-	Cursos *Respaldo= *curso; int Elegido;
-	char copia[10];
-	if (*curso){
+	Cursos *Respaldo= *curso; int Elegido;char copia[10];
+	if (*curso)
+	{
 		Cursos *consulta=*curso, *temp=NULL;
 		Ingresar_codigo_aux(&Elegido," Codigo del curso a modificar");
-		while((Respaldo)&&(Respaldo->Codigo_del_curso != Elegido))
-			Respaldo=Respaldo->prx;
-		if (!Respaldo){
-			printf("\n\tEl curso [%i] no se encuentra\n", Elegido);system("pause");
-		}else{
+		while((Respaldo)&&(Respaldo->Codigo_del_curso != Elegido))Respaldo=Respaldo->prx;
+		if (!Respaldo)
+		{printf("\n\tEl curso [%i] no se encuentra\n", Elegido);system("pause");}
+		else
+		{
 			int opciones_de_Modificacion=0; 
-			do
-			{//Menu de Mantenimiento Cursos
+			do{//Menu de Mantenimiento Cursos
 				system("cls");
 				printf("\t Que desea modificar?\n\n");
 				printf(" 1- Anio del curso\n 2- Lapso del curso\n 0- SALIR\n\n ");
@@ -580,83 +538,61 @@ void Modificar_Curso(Cursos **curso)
 				switch(opciones_de_Modificacion)
 				{
 					case 1://A�o
-						fflush(stdin);
-						Ingresar_codigo_aux(&Respaldo->AAAA,"Ingrese el nuevo anio");
-						break;
+						Ingresar_codigo_aux(&Respaldo->AAAA,"Ingrese el nuevo anio");break;
 					case 2://Lapso
-						fflush(stdin);
-						Ingresar_lapso(&Respaldo->lapso,3,1);
-						break;
+						Ingresar_lapso(&Respaldo->lapso,3,1);break;
 
 					default:
 						if (opciones_de_Modificacion)
-						{
-							printf("\n\nEsta opcion no es valida\n");
-							system("pause");break;
-						}
-			}
+						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+				}
 			}while (opciones_de_Modificacion);
 			Respaldo = *curso;
-
 		}
-	}else{
-		printf("\n\tNO HAY CURSOS PARA MODIFICAR\n");
-		system("pause");
-	}
+	}else
+	{printf("\n\tNO HAY CURSOS PARA MODIFICAR\n");system("pause");}
 }
 
 void Ingresar_codigo( int *codigo,char De[15], Materias **q)
 {
-	char copia[10];
-	int Numero_valido;
+	char copia[10];int Numero_valido;
 	do
 	{
 		printf("Codigo  %s:",De);
-		gets_s(copia);
+		fflush(stdin); gets_s(copia);fflush(stdin); 
 		Numero_valido=validar_numero(copia);
 		*codigo=atoi(copia);
-		int z;
-			z= Existe_codigo(*codigo,q);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))
-			printf("\n Este codigo no es valido (INGRESE OTRO)\n");
+		int z= Existe_codigo(*codigo,q);
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Este codigo no es valido (INGRESE OTRO)\n");
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_codigo(*codigo,q)));
-	fflush(stdin); 
 	*codigo=atoi(copia);
 }
 
 void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q)
 {
-	char copia[10];
-	int Numero_valido;
+	char copia[10];int Numero_valido;
 	do
 	{
 		printf("Codigo %s:",De);
-		gets_s(copia);
+		fflush(stdin);gets_s(copia);fflush(stdin); 
 		Numero_valido=validar_numero(copia);
 		*codigo=atoi(copia);
-		int z;
-			z= Existe_codigo_curso(*codigo,q);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))
-			printf("\n Este codigo no es valido (INGRESE OTRO)\n");
+		int z= Existe_codigo_curso(*codigo,q);
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Este codigo no es valido (INGRESE OTRO)\n");
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_codigo_curso(*codigo,q)));
-	fflush(stdin); 
 	*codigo=atoi(copia);
 }
 
 void Ingresar_codigo_aux( int *codigo,char De[20])
 {
-	char copia[10];
-	int Numero_valido;
+	char copia[10];int Numero_valido;
 	do
 	{
-		system("cls");
-		printf("%s:",De);
-		fgets(copia,10,stdin);
-		cambio(copia);
+		system("cls");printf("%s:",De);
+		fgets(copia,10,stdin);cambio(copia);
 		Numero_valido=validar_numero(copia);
 		*codigo=atoi(copia);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)))
-			printf("\n Este codigo no es valido (INGRESE OTRO)\n");
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)))printf("\n Este codigo no es valido (INGRESE OTRO)\n");
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)));
 	fflush(stdin); 
 	*codigo=atoi(copia);
@@ -665,92 +601,79 @@ void Ingresar_codigo_aux( int *codigo,char De[20])
 void ingresar_Creditos(int *Rango,int max,int min)
 {
 	char copia[10];
-	int Numero_valido;
 	do{
 		printf("\nIngrese las unidades de credito de la materia: ");
-		fflush(stdin);
-		gets_s(copia);
-		Numero_valido=validar_numero(copia);
+		fflush(stdin);gets_s(copia);fflush(stdin); 
+		int Numero_valido=validar_numero(copia);
 		*Rango=atoi(copia);
-		if ((*Rango <min)||(*Rango >max))
-			printf("\n El numero de creditos no esta en el ranco aceptado (%i,%i)\n por favor intente denuevo \n",min,max);
-	}while ((*Rango<min)||(*Rango >max));
-	fflush(stdin); 	
+		if ((*Rango <min)||(*Rango >max))printf("\n El numero de creditos no esta en el ranco aceptado (%i,%i)\n por favor intente denuevo \n",min,max);
+	}while ((*Rango<min)||(*Rango >max));	
 }
 
 void Ingresar_lapso(int *Rango,int max,int min)
 {
 	char copia[10];
-	int Numero_valido;
 	do{
 		printf("\nIngrese el lapso del curso: ");
-		fflush(stdin);
-		gets_s(copia);
-		Numero_valido=validar_numero(copia);
+		fflush(stdin);gets_s(copia);fflush(stdin); 	
+		int Numero_valido=validar_numero(copia);
 		*Rango=atoi(copia);
-		if ((*Rango <min)||(*Rango >max))
-			printf("\n El lapso introducido es invalido (%i,%i)\n por favor intente denuevo \n",min,max);
+		if ((*Rango <min)||(*Rango >max))printf("\n El lapso introducido es invalido (%i,%i)\n por favor intente denuevo \n",min,max);
 	}while ((*Rango<min)||(*Rango >max));
-	fflush(stdin); 	
 }
 
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
-	if(*En_Materias){
-		if((*En_Materias)->prx){
+	if(*En_Materias)
+	{
+		if((*En_Materias)->prx)
+		{
             Materias *aux=*En_Materias;
-			while(aux){
-				if(aux->Codigo_de_la_Materia == codigo)
-					return 1;
-				else
-					aux=aux->prx;}
+			while(aux)
+			{/**/
+				if(aux->Codigo_de_la_Materia == codigo)return 1;
+				else aux=aux->prx;
+			}
 			return 0;	
- 		}
-		else{
+ 		}else
+		 {/**/
 			Materias *aux=*En_Materias;
-			if(aux->Codigo_de_la_Materia == codigo)
-				return 1;
-			else
-				return 0;
-		}
+			if(aux->Codigo_de_la_Materia == codigo)return 1;
+			else return 0;
+		 }
 	}
-	else
-		return 0;
+	else return 0;
 }
 
 int Existe_codigo_curso(int codigo,Cursos **En_Cursos)
 {
-	if(*En_Cursos){
-		if((*En_Cursos)->prx){
+	if(*En_Cursos)
+	{
+		if((*En_Cursos)->prx)
+		{
             Cursos *aux=*En_Cursos;
-			while(aux){
-				if(aux->Codigo_del_curso == codigo)
-					return 1;
-				else
-					aux=aux->prx;}
+			while(aux)
+			{/**/
+				if(aux->Codigo_del_curso == codigo)return 1;
+				else aux=aux->prx;
+			}
 			return 0;	
- 		}
-		else{
+ 		}else
+		 {/**/
 			Cursos *aux=*En_Cursos;
-			if(aux->Codigo_del_curso == codigo)
-				return 1;
-			else
-				return 0;
-		}
+			if(aux->Codigo_del_curso == codigo)return 1;
+			else return 0;
+		 }
 	}
-	else
-		return 0;
+	else return 0;
 }
 
 int Verificar_Semestre()
 {// lee romanos devuelve entero
 	char aux[5];
-	do
-	{
+	do{/*Ciclo infinito hasta que retorne algun valor*/
 		printf("\nIngrese el semestre de la materia: ");
-		fflush(stdin);
-		fgets(aux,4,stdin);
-		cambio(aux);
+		fflush(stdin);fgets(aux,4,stdin);cambio(aux);
 		if (aux[0]=='\0')printf("Por favor ingrese un semestre \n");
 		if (((aux[0]=='I')||(aux[0]=='i'))&&(aux[1]=='\0')){ return 1;}
 		if (((aux[0]=='I')||(aux[0]=='i'))&&((aux[1]=='I')||(aux[1]=='i'))&&(aux[2]=='\0')){ return 2;}
@@ -767,8 +690,7 @@ int Verificar_Semestre()
 }
 
 void Semestre_Romano(int Numero,Materias **Nodo)
-{// dado un numero lo imprime en romano
-
+{// dado un numero del 1 al 10, lo convierte en romano
 	switch (Numero) 
 	{
 		case 1: strcpy((*Nodo)->SemestreEnRomano,"I"); break;
@@ -787,12 +709,10 @@ void Semestre_Romano(int Numero,Materias **Nodo)
 
 int validar_numero (char numero[])	
 {/*Funcion que nos permite validar dado un string, saber si tiene solo numeros*/
-	int i;
-	for(i=0;i<strlen(numero);i++)
-	{
+	for(int i=0;i<strlen(numero);i++)
+	{/*para cada caracter del string verificar si es un digito decimal*/
 		char letra=numero[i];
-		if (isdigit(letra))
-			continue;
+		if (isdigit(letra))continue;
 		return 0;
 	}
 	return true;
@@ -800,19 +720,17 @@ int validar_numero (char numero[])
 
 void Consultar_materia(Materias *Las_materias)
 {
-	if(Las_materias){
-	 Materias *consulta=Las_materias;
-	 while(consulta)
-	 { 
-		 printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-		consulta=consulta->prx;
-	 }
-	 system("pause");
+	if(Las_materias)
+	{/*Debe haber algo que consultar*/
+		Materias *consulta=Las_materias;
+		while(consulta)
+		{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+			printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+			consulta=consulta->prx;
+		}system("pause");
 	}
 	else
-	{
-		printf("No hay materias para consultar\n");system("pause");
-	}
+	{printf("No hay materias para consultar\n");system("pause");}
 }
 
 void Consultar_curso(Cursos *Los_cursos)
@@ -932,7 +850,8 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 	}
 }
 
-void Limitar_Caracteres (char *copia, int max){
+void Limitar_Caracteres (char *copia, int max)
+{
 	int z=max;
 	do{
 		fflush(stdin);
@@ -946,38 +865,38 @@ void Limitar_Caracteres (char *copia, int max){
 	fflush(stdin);
 }	
 
-void cambio(char c1[]){
-	int i;
-	for(i=0;i<strlen(c1);i++)
+void cambio(char c1[])
+{// evita salto de linea luego de un fgets
+	for(int i=0;i<strlen(c1);i++)
 		if(c1[i] == '\n')
 			c1[i] = '\0';
 }
 
 int Exportar_Materias(Materias *nodos)
-{
+{/* Exporta en un archivo el contenido de las materias*/
 	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/archivo.txt","w");
+	Nuevo_archivo = fopen("E:/archivo.txt","w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
-	{
+	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
 		return 0;
     }
 	while (nodos)
-	{
+	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
 		fprintf (Nuevo_archivo,"->%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
-	fprintf (Nuevo_archivo," ->NULL\n");
-	fclose(Nuevo_archivo);
+	fprintf (Nuevo_archivo,"->NULL\n");/*Luego de ingresar cada nodo, termina con un ->Null*/
+	fclose(Nuevo_archivo);/*Cierra el archivo*/
 	return 1;
 }
 
 int Importar_Materias(Materias **nodos)
 {
 	FILE *Archivo_entrada = NULL;
-	Archivo_entrada = fopen("E:/archivo.txt","r");
+	Archivo_entrada = fopen("E:/archivo.txt","r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
-	{
+	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
 		return 0;
     }
