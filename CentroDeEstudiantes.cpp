@@ -115,6 +115,7 @@ struct Materias
 	char Nombre_de_la_Materia[30];
 	char Descripcion_de_la_Materia[100];
 	int Semestre;
+	char SemestreEnRomano[5];
 	int Creditos_de_la_Materia;// se debe restringir al rango de 2 a 5
 	Materias *prx;
 };
@@ -145,7 +146,7 @@ struct Personas
 /*Rutinas*/
 
 int Verificar_Semestre();
-void imprimir_Romano(int Numero);
+void Semestre_Romano(int Numero,Materias **Nodo);
 void Agregar_Materia(Materias **Nueva_materia);
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
@@ -208,7 +209,7 @@ int main ()
 										case 1://Agregar Materia
 										{	
 											Agregar_Materia(&Materia); 
-											printf("\n Materia [%d] \'%s\' %i (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->Semestre,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
+											printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->SemestreEnRomano,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
 											/*lo anteriror es solo una verificacion de datos */system("pause");
 											break;
 										}
@@ -429,6 +430,7 @@ void Agregar_Materia(Materias **Nueva_materia)
 		cambio(Aux->Descripcion_de_la_Materia);
 		fflush(stdin);
 		Aux->Semestre=Verificar_Semestre();
+		Semestre_Romano(Aux->Semestre,&Aux);
 		fflush(stdin);
 		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
 		insertar_MateriaOrdenadamente( Nueva_materia, &Aux);
@@ -764,21 +766,21 @@ int Verificar_Semestre()
 	}while(true);
 }
 
-void imprimir_Romano(int Numero)
+void Semestre_Romano(int Numero,Materias **Nodo)
 {// dado un numero lo imprime en romano
 
 	switch (Numero) 
 	{
-		case 1: printf ("I"); break;
-		case 2: printf ("II"); break;
-		case 3: printf ("III"); break;
-		case 4: printf ("IV"); break;
-		case 5: printf ("V"); break;
-		case 6: printf ("VI"); break;
-		case 7: printf ("VII"); break;
-		case 8: printf ("VIII"); break;
-		case 9: printf ("IX"); break;
-		case 10: printf ("X"); break;
+		case 1: strcpy((*Nodo)->SemestreEnRomano,"I"); break;
+		case 2: strcpy((*Nodo)->SemestreEnRomano,"II"); break;
+		case 3: strcpy((*Nodo)->SemestreEnRomano,"III"); break;
+		case 4: strcpy((*Nodo)->SemestreEnRomano,"IV"); break;
+		case 5: strcpy((*Nodo)->SemestreEnRomano,"V"); break;
+		case 6: strcpy((*Nodo)->SemestreEnRomano,"VI"); break;
+		case 7: strcpy((*Nodo)->SemestreEnRomano,"VII"); break;
+		case 8: strcpy((*Nodo)->SemestreEnRomano,"VIII"); break;
+		case 9: strcpy((*Nodo)->SemestreEnRomano,"IX"); break;
+		case 10: strcpy((*Nodo)->SemestreEnRomano,"X"); break;
 		default: break;
 	}
 }
@@ -802,7 +804,7 @@ void Consultar_materia(Materias *Las_materias)
 	 Materias *consulta=Las_materias;
 	 while(consulta)
 	 { 
-		printf(" -Materia[%d] \"%s\" %i (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->Semestre,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+		 printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
 		consulta=consulta->prx;
 	 }
 	 system("pause");
@@ -962,7 +964,7 @@ int Exportar_Materias(Materias *nodos)
     }
 	while (nodos)
 	{
-		fprintf (Nuevo_archivo,"->%i %s %i (uc:%i): %s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->Semestre,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
+		fprintf (Nuevo_archivo,"->%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
 	fprintf (Nuevo_archivo," ->NULL\n");
@@ -972,9 +974,9 @@ int Exportar_Materias(Materias *nodos)
 
 int Importar_Materias(Materias **nodos)
 {
-	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/archivo.txt","r");
-	if(Nuevo_archivo == NULL ) 
+	FILE *Archivo_entrada = NULL;
+	Archivo_entrada = fopen("E:/archivo.txt","r");
+	if(Archivo_entrada == NULL ) 
 	{
 		printf("No fue posible abrir el archivo\n");
 		return 0;
@@ -998,6 +1000,6 @@ int Importar_Materias(Materias **nodos)
 		insertar_MateriaOrdenadamente( nodos, &Aux);
 		*/
 	}while(false);
-	fclose(Nuevo_archivo);
+	fclose(Archivo_entrada);
 	return 1;
 }
