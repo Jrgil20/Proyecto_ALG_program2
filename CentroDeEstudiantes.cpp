@@ -177,6 +177,7 @@ int main ()
 	do
 	{//Menu
 		system("cls");
+		Importar_Materias(&Materia);
 		printf("\t MENU\n\n");
 		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n ");
 		scanf_s("%d",&opciones);
@@ -881,8 +882,8 @@ int Exportar_Cursos(Cursos *nodos)
 
 int Importar_Materias(Materias **nodos)
 {
-	FILE *Archivo_entrada = NULL;
-	Archivo_entrada = fopen("E:/archivo.txt","r");/*Abre el archivo creado*/
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;
+	Archivo_entrada = fopen(":/archivo.txt","r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -890,12 +891,16 @@ int Importar_Materias(Materias **nodos)
     }
 	Materias *Nuevo_nodo= new Materias; fflush(stdin);
 	rewind(Archivo_entrada);//cursor al inicio del archivo
-	do
-	{
-		char buffer[] = "";
-		fscanf(Archivo_entrada, "%s", &buffer);
-		printf("Buffer:%s",buffer);system("pause");
-		/*fgets()
+    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
+	{// Lee cada línea del archivo
+        Elemento = strtok(linea, ",");
+        while (Elemento != NULL) 
+		{/* Imprime el dato delimitado para depurar y obtiene el siguiente elemento*/      
+            printf("%s\n", Elemento);
+			Elemento = strtok(NULL, ",");
+        }
+    }system("pause");
+		/*
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia", Nueva_materia);
 		printf("\nIngrese el nombre de la materia: ");
 		fgets(Aux->Nombre_de_la_Materia,30,stdin);
@@ -910,7 +915,6 @@ int Importar_Materias(Materias **nodos)
 		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
 		insertar_MateriaOrdenadamente( nodos, &Aux);
 		*/
-	}while(false);
 	fclose(Archivo_entrada);
 	return 1;
-}
+} 
