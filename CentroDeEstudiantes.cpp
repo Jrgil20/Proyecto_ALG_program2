@@ -203,37 +203,27 @@ int main ()
 								scanf_s("%d",&opciones_mantenimiento_Materias);
 								switch(opciones_mantenimiento_Materias)
 									{
-										case 1://Agregar Materia
-										{	
+										case 1://Agregar Materia	
 											Agregar_Materia(&Materia); 
 											printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->SemestreEnRomano,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
-											/*lo anteriror es solo una verificacion de datos */system("pause");
-											break;
-										}
+											/*lo anteriror es solo una verificacion de datos */system("pause");break;
 
 										case 2://Modificar
-										{
-											Modificar_Materia(&Materia);
-											break;
-										}
+											Modificar_Materia(&Materia);break;
+										
 										case 3://Consultar
-										{
-											Consultar_materia(Materia);
-											break;
-										}
+											Consultar_materia(Materia);break;
+										
 										case 4://Eliminar
-											Eliminar_materia(&Materia,&Curso);
-											break;
+											Eliminar_materia(&Materia,&Curso);break;
 
 										default:
 											if (opciones_mantenimiento_Materias)
-											{
-												printf("\n\nEsta opcion no es valida\n");
-												system("pause");break;
-											}
+											{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 									}
 							}while (opciones_mantenimiento_Materias);
-							if (Exportar_Materias(Materia));else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
+							if (Exportar_Materias(Materia));
+							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
 						}
 
@@ -250,30 +240,22 @@ int main ()
 								{
 									case 1://Agregar
 										Agregar_Curso(&Curso,&Materia);
-										if(Curso){
-										 printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Curso->Codigo_del_curso,Curso->Codigo_de_la_Materia,Curso->AAAA,Curso->lapso);
-										 system("pause");
-										}
+										if(Curso)
+											{printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Curso->Codigo_del_curso,Curso->Codigo_de_la_Materia,Curso->AAAA,Curso->lapso);system("pause");}
 										break;
 
 									case 2://Modificar
-										Modificar_Curso(&Curso);
-										break;
+										Modificar_Curso(&Curso);break;
 
 									case 3://Consultar
-										Consultar_curso(Curso);
-										break;
+										Consultar_curso(Curso);break;
 
 									case 4://Eliminar
-										Eliminar_curso(&Curso);
-										break;
+										Eliminar_curso(&Curso);break;
 
 									default:
 										if (opciones_mantenimiento_Cursos)
-										{
-											printf("\n\nEsta opcion no es valida\n");
-											system("pause");break;
-										}
+										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Cursos);
 							break;
@@ -304,10 +286,7 @@ int main ()
 
 									default:
 										if (opciones_mantenimiento_Personas)
-										{
-											printf("\n\nEsta opcion no es valida\n");
-											system("pause");break;
-										}
+										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Personas);
 							break;
@@ -315,10 +294,7 @@ int main ()
 
 						default:
 							if (opciones_mantenimiento)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 						}
 					}while (opciones_mantenimiento);
 					break;
@@ -346,10 +322,7 @@ int main ()
 
 						default:
 							if (opciones_control_estudios)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
 				}while (opciones_control_estudios);
 			}
@@ -391,20 +364,14 @@ int main ()
 
 						default:
 							if (opciones_consultas)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+								{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
 				}while (opciones_consultas);
 			}
 
 			default:
 				if (opciones)
-				{
-					printf("\n\nEsta opcion no es valida\n");
-					system("pause");break;
-				}
+					{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 		}
 	}while (opciones);
 	system("pause");
@@ -463,7 +430,7 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 }
 
 void Modificar_Materia(Materias **materia)
-{
+{/*Verificar*/
 	Materias *Respaldo= *materia; int Elegido;char copia[10];
 	if (*materia)
 	{
@@ -487,28 +454,28 @@ void Modificar_Materia(Materias **materia)
 						printf("\nIngrese el nuevo nombre de la materia: ");
 						fflush(stdin);Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);fflush(stdin);
 						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
-						/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
 						break;
 					
 					case 2://Descripcion
 						printf("\nIngrese la nueva Descripcion de la materia: ");
 						fflush(stdin);Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);fflush(stdin);
-						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Descripcion_de_la_Materia); _sleep(500);
 						break;
 
 					case 3://Semestre
-							Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
-							printf("\nSemestre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
+						Semestre_Romano(Respaldo->Semestre,&Respaldo);fflush(stdin);
+						printf("\nSemestre de %s modificado exitosamente",Respaldo->SemestreEnRomano); _sleep(500);
 						break;
 
 					case 4://Creditos
 						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
-						printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia); _sleep(500);
 						break;
 					
 					default:
 						if (opciones_de_Modificacion)
-						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 				}
 			}while (opciones_de_Modificacion);
 			Respaldo = *materia;
@@ -713,7 +680,7 @@ int validar_numero (char numero[])
 	{/*para cada caracter del string verificar si es un digito decimal*/
 		char letra=numero[i];
 		if (isdigit(letra))continue;
-		return 0;
+		return false;
 	}
 	return true;
 }
@@ -730,7 +697,7 @@ void Consultar_materia(Materias *Las_materias)
 		}system("pause");
 	}
 	else
-	{printf("No hay materias para consultar\n");system("pause");}
+		{printf("No hay materias para consultar\n");system("pause");}
 }
 
 void Consultar_curso(Cursos *Los_cursos)
@@ -827,26 +794,27 @@ void Eliminar_curso (Cursos **Los_cursos)
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 {
 	char copia[10];
-	if (*Los_cursos){
+	if (*Los_cursos)
+	{
 		Cursos *consulta=*Los_cursos, *temp=NULL;
-		if ((consulta->Codigo_de_la_Materia) == codigo_mat){
+		if ((consulta->Codigo_de_la_Materia) == codigo_mat)
+		{
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
 			delete temp;
-		}
-		else{
-			while(consulta->prx)
-			{
-				if (consulta->prx->Codigo_de_la_Materia == codigo_mat){
-					temp = consulta->prx;
-					consulta->prx = temp->prx;
-					delete temp;
+		}else{
+				while(consulta->prx)
+				{
+					if (consulta->prx->Codigo_de_la_Materia == codigo_mat)
+					{
+						temp = consulta->prx;
+						consulta->prx = temp->prx;
+						delete temp;
+					}
+					else
+						consulta = consulta->prx;
 				}
-				else
-					consulta = consulta->prx;
-
-			}
-		}
+			 }
 	}
 }
 
@@ -883,10 +851,10 @@ int Exportar_Materias(Materias *nodos)
     }
 	while (nodos)
 	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
-		fprintf (Nuevo_archivo,"->%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
+		fprintf (Nuevo_archivo,"%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
-	fprintf (Nuevo_archivo,"->NULL\n");/*Luego de ingresar cada nodo, termina con un ->Null*/
+	fprintf (Nuevo_archivo,"NULL\n");/*Luego de ingresar cada nodo, termina con un ->Null*/
 	fclose(Nuevo_archivo);/*Cierra el archivo*/
 	return 1;
 }
@@ -901,9 +869,13 @@ int Importar_Materias(Materias **nodos)
 		return 0;
     }
 	Materias *Nuevo_nodo= new Materias; fflush(stdin);
+	rewind(Archivo_entrada);//cursor al inicio del archivo
 	do
 	{
-		/*
+		char buffer[] = "";
+		fscanf(Archivo_entrada, "%s", &buffer);
+		printf("Buffer:%s",buffer);system("pause");
+		/*fgets()
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia", Nueva_materia);
 		printf("\nIngrese el nombre de la materia: ");
 		fgets(Aux->Nombre_de_la_Materia,30,stdin);
