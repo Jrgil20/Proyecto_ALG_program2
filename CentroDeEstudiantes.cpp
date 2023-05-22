@@ -165,6 +165,7 @@ void Eliminar_curso (Cursos **Los_cursos);
 void Limitar_Caracteres (char *copia, int max);
 void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
+int Exportar_Cursos(Cursos *nodos);
 int Importar_Materias(Materias **nodos);
 
 int main ()
@@ -258,6 +259,8 @@ int main ()
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Cursos);
+							if (Exportar_Cursos(Curso));
+							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
 							break;
 						}
 
@@ -843,7 +846,7 @@ void cambio(char c1[])
 int Exportar_Materias(Materias *nodos)
 {/* Exporta en un archivo el contenido de las materias*/
 	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/archivo.txt","w");/*Abre el archivo creado*/
+	Nuevo_archivo = fopen("E:/ArchivoMaterias.txt","w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
 	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -854,7 +857,24 @@ int Exportar_Materias(Materias *nodos)
 		fprintf (Nuevo_archivo,"%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
-	fprintf (Nuevo_archivo,"NULL\n");/*Luego de ingresar cada nodo, termina con un ->Null*/
+	fclose(Nuevo_archivo);/*Cierra el archivo*/
+	return 1;
+}
+
+int Exportar_Cursos(Cursos *nodos)
+{/* Exporta en un archivo el contenido de las materias*/
+	FILE *Nuevo_archivo = NULL;
+	Nuevo_archivo = fopen("E:/ArchivoCursos.txt","w");/*Abre el archivo creado*/
+	if(Nuevo_archivo == NULL ) 
+	{/*verifica que se haya creado correctamente e informa de no ser asi*/
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	while (nodos)
+	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
+		fprintf (Nuevo_archivo,"%i,%i,%i,%i\n",nodos->Codigo_de_la_Materia,nodos->Codigo_del_curso,nodos->lapso,nodos->AAAA);
+		nodos=nodos->prx;
+	}
 	fclose(Nuevo_archivo);/*Cierra el archivo*/
 	return 1;
 }
