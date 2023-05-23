@@ -1,7 +1,94 @@
+﻿/*
+    Nombre:
+		MINI PROYECTO 1	
+	Objetivo:
+		Se desea crear un programa que maneje el control de estudios de un centro educativo.
+	Descripcion:
+		`En la instituci�n se dictan clases semestralmente, se tienen tres lapsos (1,2,3) anuales, el per�odo corresponde al curso de verano anual.
+		`Las materias a dictar est�n guardadas en el sistema. Se pueden modificar, consultar o eliminar materias. 
+		`Cuando se elimina una materia se deben borrar del sistema todos los cursos con esa materia como contenido. 
+		`El c�digo de materia es �nico y no se puede modificar una vez creado.
+		`Para registrar un curso deben preexistir la materia (c�digo) y los alumnos (c�dula).
+		`Un alumno puede solo puede tener aprobada una materia una vez, luego de ello no puede reinscribirla.
+		`Puede haber reprobado la materia un m�ximo de 4 (cuatro) veces. En caso de reprobar ya no puede volver a inscribirse en el instituto.
+		`Puede haber retirado la materia infinita cantidad de veces. 
+		`El c�digo del curso es �nico y no puede ser modificado una vez creado.
+			-Cuando se elimina un curso, deben borrarse todas sus referencias en el sistema
+			-Cuando se elimina un alumno deben borrarse todas sus referencias en el sistema.
+			-El sistema debe manejarse en listas din�micas en memoria principal y almacenarse en memoria secundaria.
+		Se tienen tres listas principales:
+			*Materias:
+				 c�digo dela materia (entero),
+				 nombre (hasta 30 caracteres),
+				 descripci�n(m�ximo 100 caracteres),
+				 semestre al que pertenece (I,II, �, X),
+				 numero de cr�ditos ( 2 a 5 ).
+			*Cursos:
+				C�digo del curso ( entero ),
+				c�digo materia, a�o ( XXXX), 
+				Lapso (1..3: indica primer semestre, segundo o verano).
+			*Personas:
+				C�dula de identidad ( entero largo ),
+				nombres y apellidos,
+				fecha de nacimiento,
+				direcci�n.
+				La cedula es �nica y no puede ser modificada. 
+				Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.
+				Igual mente cada estudiante tiene una lista de los cursos en que ha participado.
+				All� se almacenan: c�digo de curso y la nota correspondiente.
+	Caracter�sticas del sistema:
+		El sistema tiene un men� principal que tiene tres (03) opciones principales
+		+Mantenimiento: (tablas base del sistema)
+			-Materias:                             
+				*agregar
+				*modificar
+				*consultar 
+				*eliminar.
+			-Cursos:
+				*agregar, 
+				*modificar
+				*consultar 
+				*eliminar.
+			-Personas:
+				*agregar
+				*modificar
+				*consultar 
+				*eliminar personas (sin datos de cursos)
+		+Control de estudios
+			-Alumnos:
+				*Agregar 
+				*modificar 
+				*eliminar alumnos en cursos con sus notas correspondientes.
+			-Una persona solo se puede inscribir una vez en cada Curso.
+			-No se puede inscribir a un alumno en una materia que ya tenga aprobada. 
+            -Se puede modificar la nota en un curso y alumnos dados
+		+Consultas:
+			- Dado un nombre de curso buscar su c�digo.
+			- Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
+			- Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+			- Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+			-Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+			-Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+			-Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
+			-Dada una cedula mostrar todos los cursos con sus notas tomadas por esapersona
+*/
+/*
+	Entrega inicial: 01 de junio 2023 v�a m�dulo 7 (archivo comprimido con todos los fuentesy archivos de datos).
+	Grupos de un m�ximo de 04 (cuatro) personas. (misma secci�n).
+	
+	Contenido de la entrega: 
+	todo el mantenimiento del sistema (tablas):
+		-materias
+		-cursos 
+		-personas 
+		(agregar, modificar y eliminar, as� como el almacenamiento y recuperaci�n de la informaci�n con archivos).
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <windows.h>
 
 /*estructuras y tipos secundarios*/
 typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; const int maxEntero=1294967295;
@@ -76,9 +163,10 @@ void Consultar_curso(Cursos *Los_cursos);
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat);
 void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
-void Limitar_Caracteres (char *copia, int max);
+int LimitarCaracteres (char *copia, int max);
 void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
+int Exportar_Cursos(Cursos *nodos);
 int Importar_Materias(Materias **nodos);
 
 int main ()
@@ -87,6 +175,7 @@ int main ()
 	Cursos *Curso =NULL;
 	int opciones=0; 
 
+	Importar_Materias(&Materia);
 	do
 	{//Menu
 		system("cls");
@@ -117,37 +206,27 @@ int main ()
 								scanf_s("%d",&opciones_mantenimiento_Materias);
 								switch(opciones_mantenimiento_Materias)
 									{
-										case 1://Agregar Materia
-										{	
+										case 1://Agregar Materia	
 											Agregar_Materia(&Materia); 
 											printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->SemestreEnRomano,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
-											/*lo anteriror es solo una verificacion de datos */system("pause");
-											break;
-										}
+											/*lo anteriror es solo una verificacion de datos */system("pause");break;
 
 										case 2://Modificar
-										{
-											Modificar_Materia(&Materia);
-											break;
-										}
+											Modificar_Materia(&Materia);break;
+										
 										case 3://Consultar
-										{
-											Consultar_materia(Materia);
-											break;
-										}
+											Consultar_materia(Materia);break;
+										
 										case 4://Eliminar
-											Eliminar_materia(&Materia,&Curso);
-											break;
+											Eliminar_materia(&Materia,&Curso);break;
 
 										default:
 											if (opciones_mantenimiento_Materias)
-											{
-												printf("\n\nEsta opcion no es valida\n");
-												system("pause");break;
-											}
+											{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 									}
 							}while (opciones_mantenimiento_Materias);
-							if (Exportar_Materias(Materia));else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
+							if (Exportar_Materias(Materia));
+							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
 						}
 
@@ -164,32 +243,26 @@ int main ()
 								{
 									case 1://Agregar
 										Agregar_Curso(&Curso,&Materia);
-										if(Curso){
-										 printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Curso->Codigo_del_curso,Curso->Codigo_de_la_Materia,Curso->AAAA,Curso->lapso);
-										 system("pause");
-										}
+										if(Curso)
+											{printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Curso->Codigo_del_curso,Curso->Codigo_de_la_Materia,Curso->AAAA,Curso->lapso);system("pause");}
 										break;
 
 									case 2://Modificar
-										Modificar_Curso(&Curso);
-										break;
+										Modificar_Curso(&Curso);break;
 
 									case 3://Consultar
-										Consultar_curso(Curso);
-										break;
+										Consultar_curso(Curso);break;
 
 									case 4://Eliminar
-										Eliminar_curso(&Curso);
-										break;
+										Eliminar_curso(&Curso);break;
 
 									default:
 										if (opciones_mantenimiento_Cursos)
-										{
-											printf("\n\nEsta opcion no es valida\n");
-											system("pause");break;
-										}
+										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Cursos);
+							if (Exportar_Cursos(Curso));
+							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
 							break;
 						}
 
@@ -218,10 +291,7 @@ int main ()
 
 									default:
 										if (opciones_mantenimiento_Personas)
-										{
-											printf("\n\nEsta opcion no es valida\n");
-											system("pause");break;
-										}
+										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Personas);
 							break;
@@ -229,10 +299,7 @@ int main ()
 
 						default:
 							if (opciones_mantenimiento)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 						}
 					}while (opciones_mantenimiento);
 					break;
@@ -260,10 +327,7 @@ int main ()
 
 						default:
 							if (opciones_control_estudios)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
 				}while (opciones_control_estudios);
 			}
@@ -305,20 +369,14 @@ int main ()
 
 						default:
 							if (opciones_consultas)
-							{
-								printf("\n\nEsta opcion no es valida\n");
-								system("pause");break;
-							}
+								{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
 				}while (opciones_consultas);
 			}
 
 			default:
 				if (opciones)
-				{
-					printf("\n\nEsta opcion no es valida\n");
-					system("pause");break;
-				}
+					{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 		}
 	}while (opciones);
 	system("pause");
@@ -329,7 +387,7 @@ void Agregar_Materia(Materias **Lista_materia)
 {/*Crea un nodo llamado aux y lo ingresa en la lista de materias*/
 	Materias *Aux= new Materias; fflush(stdin);
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia",Lista_materia);
-		printf("\nIngrese el nombre de la materia: ");
+		printf("\nIngrese el nombre de la materia: ");fflush(stdin);
 		fgets(Aux->Nombre_de_la_Materia,30,stdin);cambio(Aux->Nombre_de_la_Materia);fflush(stdin);
 		printf("\nIngrese la Descripcion de la materia: ");
 		fgets(Aux->Descripcion_de_la_Materia,100,stdin);cambio(Aux->Descripcion_de_la_Materia);fflush(stdin);
@@ -371,14 +429,14 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 			Aux->prx=*c;
 			*c=Aux;
 		}else
-			{printf("La materia no existe, por lo que no se creara el curso\n");_sleep(500);}
+			{printf("La materia no existe, por lo que no se creara el curso\n");Sleep(500);}
 	}else
-		{printf("No existen materias, por lo que no se pueden crear cursos\n");_sleep(500);}
+		{printf("No existen materias, por lo que no se pueden crear cursos\n");Sleep(500);}
 }
 
 void Modificar_Materia(Materias **materia)
-{
-	Materias *Respaldo= *materia; int Elegido;char copia[10];
+{/*Verificar*/
+	Materias *Respaldo= *materia; int Elegido;
 	if (*materia)
 	{
 		Materias *consulta=*materia, *temp=NULL;
@@ -399,30 +457,30 @@ void Modificar_Materia(Materias **materia)
 				{
 					case 1://Nombre
 						printf("\nIngrese el nuevo nombre de la materia: ");
-						fflush(stdin);Limitar_Caracteres(Respaldo->Nombre_de_la_Materia,30);fflush(stdin);
-						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
-						/* verificar : que el nombre solo tenga un maximo de 30 carcteres*/
+						fflush(stdin);fgets(Respaldo->Nombre_de_la_Materia,30,stdin);cambio(Respaldo->Nombre_de_la_Materia);fflush(stdin);
+						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia);Sleep(500);
 						break;
 					
 					case 2://Descripcion
 						printf("\nIngrese la nueva Descripcion de la materia: ");
-						fflush(stdin);Limitar_Caracteres(Respaldo->Descripcion_de_la_Materia,100);fflush(stdin);
-						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						fflush(stdin);fgets(Respaldo->Descripcion_de_la_Materia,100,stdin);cambio(Respaldo->Descripcion_de_la_Materia);fflush(stdin);fflush(stdin);
+						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Descripcion_de_la_Materia);Sleep(500);
 						break;
 
 					case 3://Semestre
-							Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
-							printf("\nSemestre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
+						Semestre_Romano(Respaldo->Semestre,&Respaldo);fflush(stdin);
+						printf("\nSemestre de %s modificado exitosamente",Respaldo->SemestreEnRomano);Sleep(500);
 						break;
 
 					case 4://Creditos
 						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
-						printf("Creditos de %s modificados exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia);Sleep(500);
 						break;
 					
 					default:
 						if (opciones_de_Modificacion)
-						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 				}
 			}while (opciones_de_Modificacion);
 			Respaldo = *materia;
@@ -433,7 +491,7 @@ void Modificar_Materia(Materias **materia)
 
 void Modificar_Curso(Cursos **curso)
 {
-	Cursos *Respaldo= *curso; int Elegido;char copia[10];
+	Cursos *Respaldo= *curso; int Elegido;
 	if (*curso)
 	{
 		Cursos *consulta=*curso, *temp=NULL;
@@ -623,11 +681,11 @@ void Semestre_Romano(int Numero,Materias **Nodo)
 
 int validar_numero (char numero[])	
 {/*Funcion que nos permite validar dado un string, saber si tiene solo numeros*/
-	for(int i=0;i<strlen(numero);i++)
+	for(int i=0;unsigned(i)<strlen(numero);i++)
 	{/*para cada caracter del string verificar si es un digito decimal*/
 		char letra=numero[i];
 		if (isdigit(letra))continue;
-		return 0;
+		return false;
 	}
 	return true;
 }
@@ -644,7 +702,7 @@ void Consultar_materia(Materias *Las_materias)
 		}system("pause");
 	}
 	else
-	{printf("No hay materias para consultar\n");system("pause");}
+		{printf("No hay materias para consultar\n");system("pause");}
 }
 
 void Consultar_curso(Cursos *Los_cursos)
@@ -666,7 +724,6 @@ void Consultar_curso(Cursos *Los_cursos)
 
 void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 {
-	char copia[10];
 	int codigo_mat,cont=0;
 
 	if (*Las_materias){
@@ -704,7 +761,6 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 
 void Eliminar_curso (Cursos **Los_cursos)
 {
-	char copia[10];
 	int codigo_mat,cont=0;
 
 	if (*Los_cursos){
@@ -740,48 +796,39 @@ void Eliminar_curso (Cursos **Los_cursos)
 
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 {
-	char copia[10];
-	if (*Los_cursos){
+	if (*Los_cursos)
+	{
 		Cursos *consulta=*Los_cursos, *temp=NULL;
-		if ((consulta->Codigo_de_la_Materia) == codigo_mat){
+		if ((consulta->Codigo_de_la_Materia) == codigo_mat)
+		{
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
 			delete temp;
-		}
-		else{
-			while(consulta->prx)
-			{
-				if (consulta->prx->Codigo_de_la_Materia == codigo_mat){
-					temp = consulta->prx;
-					consulta->prx = temp->prx;
-					delete temp;
+		}else{
+				while(consulta->prx)
+				{
+					if (consulta->prx->Codigo_de_la_Materia == codigo_mat)
+					{
+						temp = consulta->prx;
+						consulta->prx = temp->prx;
+						delete temp;
+					}
+					else
+						consulta = consulta->prx;
 				}
-				else
-					consulta = consulta->prx;
-
-			}
-		}
+			 }
 	}
 }
 
-void Limitar_Caracteres (char *copia, int max)
-{
-	int z=max;
-	do{
-		fflush(stdin);
-		scanf_s (" %[^\n]s",&*copia);
-		if (!(strlen(copia)>0)||!(strlen(copia)<=z)){
-			printf(" LA CADENA DEBE SER MENOR A %i Y MAYOR A 0 CARACTERES \n", max);
-			printf(" INGRESE DE NUEVO = ");
-		}
-	} while (!(strlen(copia)>0)||!(strlen(copia)<=z));
-	printf  ("\n");
-	fflush(stdin);
+int LimitarCaracteres (char *copia, int max)
+{		
+		if (!(strlen(copia)>0)||!(strlen(copia)<=unsigned(max)))return 0;
+		else return 1;
 }	
 
 void cambio(char c1[])
 {// evita salto de linea luego de un fgets
-	for(int i=0;i<strlen(c1);i++)
+	for(int i=0;unsigned(i)<strlen(c1);i++)
 		if(c1[i] == '\n')
 			c1[i] = '\0';
 }
@@ -789,7 +836,7 @@ void cambio(char c1[])
 int Exportar_Materias(Materias *nodos)
 {/* Exporta en un archivo el contenido de las materias*/
 	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/archivo.txt","w");/*Abre el archivo creado*/
+	Nuevo_archivo = fopen("E:/ArchivoMaterias.txt","w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
 	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -797,42 +844,67 @@ int Exportar_Materias(Materias *nodos)
     }
 	while (nodos)
 	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
-		fprintf (Nuevo_archivo,"->%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
+		fprintf (Nuevo_archivo,"%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
-	fprintf (Nuevo_archivo,"->NULL\n");/*Luego de ingresar cada nodo, termina con un ->Null*/
+	fclose(Nuevo_archivo);/*Cierra el archivo*/
+	return 1;
+}
+
+int Exportar_Cursos(Cursos *nodos)
+{/* Exporta en un archivo el contenido de las materias*/
+	FILE *Nuevo_archivo = NULL;
+	Nuevo_archivo = fopen("E:/ArchivoCursos.txt","w");/*Abre el archivo creado*/
+	if(Nuevo_archivo == NULL ) 
+	{/*verifica que se haya creado correctamente e informa de no ser asi*/
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	while (nodos)
+	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
+		fprintf (Nuevo_archivo,"%i,%i,%i,%i\n",nodos->Codigo_de_la_Materia,nodos->Codigo_del_curso,nodos->lapso,nodos->AAAA);
+		nodos=nodos->prx;
+	}
 	fclose(Nuevo_archivo);/*Cierra el archivo*/
 	return 1;
 }
 
 int Importar_Materias(Materias **nodos)
 {
-	FILE *Archivo_entrada = NULL;
-	Archivo_entrada = fopen("E:/archivo.txt","r");/*Abre el archivo creado*/
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
+	Archivo_entrada = fopen("J:/ArchivoMaterias.txt","r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
 		return 0;
     }
-	Materias *Nuevo_nodo= new Materias; fflush(stdin);
-	do
-	{
-		/*
-		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia", Nueva_materia);
-		printf("\nIngrese el nombre de la materia: ");
-		fgets(Aux->Nombre_de_la_Materia,30,stdin);
-		cambio(Aux->Nombre_de_la_Materia);
-		fflush(stdin);
-		printf("\nIngrese la Descripcion de la materia: ");
-		fgets(Aux->Descripcion_de_la_Materia,100,stdin);
-		cambio(Aux->Descripcion_de_la_Materia);
-		fflush(stdin);
-		Aux->Semestre=Verificar_Semestre();
-		fflush(stdin);
-		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
-		insertar_MateriaOrdenadamente( nodos, &Aux);
-		*/
-	}while(false);
+	rewind(Archivo_entrada);//cursor al inicio del archivo
+    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
+	{// Lee cada línea del archivo y lo convierte en un nodo completo
+		Materias *Nuevo_nodo= new Materias; int error=0;
+        Elemento = strtok(linea, ",");      
+        Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
+		if ( Nuevo_nodo->Codigo_de_la_Materia>=maxEntero || Nuevo_nodo->Codigo_de_la_Materia<=0 || !(validar_numero(Elemento)) ) error++;
+		Elemento = strtok(NULL, ",");
+		if (LimitarCaracteres (Elemento, 30))strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
+		else error++;	
+		Elemento = strtok(NULL, ",");
+		Nuevo_nodo->Creditos_de_la_Materia=atoi(Elemento);
+		if ((Nuevo_nodo->Creditos_de_la_Materia <2)||(Nuevo_nodo->Creditos_de_la_Materia >5)) error++;
+		Elemento = strtok(NULL, ",");
+		Nuevo_nodo->Semestre=atoi(Elemento);
+		Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);
+		if ((Nuevo_nodo->Creditos_de_la_Materia <1)||(Nuevo_nodo->Creditos_de_la_Materia >10)) error++;	
+		Elemento = strtok(NULL, ",");
+		if (LimitarCaracteres (Elemento, 100))strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
+		if(error)printf("Errores en el nodo: %i\n",error);
+		else 
+		{/*se imprime para verificar*/
+			insertar_MateriaOrdenadamente(nodos, &Nuevo_nodo);
+			printf(" se importo el nodo :Materia[%d] \"%s\" %s (%i): %s \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Nombre_de_la_Materia,Nuevo_nodo->SemestreEnRomano,Nuevo_nodo->Creditos_de_la_Materia,Nuevo_nodo->Descripcion_de_la_Materia);	
+		}
+		Elemento = strtok(NULL, ",");
+    }system("pause");	
 	fclose(Archivo_entrada);
 	return 1;
-}
+} 
