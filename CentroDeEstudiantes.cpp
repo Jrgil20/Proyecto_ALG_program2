@@ -88,6 +88,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <windows.h>
 
 /*estructuras y tipos secundarios*/
 typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; const int maxEntero=1294967295;
@@ -428,14 +429,14 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 			Aux->prx=*c;
 			*c=Aux;
 		}else
-			{printf("La materia no existe, por lo que no se creara el curso\n");_sleep(500);}
+			{printf("La materia no existe, por lo que no se creara el curso\n");Sleep(500);}
 	}else
-		{printf("No existen materias, por lo que no se pueden crear cursos\n");_sleep(500);}
+		{printf("No existen materias, por lo que no se pueden crear cursos\n");Sleep(500);}
 }
 
 void Modificar_Materia(Materias **materia)
 {/*Verificar*/
-	Materias *Respaldo= *materia; int Elegido;char copia[10];
+	Materias *Respaldo= *materia; int Elegido;
 	if (*materia)
 	{
 		Materias *consulta=*materia, *temp=NULL;
@@ -457,24 +458,24 @@ void Modificar_Materia(Materias **materia)
 					case 1://Nombre
 						printf("\nIngrese el nuevo nombre de la materia: ");
 						fflush(stdin);fgets(Respaldo->Nombre_de_la_Materia,30,stdin);cambio(Respaldo->Nombre_de_la_Materia);fflush(stdin);
-						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia); _sleep(500);
+						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia);Sleep(500);
 						break;
 					
 					case 2://Descripcion
 						printf("\nIngrese la nueva Descripcion de la materia: ");
 						fflush(stdin);fgets(Respaldo->Descripcion_de_la_Materia,100,stdin);cambio(Respaldo->Descripcion_de_la_Materia);fflush(stdin);fflush(stdin);
-						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Descripcion_de_la_Materia); _sleep(500);
+						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Descripcion_de_la_Materia);Sleep(500);
 						break;
 
 					case 3://Semestre
 						Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
 						Semestre_Romano(Respaldo->Semestre,&Respaldo);fflush(stdin);
-						printf("\nSemestre de %s modificado exitosamente",Respaldo->SemestreEnRomano); _sleep(500);
+						printf("\nSemestre de %s modificado exitosamente",Respaldo->SemestreEnRomano);Sleep(500);
 						break;
 
 					case 4://Creditos
 						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
-						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia); _sleep(500);
+						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia);Sleep(500);
 						break;
 					
 					default:
@@ -490,7 +491,7 @@ void Modificar_Materia(Materias **materia)
 
 void Modificar_Curso(Cursos **curso)
 {
-	Cursos *Respaldo= *curso; int Elegido;char copia[10];
+	Cursos *Respaldo= *curso; int Elegido;
 	if (*curso)
 	{
 		Cursos *consulta=*curso, *temp=NULL;
@@ -680,7 +681,7 @@ void Semestre_Romano(int Numero,Materias **Nodo)
 
 int validar_numero (char numero[])	
 {/*Funcion que nos permite validar dado un string, saber si tiene solo numeros*/
-	for(int i=0;i<strlen(numero);i++)
+	for(int i=0;unsigned(i)<strlen(numero);i++)
 	{/*para cada caracter del string verificar si es un digito decimal*/
 		char letra=numero[i];
 		if (isdigit(letra))continue;
@@ -723,7 +724,6 @@ void Consultar_curso(Cursos *Los_cursos)
 
 void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 {
-	char copia[10];
 	int codigo_mat,cont=0;
 
 	if (*Las_materias){
@@ -761,7 +761,6 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 
 void Eliminar_curso (Cursos **Los_cursos)
 {
-	char copia[10];
 	int codigo_mat,cont=0;
 
 	if (*Los_cursos){
@@ -797,7 +796,6 @@ void Eliminar_curso (Cursos **Los_cursos)
 
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 {
-	char copia[10];
 	if (*Los_cursos)
 	{
 		Cursos *consulta=*Los_cursos, *temp=NULL;
@@ -824,13 +822,13 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 
 int LimitarCaracteres (char *copia, int max)
 {		
-		if (!(strlen(copia)>0)||!(strlen(copia)<=max))return 0;
+		if (!(strlen(copia)>0)||!(strlen(copia)<=unsigned(max)))return 0;
 		else return 1;
 }	
 
 void cambio(char c1[])
 {// evita salto de linea luego de un fgets
-	for(int i=0;i<strlen(c1);i++)
+	for(int i=0;unsigned(i)<strlen(c1);i++)
 		if(c1[i] == '\n')
 			c1[i] = '\0';
 }
@@ -874,7 +872,7 @@ int Exportar_Cursos(Cursos *nodos)
 int Importar_Materias(Materias **nodos)
 {
 	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
-	Archivo_entrada = fopen("J:/archivo.txt","r");/*Abre el archivo creado*/
+	Archivo_entrada = fopen("J:/ArchivoMaterias.txt","r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
