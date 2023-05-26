@@ -955,28 +955,38 @@ int Importar_Materias(Materias **nodos)
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Materias *Nuevo_nodo= new Materias; int error=0;
         Elemento = strtok(linea, ",");      
-        Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
-		if ( Nuevo_nodo->Codigo_de_la_Materia>=maxEntero || Nuevo_nodo->Codigo_de_la_Materia<=0 || !(validar_numero(Elemento)) ) error++;
+		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !validar_numero(Elemento) || Existe_codigo(atoi(Elemento),nodos) ) 
+			error++;
+		else 
+			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 		Elemento = strtok(NULL, ",");cambio(Elemento);
-		if (LimitarCaracteres (Elemento, 30))strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
-		else error++;	
+		if (LimitarCaracteres (Elemento, 30))
+			strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
+		else 
+			error++;	
 		Elemento = strtok(NULL, ",");
-		Nuevo_nodo->Creditos_de_la_Materia=atoi(Elemento);
-		if ((Nuevo_nodo->Creditos_de_la_Materia <2)||(Nuevo_nodo->Creditos_de_la_Materia >5)) error++;
+		if ((atoi(Elemento) <2)||(atoi(Elemento) >5)) 
+			error++;
+		else
+			Nuevo_nodo->Creditos_de_la_Materia=atoi(Elemento);
 		Elemento = strtok(NULL, ",");
-		Nuevo_nodo->Semestre=atoi(Elemento);
-		Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);
-		if ((Nuevo_nodo->Semestre <1)||(Nuevo_nodo->Semestre >10)) error++;	
+		if ((atoi(Elemento) <1)||(atoi(Elemento) >10))
+			error++;	
+		else 
+			{Nuevo_nodo->Semestre=atoi(Elemento);Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");cambio(Elemento);
-		if (LimitarCaracteres (Elemento, 100))strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
+		if (LimitarCaracteres (Elemento, 100))
+			strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
+		else
+			error++;
 		if(error)printf("Errores en el nodo: %i\n",error);
 		else 
 		{/*se imprime para verificar*/
 			insertar_MateriaOrdenadamente(nodos, &Nuevo_nodo);
-			printf(" se importo el nodo :Materia[%d] \"%s\" %s (%i): %s \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Nombre_de_la_Materia,Nuevo_nodo->SemestreEnRomano,Nuevo_nodo->Creditos_de_la_Materia,Nuevo_nodo->Descripcion_de_la_Materia);	
+			printf(" Importar: Materia[%d] \"%s\" %s (%i): %s \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Nombre_de_la_Materia,Nuevo_nodo->SemestreEnRomano,Nuevo_nodo->Creditos_de_la_Materia,Nuevo_nodo->Descripcion_de_la_Materia);	
 		}
 		Elemento = strtok(NULL, ",");
-	}Sleep(1000);
+	}system("pause");
 	fclose(Archivo_entrada);
 	return 1;
 } 
@@ -1018,10 +1028,10 @@ int Importar_Cursos(Cursos **nodos)
 		else 
 		{/*se imprime para verificar*/
 			insertar_CursoOrdenadamente(nodos,&Nuevo_nodo);
-			printf(" se importo el nodo :Cursos[%d] \"%i\" (%i): %i \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Codigo_del_curso,Nuevo_nodo->lapso,Nuevo_nodo->AAAA);	
+			printf(" Importar: Cursos[%d] \"%i\" (%i): %i \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Codigo_del_curso,Nuevo_nodo->lapso,Nuevo_nodo->AAAA);	
 		}
 		Elemento = strtok(NULL, ",");
-	}Sleep(1000);
+	}system("pause");
 	fclose(Archivo_entrada);
 	return 1;
 }
