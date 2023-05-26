@@ -148,6 +148,7 @@ void Semestre_Romano(int Numero,Materias **Nodo);
 void Agregar_Materia(Materias **Nueva_materia);
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
+void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
 void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q);
 void Ingresar_codigo_aux(int *codigo, char De[15]);
@@ -168,6 +169,7 @@ void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
 int Exportar_Cursos(Cursos *nodos);
 int Importar_Materias(Materias **nodos);
+int Importar_Cursos(Cursos **nodos);
 
 int main ()
 {
@@ -176,6 +178,7 @@ int main ()
 	int opciones=0; 
 
 	Importar_Materias(&Materia);
+	Importar_Cursos(&Curso);
 	do
 	{//Menu
 		system("cls");
@@ -240,10 +243,7 @@ int main ()
 								switch(opciones_mantenimiento_Cursos)
 								{
 									case 1://Agregar
-										Agregar_Curso(&Curso,&Materia);
-										if(Curso)
-											{printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Curso->Codigo_del_curso,Curso->Codigo_de_la_Materia,Curso->AAAA,Curso->lapso);system("pause");}
-										break;
+										Agregar_Curso(&Curso,&Materia);break;
 
 									case 2://Modificar
 										Modificar_Curso(&Curso);break;
@@ -388,14 +388,14 @@ void Agregar_Materia(Materias **Lista_materia)
 		do{
 			printf("\nIngrese el nombre de la materia: ");fflush(stdin);
 			fgets(Aux->Nombre_de_la_Materia,30,stdin);cambio(Aux->Nombre_de_la_Materia);fflush(stdin);
-			if (!strcmp(Aux->Nombre_de_la_Materia,""))
-				printf("\nLa materia debe tener un nombre ");
+			if (!strcmp(Aux->Nombre_de_la_Materia,""))printf("\nLa materia debe tener un nombre ");
+			if (validar_numero(Aux->Nombre_de_la_Materia))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
 		}while(!strcmp(Aux->Nombre_de_la_Materia,""));
 		do{
 			printf("\nIngrese la Descripcion de la materia: ");
 			fgets(Aux->Descripcion_de_la_Materia,100,stdin);cambio(Aux->Descripcion_de_la_Materia);fflush(stdin);
-			if (!strcmp(Aux->Descripcion_de_la_Materia,""))
-				printf("\nDebe haber una descripcion ");
+			if (!strcmp(Aux->Descripcion_de_la_Materia,""))printf("\nDebe haber una descripcion ");
+			if (validar_numero(Aux->Descripcion_de_la_Materia))printf("\tAdvertencia: la descripcion de la materia es Numerica\n");
 		}while(!strcmp(Aux->Descripcion_de_la_Materia,""));
 		Aux->Semestre=Verificar_Semestre();
 		Semestre_Romano(Aux->Semestre,&Aux);fflush(stdin);
@@ -431,14 +431,34 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 			Cursos *Aux= new Cursos;printf("\n");
 			Aux->Codigo_de_la_Materia = cod;
 			Ingresar_codigo_curso(&Aux->Codigo_del_curso,"del Curso", c);printf("\n");
-			Ingresar_codigo_aux(&Aux->AAAA,"Ingrese el anio");printf("\n");
+			do
+			{
+				Ingresar_codigo_aux(&Aux->AAAA,"Ingrese el anio");printf("\n");
+				if (Aux->AAAA <1900||Aux->AAAA >2100)printf("el año no esta en un rango plausible, por favor ingrese el formato completo AAAA");Sleep(500);
+			}while(Aux->AAAA <1900||Aux->AAAA >2100);
 			Ingresar_lapso(&Aux->lapso,3,1);
-			Aux->prx=*c;
-			*c=Aux;
+			insertar_CursoOrdenadamente(c,&Aux);
+			printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Aux->Codigo_del_curso,Aux->Codigo_de_la_Materia,Aux->AAAA,Aux->lapso);Sleep(500);
 		}else
 			{printf("La materia no existe, por lo que no se creara el curso\n");Sleep(500);}
 	}else
 		{printf("No existen materias, por lo que no se pueden crear cursos\n");Sleep(500);}
+}
+
+void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo)
+{/*Inserta el nodo materia de manera ordenada en la lista ordenada*/
+	if (*lista==NULL || (*Nuevo_nodo)->lapso<(*lista)->lapso)//mientras el nuevo nodo sea la nueva cabeza
+	{
+		(*Nuevo_nodo)->prx = *lista;//apunta a lo que apuntaba p
+		*lista = *Nuevo_nodo;//hace el nuevo nodo cabeza
+	}else
+	{
+		Cursos *aux=*lista;//crea un auxiliar
+		while(aux->prx && aux->prx->lapso <= (*Nuevo_nodo)->lapso)
+			aux=aux->prx;// este avanza hasta encontrar la posicion
+		(*Nuevo_nodo)->prx=aux->prx;//enlazamos el nodo a lo que apunta e auxiliar
+		aux->prx=*Nuevo_nodo; //enlazamos el auxiliar al nuevo nodo
+	}
 }
 
 void Modificar_Materia(Materias **materia)
@@ -912,7 +932,52 @@ int Importar_Materias(Materias **nodos)
 			printf(" se importo el nodo :Materia[%d] \"%s\" %s (%i): %s \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Nombre_de_la_Materia,Nuevo_nodo->SemestreEnRomano,Nuevo_nodo->Creditos_de_la_Materia,Nuevo_nodo->Descripcion_de_la_Materia);	
 		}
 		Elemento = strtok(NULL, ",");
-    }system("pause");	
+	}Sleep(1000);
 	fclose(Archivo_entrada);
 	return 1;
 } 
+
+int Importar_Cursos(Cursos **nodos)
+{
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
+	Archivo_entrada = fopen("E:/ArchivoCursos.txt","r");/*Abre el archivo creado*/
+	if(Archivo_entrada == NULL ) 
+	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	rewind(Archivo_entrada);//cursor al inicio del archivo
+    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
+	{// Lee cada línea del archivo y lo convierte en un nodo completo
+		Cursos *Nuevo_nodo= new Cursos; int error=0;
+        Elemento = strtok(linea, ",");      
+		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !(validar_numero(Elemento)) ) 
+			error++;
+		else
+			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
+		Elemento = strtok(NULL, ",");
+		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !(validar_numero(Elemento)) ) 
+			error++;
+		else 
+			Nuevo_nodo->Codigo_del_curso=atoi(Elemento);
+		Elemento = strtok(NULL, ",");
+		if (atoi(Elemento)<1||atoi(Elemento)>3) 
+			error++;
+		else
+			Nuevo_nodo->lapso=atoi(Elemento);
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+			error++;
+		else
+			Nuevo_nodo->AAAA=atoi(Elemento);
+		if(error)printf("Errores en el nodo: %i\n",error);
+		else 
+		{/*se imprime para verificar*/
+			insertar_CursoOrdenadamente(nodos,&Nuevo_nodo);
+			printf(" se importo el nodo :Cursos[%d] \"%i\" (%i): %i \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Codigo_del_curso,Nuevo_nodo->lapso,Nuevo_nodo->AAAA);	
+		}
+		Elemento = strtok(NULL, ",");
+	}Sleep(1000);
+	fclose(Archivo_entrada);
+	return 1;
+}
