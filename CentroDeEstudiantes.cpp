@@ -168,8 +168,10 @@ int LimitarCaracteres (char *copia, int max);
 void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
 int Exportar_Cursos(Cursos *nodos);
+int Exportar_Personas(Personas *nodos);
 int Importar_Materias(Materias **nodos);
 int Importar_Cursos(Cursos **nodos);
+int Importar_Personas(Personas **nodos);
 
 int main ()
 {
@@ -722,14 +724,14 @@ void Consultar_materia(Materias *Las_materias)
 {
 	if(Las_materias)
 	{/*Debe haber algo que consultar*/
-		int opciones_mantenimiento_Materias=0; 
+		int opciones_Consulta=0; 
 		do
 		{
 			Materias *consulta=Las_materias;system("cls");					
 			printf("\t consultar\n\n");
 			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n ");
-			scanf_s("%d",&opciones_mantenimiento_Materias);
-			switch(opciones_mantenimiento_Materias)
+			scanf_s("%d",&opciones_Consulta);
+			switch(opciones_Consulta)
 			{
 				case 1:
 					while(consulta)
@@ -767,10 +769,11 @@ void Consultar_materia(Materias *Las_materias)
 					}system("pause"); 
 					break;
 				default:
-				if (opciones_mantenimiento_Materias)
-					{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+				if (opciones_Consulta)
+					{printf("\n\nEsta opcion no es valida\n");system("pause");}
+				break;
 			}
-		}while (opciones_mantenimiento_Materias);
+		}while (opciones_Consulta);
 
 	}
 	else
@@ -779,14 +782,86 @@ void Consultar_materia(Materias *Las_materias)
 
 void Consultar_curso(Cursos *Los_cursos)
 {
-	if(Los_cursos){
-	 Cursos *consulta=Los_cursos;
-	 while(consulta)
-	 { 
-		printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
-		consulta=consulta->prx;
-	 }
-	 system("pause");
+	if(Los_cursos)
+	{
+		int opciones_Consulta=0; 
+		do
+		{
+			 Cursos *consulta=Los_cursos;;system("cls");					
+			printf("\t consultar\n\n");
+			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- cursos de cierto lapso\n 4- cursos de cierta materia\n 5-curso especifico \n\n 0- SALIR\n\n ");
+			scanf_s("%d",&opciones_Consulta);
+			switch(opciones_Consulta)
+			{
+				case 1:
+					while(consulta)
+					{ 
+						printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 2:
+					int AAAA;
+					do{
+					Ingresar_codigo_aux(&AAAA,"Ingrese el anio");printf("\n");
+						if (AAAA <1900||AAAA >2100)
+							printf("el año no esta en un rango plausible, por favor ingrese el formato completo AAAA");
+					}while(AAAA <1900||AAAA >2100);
+					while(consulta)
+					{ 
+						if (AAAA==consulta->AAAA)
+							printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 3:
+					int Lapso;
+					do{
+					Ingresar_codigo_aux(&Lapso,"Ingrese el anio");printf("\n");
+						if (Lapso <1||Lapso>3)
+							printf("el lapso no esta en un rango en el rango(1,3)");
+					}while(Lapso <1||Lapso>3);
+					while(consulta)
+					{ 
+						if (Lapso==consulta->lapso)
+							printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 4:
+					int Codigo;
+					do{
+					Ingresar_codigo_aux(&Codigo,"codigo de la materia");printf("\n");
+						if (true)
+							;
+					}while(false);
+					while(consulta)
+					{ 
+						if (Codigo==consulta->Codigo_de_la_Materia)
+							printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+					case 5:
+					int CodigoC;
+					do{
+					Ingresar_codigo_aux(&CodigoC,"codigo del curso");printf("\n");
+						if (true)
+							;
+					}while(false);
+					while(consulta)
+					{ 
+						if (CodigoC==consulta->Codigo_del_curso)
+							printf("\n Curso [%d] (%i) (%i) (%i)\n\n",consulta->Codigo_del_curso,consulta->Codigo_de_la_Materia,consulta->AAAA,consulta->lapso);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				default:
+				if (opciones_Consulta)
+					{printf("\n\nEsta opcion no es valida\n");system("pause");}
+				break;
+			}
+		}while (opciones_Consulta);
 	}
 	else
 	{
