@@ -1080,8 +1080,8 @@ int Importar_Cursos(Cursos **nodos)
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Cursos *Nuevo_nodo= new Cursos; int error=0;
         Elemento = strtok(linea, ",");      
-		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !(validar_numero(Elemento)) ) 
-			error++;
+		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+			error++;/*||!Existe_codigo(atoi(Elemento),Materia)*/
 		else
 			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 		Elemento = strtok(NULL, ",");
