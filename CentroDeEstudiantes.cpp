@@ -722,12 +722,56 @@ void Consultar_materia(Materias *Las_materias)
 {
 	if(Las_materias)
 	{/*Debe haber algo que consultar*/
-		Materias *consulta=Las_materias;
-		while(consulta)
-		{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-			printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-			consulta=consulta->prx;
-		}system("pause");
+		int opciones_mantenimiento_Materias=0; 
+		do
+		{
+			Materias *consulta=Las_materias;system("cls");					
+			printf("\t consultar\n\n");
+			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n ");
+			scanf_s("%d",&opciones_mantenimiento_Materias);
+			switch(opciones_mantenimiento_Materias)
+			{
+				case 1:
+					while(consulta)
+					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+						printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 2:
+					int x;x=Verificar_Semestre();
+					while(consulta)
+					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+						if (x==consulta->Semestre)
+							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 3:
+					char nombre[30];
+					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
+					while(consulta)
+					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+						if (strcmp(consulta->Nombre_de_la_Materia,nombre) >= 0)
+							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 4:
+					int y;Ingresar_codigo_aux(&y,"Codigo a consultar");
+					while(consulta)
+					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+						if (y==consulta->Codigo_de_la_Materia)
+							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				default:
+				if (opciones_mantenimiento_Materias)
+					{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+			}
+		}while (opciones_mantenimiento_Materias);
+
 	}
 	else
 		{printf("No hay materias para consultar\n");system("pause");}
