@@ -207,9 +207,7 @@ int main ()
 								switch(opciones_mantenimiento_Materias)
 									{
 										case 1://Agregar Materia	
-											Agregar_Materia(&Materia); 
-											printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Materia->Codigo_de_la_Materia,Materia->Nombre_de_la_Materia,Materia->SemestreEnRomano,Materia->Creditos_de_la_Materia,Materia->Descripcion_de_la_Materia);
-											/*lo anteriror es solo una verificacion de datos */system("pause");break;
+											Agregar_Materia(&Materia); break;
 
 										case 2://Modificar
 											Modificar_Materia(&Materia);break;
@@ -387,14 +385,23 @@ void Agregar_Materia(Materias **Lista_materia)
 {/*Crea un nodo llamado aux y lo ingresa en la lista de materias*/
 	Materias *Aux= new Materias; fflush(stdin);
 		Ingresar_codigo(&Aux->Codigo_de_la_Materia,"de la materia",Lista_materia);
-		printf("\nIngrese el nombre de la materia: ");fflush(stdin);
-		fgets(Aux->Nombre_de_la_Materia,30,stdin);cambio(Aux->Nombre_de_la_Materia);fflush(stdin);
-		printf("\nIngrese la Descripcion de la materia: ");
-		fgets(Aux->Descripcion_de_la_Materia,100,stdin);cambio(Aux->Descripcion_de_la_Materia);fflush(stdin);
+		do{
+			printf("\nIngrese el nombre de la materia: ");fflush(stdin);
+			fgets(Aux->Nombre_de_la_Materia,30,stdin);cambio(Aux->Nombre_de_la_Materia);fflush(stdin);
+			if (!strcmp(Aux->Nombre_de_la_Materia,""))
+				printf("\nLa materia debe tener un nombre ");
+		}while(!strcmp(Aux->Nombre_de_la_Materia,""));
+		do{
+			printf("\nIngrese la Descripcion de la materia: ");
+			fgets(Aux->Descripcion_de_la_Materia,100,stdin);cambio(Aux->Descripcion_de_la_Materia);fflush(stdin);
+			if (!strcmp(Aux->Descripcion_de_la_Materia,""))
+				printf("\nDebe haber una descripcion ");
+		}while(!strcmp(Aux->Descripcion_de_la_Materia,""));
 		Aux->Semestre=Verificar_Semestre();
 		Semestre_Romano(Aux->Semestre,&Aux);fflush(stdin);
 		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
 		insertar_MateriaOrdenadamente( Lista_materia, &Aux);
+		printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Aux->Codigo_de_la_Materia,Aux->Nombre_de_la_Materia,Aux->SemestreEnRomano,Aux->Creditos_de_la_Materia,Aux->Descripcion_de_la_Materia);Sleep(500);
 }
 
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo)
@@ -657,6 +664,7 @@ int Verificar_Semestre()
 		if (((aux[0]=='V')||(aux[0]=='v'))&&((aux[1]=='I')||(aux[1]=='i'))&&((aux[2]=='I')||(aux[2]=='i'))&&((aux[3]=='I')||(aux[3]=='i'))&&(aux[4]=='\0')){ return 8;}
 		if (((aux[0]=='I')||(aux[0]=='i'))&&((aux[1]=='X')||(aux[1]=='x'))&&(aux[2]=='\0')){ return 9;}
 		if (((aux[0]=='X')||(aux[0]=='x'))&&(aux[1]=='\0')){return 10;}
+		printf(" El semestre ingresado no es valido, intente denuevo");
 		fflush(stdin);
 	}while(true);
 }
@@ -844,7 +852,7 @@ int Exportar_Materias(Materias *nodos)
     }
 	while (nodos)
 	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
-		fprintf (Nuevo_archivo,"%i,%s,%s,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->SemestreEnRomano,nodos->Creditos_de_la_Materia,nodos->Descripcion_de_la_Materia);
+		fprintf (Nuevo_archivo,"%i,%s,%i,%i,%s\n",nodos->Codigo_de_la_Materia,nodos->Nombre_de_la_Materia,nodos->Creditos_de_la_Materia,nodos->Semestre,nodos->Descripcion_de_la_Materia);
 		nodos=nodos->prx;
 	}
 	fclose(Nuevo_archivo);/*Cierra el archivo*/
@@ -872,7 +880,7 @@ int Exportar_Cursos(Cursos *nodos)
 int Importar_Materias(Materias **nodos)
 {
 	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
-	Archivo_entrada = fopen("J:/ArchivoMaterias.txt","r");/*Abre el archivo creado*/
+	Archivo_entrada = fopen("E:/ArchivoMaterias.txt","r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -885,7 +893,7 @@ int Importar_Materias(Materias **nodos)
         Elemento = strtok(linea, ",");      
         Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 		if ( Nuevo_nodo->Codigo_de_la_Materia>=maxEntero || Nuevo_nodo->Codigo_de_la_Materia<=0 || !(validar_numero(Elemento)) ) error++;
-		Elemento = strtok(NULL, ",");
+		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (LimitarCaracteres (Elemento, 30))strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
 		else error++;	
 		Elemento = strtok(NULL, ",");
@@ -894,8 +902,8 @@ int Importar_Materias(Materias **nodos)
 		Elemento = strtok(NULL, ",");
 		Nuevo_nodo->Semestre=atoi(Elemento);
 		Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);
-		if ((Nuevo_nodo->Creditos_de_la_Materia <1)||(Nuevo_nodo->Creditos_de_la_Materia >10)) error++;	
-		Elemento = strtok(NULL, ",");
+		if ((Nuevo_nodo->Semestre <1)||(Nuevo_nodo->Semestre >10)) error++;	
+		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (LimitarCaracteres (Elemento, 100))strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
 		if(error)printf("Errores en el nodo: %i\n",error);
 		else 
