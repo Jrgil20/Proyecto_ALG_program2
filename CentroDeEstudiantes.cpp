@@ -1,4 +1,4 @@
-﻿/*
+/*
     Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
@@ -89,6 +89,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <windows.h>
+#include <conio.h>
 
 /*estructuras y tipos secundarios*/
 typedef int year;	typedef int month;	typedef int day; typedef  int Codigo_curso; typedef int Codigo_Materia; const int maxEntero=1294967295;
@@ -136,7 +137,7 @@ struct Personas
 	char nombre_apellido[30];
 	fecha Fecha_de_Nacimiento;
 	char direccion[40];
-	Participacion Record;
+	Participacion *Record;
 	/*Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.*/
 	Personas *prx;
 
@@ -149,21 +150,28 @@ void Agregar_Materia(Materias **Nueva_materia);
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
 void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo);
+void Agregar_Persona(Personas **);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
 void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q);
+void Ingresar_cedula( long int *codigo,char De[15], Personas **q);
 void Ingresar_codigo_aux(int *codigo, char De[15]);
 void ingresar_Creditos(int *Rango,int max,int min);
 void Ingresar_lapso(int *Rango,int max,int min);
+void Ingresar_fecha(int *Rango,int max,int min, char De[10]);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int Existe_codigo_curso(int codigo,Cursos **En_Cursos);
+int Existe_cedula(long int codigo,Personas **En_Personas);
 int validar_numero (char numero[]);
 void Modificar_Materia(Materias **materia);
 void Modificar_Curso(Cursos **);
+void Modificar_Persona(Personas **);
 void Consultar_materia(Materias *Las_materias);
 void Consultar_curso(Cursos *Los_cursos);
+void Consultar_Personas(Personas *);
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat);
 void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
+void Eliminar_persona(Personas **);
 int LimitarCaracteres (char *copia, int max);
 void cambio(char c1[]);
 int Exportar_Materias(Materias *nodos);
@@ -177,6 +185,7 @@ int main ()
 {
 	Materias *Materia=NULL;
 	Cursos *Curso =NULL;
+	Personas *Persona=NULL;
 	int opciones=0; 
 
 	Importar_Materias(&Materia);
@@ -278,15 +287,19 @@ int main ()
 								switch(opciones_mantenimiento_Personas)
 								{
 									case 1://Agregar
+										Agregar_Persona(&Persona);
 										break;
 
 									case 2://Modificar
+										Modificar_Persona(&Persona);
 										break;
 
 									case 3://Consultar
+										Consultar_Personas(Persona);
 										break;
 
-									case 4://Eliminar personas (sin datos de cursos)
+									case 4:
+										Eliminar_persona(&Persona);
 										break;
 
 									default:
@@ -463,6 +476,25 @@ void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo)
 	}
 }
 
+void Agregar_Persona(Personas **Nueva_persona){
+	  Personas *aux=new Personas;
+	  Ingresar_cedula(&aux->cedula,"del estudiante",Nueva_persona);
+	  printf("\n");
+	  printf("Ingrese nombre y apellido de la persona: ");
+	  fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
+	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
+	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,21,1,"mes de nacimiento");
+	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"anio de nacimiento");
+	  printf("\n");
+	  printf("Ingrese la direccion: ");
+	  fflush(stdin);fgets(aux->direccion,40,stdin);
+	  fflush(stdin);
+	  aux->prx=*Nueva_persona;
+	  *Nueva_persona=aux;
+	  (*Nueva_persona)->Record = NULL;
+	  printf("\n Estudidante de cedula: [%d] \'%s\' nacido el: [%d] [%d] [%d],con residencia en: %s \n\n Agregado exitosamente \n",aux->cedula,aux->nombre_apellido,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
+}
+
 void Modificar_Materia(Materias **materia)
 {/*Verificar*/
 	Materias *Respaldo= *materia; int Elegido;
@@ -554,6 +586,56 @@ void Modificar_Curso(Cursos **curso)
 	{printf("\n\tNO HAY CURSOS PARA MODIFICAR\n");system("pause");}
 }
 
+void Modificar_Persona(Personas **persona)
+{
+	Personas *Respaldo= *persona; int Elegido;
+	if (*persona)
+	{
+		Personas *consulta=*persona, *temp=NULL;
+		Ingresar_codigo_aux(&Elegido," Cedula del estdiante a modificar");
+		while((Respaldo)&&(Respaldo->cedula != Elegido))Respaldo=Respaldo->prx;
+		if (!Respaldo)
+		{printf("\n\tEl estudiante de cedula [%i] no se encuentra\n", Elegido);system("pause");}
+		else
+		{
+			int opciones_de_Modificacion=0; 
+			do{//Menu de Mantenimiento Cursos
+				system("cls");
+				printf("\t Que desea modificar?\n\n");
+				printf(" 1- Nombre y apellido\n 2- Fecha de nacimiento\n 3.- Direccion\n 0- SALIR\n\n ");
+				scanf_s("%d",&opciones_de_Modificacion);
+				switch(opciones_de_Modificacion)
+				{
+					case 1://Nombre y apellido
+						printf("Ingrese el nuevo nombre y el nuevo apellido: ");
+						fflush(stdin);
+						fgets(Respaldo->nombre_apellido,40,stdin);
+						cambio(Respaldo->nombre_apellido);
+						fflush(stdin);
+						break;
+					case 2://Fecha de nacimiento
+						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.dd,31,1,"dia");
+						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.mm,12,1,"mes");
+						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,1900,2100,"anio");
+						break;
+					case 3://Direccion
+						printf("Ingrese la nueva direccion: ");
+						fflush(stdin);
+						fgets(Respaldo->direccion,40,stdin);
+						cambio(Respaldo->direccion);
+						fflush(stdin);
+						break;
+					default:
+						if (opciones_de_Modificacion)
+						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+				}
+			}while (opciones_de_Modificacion);
+			Respaldo = *persona;
+		}
+	}else
+	{printf("\n\tNO HAY PERSONAS PARA MODIFICAR\n");system("pause");}
+}
+
 void Ingresar_codigo( int *codigo,char De[15], Materias **q)
 {
 	char copia[10];int Numero_valido;
@@ -582,6 +664,21 @@ void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q)
 		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Este codigo no es valido (INGRESE OTRO)\n");
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_codigo_curso(*codigo,q)));
 	*codigo=atoi(copia);
+}
+
+void Ingresar_cedula( long int *codigo,char De[15], Personas **q)
+{
+	char copia[10];int Numero_valido;
+	do
+	{
+		printf("Cedula %s:",De);
+		fflush(stdin);gets_s(copia);fflush(stdin); 
+		Numero_valido=validar_numero(copia);
+		*codigo=atol(copia);
+		int z= Existe_cedula(*codigo,q);
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Esta cedula no es valido (INGRESE OTRO)\n");
+	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_cedula(*codigo,q)));
+	*codigo=atol(copia);
 }
 
 void Ingresar_codigo_aux( int *codigo,char De[20])
@@ -623,6 +720,19 @@ void Ingresar_lapso(int *Rango,int max,int min)
 	}while ((*Rango<min)||(*Rango >max));
 }
 
+void Ingresar_fecha(int *Rango,int max,int min, char De[10])
+{
+	char copia[10];
+	do{
+		printf("\nIngrese el %s: ",De);
+		fflush(stdin);gets_s(copia);fflush(stdin); 	
+		int Numero_valido=validar_numero(copia);
+		*Rango=atoi(copia);
+		if ((*Rango <min)||(*Rango >max))printf("\n El %s introducido es invalido (%i,%i)\n por favor intente denuevo \n",De,min,max);
+	}while ((*Rango<min)||(*Rango >max));
+}
+
+
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
 	if(*En_Materias)
@@ -663,6 +773,29 @@ int Existe_codigo_curso(int codigo,Cursos **En_Cursos)
 		 {/**/
 			Cursos *aux=*En_Cursos;
 			if(aux->Codigo_del_curso == codigo)return 1;
+			else return 0;
+		 }
+	}
+	else return 0;
+}
+
+int Existe_cedula(long int codigo,Personas **En_Personas)
+{
+	if(*En_Personas)
+	{
+		if((*En_Personas)->prx)
+		{
+            Personas *aux=*En_Personas;
+			while(aux)
+			{/**/
+				if(aux->cedula == codigo)return 1;
+				else aux=aux->prx;
+			}
+			return 0;	
+ 		}else
+		 {/**/
+			Personas *aux=*En_Personas;
+			if(aux->cedula == codigo)return 1;
 			else return 0;
 		 }
 	}
@@ -729,7 +862,7 @@ void Consultar_materia(Materias *Las_materias)
 		{
 			Materias *consulta=Las_materias;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- Nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
@@ -744,8 +877,10 @@ void Consultar_materia(Materias *Las_materias)
 					int x;x=Verificar_Semestre();
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (x==consulta->Semestre)
+						if (x==consulta->Semestre){
+							printf("\n");
 							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
+						}
 						consulta=consulta->prx;
 					}system("pause"); 
 					break;
@@ -754,18 +889,22 @@ void Consultar_materia(Materias *Las_materias)
 					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (strcmp(consulta->Nombre_de_la_Materia,nombre) >= 0)
+						if (strcmp(consulta->Nombre_de_la_Materia,nombre) >= 0){
+							printf("\n");
 							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-						consulta=consulta->prx;
+						}
+							consulta=consulta->prx;
 					}system("pause"); 
 					break;
 				case 4:
 					int y;Ingresar_codigo_aux(&y,"Codigo a consultar");
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (y==consulta->Codigo_de_la_Materia)
+						if (y==consulta->Codigo_de_la_Materia){
+							printf("\n");
 							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-						consulta=consulta->prx;
+						}						
+							consulta=consulta->prx;
 					}system("pause"); 
 					break;
 				default:
@@ -789,7 +928,7 @@ void Consultar_curso(Cursos *Los_cursos)
 		{
 			 Cursos *consulta=Los_cursos;;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- cursos de cierto lapso\n 4- cursos de cierta materia\n 5-curso especifico \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n C-curso especifico \n\n 0- SALIR\n\n ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
@@ -869,6 +1008,72 @@ void Consultar_curso(Cursos *Los_cursos)
 	}
 }
 
+void Consultar_Personas(Personas *Las_personas)
+{
+	if(Las_personas)
+	{/*Debe haber algo que consultar*/
+		int opciones_Consulta=0; 
+		do
+		{
+			int cont =0;
+			Personas *consulta=Las_personas;system("cls");					
+			printf("\t consultar\n\n");
+			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Codigo \n\n 0- SALIR\n\n ");
+			scanf_s("%d",&opciones_Consulta);
+			switch(opciones_Consulta)
+			{
+				case 1:
+					while(consulta)
+					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
+						printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+						consulta=consulta->prx;
+					}system("pause"); 
+					break;
+				case 2:
+					char nombre[40];
+					printf("Introduzca el nombre a consultar: ");fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
+					while(consulta)
+					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
+						if (strcmp(consulta->nombre_apellido,nombre) >= 0){
+							cont +=1;
+							printf("\n");
+							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+						}
+							consulta=consulta->prx;
+					}system("pause"); 
+					if(cont == 0){
+						printf("No hay ningun estudiante con ese nombre");
+						getch();
+					}
+					break;
+				case 3:
+					int y;Ingresar_codigo_aux(&y,"Cedula a consultar");
+					while(consulta)
+					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
+						if (y==consulta->cedula){
+							cont +=1;
+							printf("\n");
+							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+						}						
+							consulta=consulta->prx;
+					}system("pause"); 
+					if(cont == 0){
+						printf("No hay ningun estudiante con esa cedula");
+						getch();
+					}
+					break;
+				default:
+				if (opciones_Consulta)
+					{printf("\n\nEsta opcion no es valida\n");system("pause");}
+				break;
+			}
+		}while (opciones_Consulta);
+
+	}
+	else
+		{printf("No hay personas para consultar\n");system("pause");}
+}
+
 void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 {
 	int codigo_mat,cont=0;
@@ -940,6 +1145,52 @@ void Eliminar_curso (Cursos **Los_cursos)
 		system("pause");
 	}
 }
+
+void Eliminar_persona (Personas **Las_personas)
+{
+	int codigo_per,cont=0;
+
+	if (*Las_personas){
+		Personas *consulta=*Las_personas, *temp=NULL;
+		Ingresar_codigo_aux(&codigo_per,"Cedula del estudiante a eliminar");
+		if ((consulta->cedula) == codigo_per){
+			while(consulta->Record){
+				Participacion *aux2=consulta->Record;
+				consulta->Record=consulta->Record->prx;
+				delete aux2;
+			}
+			temp = *Las_personas;
+			*Las_personas = (*Las_personas)->prx;
+			delete temp;
+		}
+		else{
+			while(consulta->prx)
+			{
+				if (consulta->prx->cedula == codigo_per){
+					while(consulta->Record){
+				Participacion *aux2=consulta->Record;
+				consulta->Record=consulta->Record->prx;
+				delete aux2;
+			}
+					temp = consulta->prx;
+					consulta->prx = temp->prx;
+					delete temp;
+					cont +=1;
+					printf("\n\tPERSONA ELIMINADA CORRECTAMENTE!\n"); system("pause");
+				}
+				else
+					consulta = consulta->prx;
+
+			}
+			if(cont != 1)
+			 printf("\n\tEl estudiante de cedula [%i] no se encuentra\n", codigo_per);
+		}
+	}else{
+		printf("\n\tNO HAY PERSONAS PARA ELIMINAR\n");
+		system("pause");
+	}
+}
+
 
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 {
