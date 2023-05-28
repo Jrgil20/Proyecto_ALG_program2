@@ -1226,10 +1226,10 @@ int LimitarCaracteres (char *copia, int max)
 }	
 
 void cambio(char c1[])
-{// evita salto de linea luego de un fgets
+{// evita salto de linea luego de un fgets y cambia las comas por punto para evitar errores en los archivos
 	for(int i=0;unsigned(i)<strlen(c1);i++)
-		if(c1[i] == '\n')
-			c1[i] = '\0';
+		if(c1[i] == '\n')c1[i] = '\0';
+		else if(c1[i]==',')c1[i]='.';
 }
 
 int Exportar_Materias(Materias *nodos,char ruta[])
