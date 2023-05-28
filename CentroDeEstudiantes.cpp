@@ -1,4 +1,4 @@
-/*
+﻿/*
     Nombre:
 		MINI PROYECTO 1	
 	Objetivo:
@@ -111,36 +111,32 @@ struct Participacion
 /*Se tienen tres listas principales:*/
 struct Materias
 {
-	Codigo_Materia Codigo_de_la_Materia;
-	char Nombre_de_la_Materia[30];
-	char Descripcion_de_la_Materia[100];
-	int Semestre;
-	char SemestreEnRomano[5];
+	Codigo_Materia Codigo_de_la_Materia;//no se puede repetir
+	char Nombre_de_la_Materia[30];//no debe estar vacio
+	char Descripcion_de_la_Materia[100];//no debe estar vacio
+	int Semestre;// se debe restringir al rango de 1 a 10
+	char SemestreEnRomano[5];// se debe restringir al rango de I a X
 	int Creditos_de_la_Materia;// se debe restringir al rango de 2 a 5
 	Materias *prx;
 };
 
 struct Cursos
-{
-	Codigo_curso Codigo_del_curso;
-	/*Para registrar un curso deben preexistir la materia (c�digo) */
-	Codigo_Materia Codigo_de_la_Materia; 
-	year AAAA;
+{/*Cuando se elimina un curso, deben borrarse todas sus referencias en el sistema.*/
+	Codigo_curso Codigo_del_curso;/*Para registrar un curso deben preexistir la materia */
+	Codigo_Materia Codigo_de_la_Materia; //debe existir previamente
+	year AAAA;//se restringe de 1900 a 2100
 	int lapso;// se debe restringir al rango de 1 a 3
-	/*Cuando se elimina un curso, deben borrarse todas sus referencias en el sistema.*/
 	Cursos *prx;
 };
 
 struct Personas
-{
-	long int cedula;	// restricion: no se puede modificar
+{/*Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.*/
+	long int cedula;// restricion: no se puede modificar
 	char nombre_apellido[30];
 	fecha Fecha_de_Nacimiento;
 	char direccion[40];
-	Participacion *Record;
-	/*Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.*/
+	Participacion *Record;	
 	Personas *prx;
-
 };
 
 /*Rutinas*/
@@ -190,6 +186,7 @@ int main ()
 
 	Importar_Materias(&Materia);
 	Importar_Cursos(&Curso);
+	Importar_Personas(&Persona);
 	do
 	{//Menu
 		system("cls");
@@ -203,7 +200,7 @@ int main ()
 				int opciones_mantenimiento=0; 
 				do
 				{//Menu de Mantenimiento del sistema
-					system("cls");
+					Sleep(1000);system("cls");
 					printf("\t Menu de Mantenimiento\n\n");
 					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n ");
 					scanf_s("%d",&opciones_mantenimiento);
@@ -241,7 +238,6 @@ int main ()
 							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
 						}
-
 						case 2:
 						{
 							int opciones_mantenimiento_Cursos=0; 
@@ -274,7 +270,6 @@ int main ()
 							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
 							break;
 						}
-
 						case 3:
 						{
 							int opciones_mantenimiento_Personas=0; 
@@ -307,9 +302,10 @@ int main ()
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Personas);
+							if (Exportar_Personas(Persona));
+							else printf("\t se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 							break;
 						}	
-
 						default:
 							if (opciones_mantenimiento)
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
@@ -484,7 +480,7 @@ void Agregar_Persona(Personas **Nueva_persona){
 	  fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
 	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
 	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,21,1,"mes de nacimiento");
-	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"anio de nacimiento");
+	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"año de nacimiento");
 	  printf("\n");
 	  printf("Ingrese la direccion: ");
 	  fflush(stdin);fgets(aux->direccion,40,stdin);
@@ -731,7 +727,6 @@ void Ingresar_fecha(int *Rango,int max,int min, char De[10])
 		if ((*Rango <min)||(*Rango >max))printf("\n El %s introducido es invalido (%i,%i)\n por favor intente denuevo \n",De,min,max);
 	}while ((*Rango<min)||(*Rango >max));
 }
-
 
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
@@ -1053,7 +1048,7 @@ void Consultar_Personas(Personas *Las_personas)
 						if (y==consulta->cedula){
 							cont +=1;
 							printf("\n");
-							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d] con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
 						}						
 							consulta=consulta->prx;
 					}system("pause"); 
@@ -1191,7 +1186,6 @@ void Eliminar_persona (Personas **Las_personas)
 	}
 }
 
-
 void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 {
 	if (*Los_cursos)
@@ -1250,7 +1244,7 @@ int Exportar_Materias(Materias *nodos)
 }
 
 int Exportar_Cursos(Cursos *nodos)
-{/* Exporta en un archivo el contenido de las materias*/
+{/* Exporta en un archivo el contenido de los cursos*/
 	FILE *Nuevo_archivo = NULL;
 	Nuevo_archivo = fopen("E:/ArchivoCursos.txt","w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
@@ -1261,6 +1255,30 @@ int Exportar_Cursos(Cursos *nodos)
 	while (nodos)
 	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
 		fprintf (Nuevo_archivo,"%i,%i,%i,%i\n",nodos->Codigo_de_la_Materia,nodos->Codigo_del_curso,nodos->lapso,nodos->AAAA);
+		nodos=nodos->prx;
+	}
+	fclose(Nuevo_archivo);/*Cierra el archivo*/
+	return 1;
+}
+
+int Exportar_Personas(Personas *nodos)
+{/* Exporta en un archivo el contenido de las persdonas*/
+	FILE *Nuevo_archivo = NULL;
+	Nuevo_archivo = fopen("E:/ArchivoPersonas.txt","w");/*Abre el archivo creado*/
+	if(Nuevo_archivo == NULL ) 
+	{/*verifica que se haya creado correctamente e informa de no ser asi*/
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	while (nodos)
+	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
+		fprintf (Nuevo_archivo,"%i,%s,%i,%i,%i,%s",nodos->cedula,nodos->nombre_apellido,nodos->Fecha_de_Nacimiento.yyyy,nodos->Fecha_de_Nacimiento.mm,nodos->Fecha_de_Nacimiento.dd,nodos->direccion);
+		while (nodos->Record)
+		{
+			fprintf(Nuevo_archivo,",*%i,*%i",nodos->Record->Codigo_del_curso,nodos->Record->nota);
+			nodos->Record=nodos->Record->prx;
+		}
+		fprintf(Nuevo_archivo,"\n");
 		nodos=nodos->prx;
 	}
 	fclose(Nuevo_archivo);/*Cierra el archivo*/
@@ -1355,6 +1373,59 @@ int Importar_Cursos(Cursos **nodos)
 		{/*se imprime para verificar*/
 			insertar_CursoOrdenadamente(nodos,&Nuevo_nodo);
 			printf(" Importar: Cursos[%d] \"%i\" (%i): %i \n\n",Nuevo_nodo->Codigo_de_la_Materia,Nuevo_nodo->Codigo_del_curso,Nuevo_nodo->lapso,Nuevo_nodo->AAAA);	
+		}
+		Elemento = strtok(NULL, ",");
+	}system("pause");
+	fclose(Archivo_entrada);
+	return 1;
+}
+
+int Importar_Personas(Personas **nodos)
+{
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
+	Archivo_entrada = fopen("E:/ArchivoPersonas.txt","r");/*Abre el archivo creado*/
+	if(Archivo_entrada == NULL ) 
+	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
+		printf("No fue posible abrir el archivo\n");
+		return 0;
+    }
+	rewind(Archivo_entrada);//cursor al inicio del archivo
+    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
+	{// Lee cada línea del archivo y lo convierte en un nodo completo
+		
+		Personas *Nuevo_nodo= new Personas; int error=0;
+        Elemento = strtok(linea, ",");      
+		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+			error++;
+		else
+			Nuevo_nodo->cedula=atoi(Elemento);
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (LimitarCaracteres (Elemento, 40))
+			strcpy(Nuevo_nodo->nombre_apellido,Elemento);
+		else 
+			error++;	
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+			error++;
+		else
+			Nuevo_nodo->Fecha_de_Nacimiento.yyyy=atoi(Elemento);
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (atoi(Elemento)<1||atoi(Elemento)>12) 
+			error++;
+		else
+			Nuevo_nodo->Fecha_de_Nacimiento.mm=atoi(Elemento);
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (atoi(Elemento)<1||atoi(Elemento)>31) 
+			error++;
+		else
+			Nuevo_nodo->Fecha_de_Nacimiento.dd=atoi(Elemento);
+		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if(error)printf("%i Errores en el nodo\n",error);
+		else 
+		{/*se imprime para verificar*/
+			Nuevo_nodo->prx=*nodos;
+			*nodos=Nuevo_nodo;
+			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
 		}
 		Elemento = strtok(NULL, ",");
 	}system("pause");
