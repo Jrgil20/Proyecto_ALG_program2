@@ -1415,7 +1415,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
     }
 	rewind(Archivo_entrada);//cursor al inicio del archivo
     while (fgets(linea, sizeof(linea),Archivo_entrada)) 
-	{/* Lee cada línea del archivo y lo convierte en un nodo completo
+	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Personas *Nuevo_nodo= new Personas; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
@@ -1423,7 +1423,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		else
 			Nuevo_nodo->cedula=atoi(Elemento);
 		Elemento = strtok(NULL, ",");cambio(Elemento);
-		if (LimitarCaracteres (Elemento, 40))
+		if (LimitarCaracteres (Elemento, 30))
 			strcpy(Nuevo_nodo->nombre_apellido,Elemento);
 		else 
 			error++;	
@@ -1443,13 +1443,17 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		else
 			Nuevo_nodo->Fecha_de_Nacimiento.dd=atoi(Elemento);
 		Elemento = strtok(NULL, ",");cambio(Elemento);
+		if (LimitarCaracteres (Elemento, 40))
+			strcpy(Nuevo_nodo->direccion,Elemento);
+		else 
+			error++;	
 		if(error)printf("%i Errores en el nodo\n",error);
 		else 
 		{
 			Nuevo_nodo->prx=*nodos;
 			*nodos=Nuevo_nodo;
-			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
-		}*/
+			printf(" Importar a: %s C.I:%i (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
+		}
 		Elemento = strtok(NULL, ",");
 	}system("pause");
 	fclose(Archivo_entrada);
