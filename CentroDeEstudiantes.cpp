@@ -169,7 +169,9 @@ void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
 void Eliminar_persona(Personas **);
 int LimitarCaracteres (char *copia, int max);
+int compararCadenas(char *cadena1,char *cadena2);
 void cambio(char c1[]);
+int verificarRuta(char);
 int Exportar_Materias(Materias *nodos,char ruta[]);
 int Exportar_Cursos(Cursos *nodos,char ruta[]);
 int Exportar_Personas(Personas *nodos,char ruta[]);
@@ -483,23 +485,29 @@ void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo)
 	}
 }
 
-void Agregar_Persona(Personas **Nueva_persona){
-	  Personas *aux=new Personas;
-	  Ingresar_cedula(&aux->cedula,"del estudiante",Nueva_persona);
-	  printf("\n");
-	  printf("Ingrese nombre y apellido de la persona: ");
-	  fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
-	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
-	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,21,1,"mes de nacimiento");
-	  Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"año de nacimiento");
-	  printf("\n");
-	  printf("Ingrese la direccion: ");
-	  fflush(stdin);fgets(aux->direccion,40,stdin);
-	  fflush(stdin);
-	  aux->prx=*Nueva_persona;
-	  *Nueva_persona=aux;
-	  (*Nueva_persona)->Record = NULL;
-	  printf("\n Estudidante de cedula: [%d] \'%s\' nacido el: [%d] [%d] [%d],con residencia en: %s \n\n Agregado exitosamente \n",aux->cedula,aux->nombre_apellido,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
+void Agregar_Persona(Personas **Nueva_persona)
+{
+	Personas *aux=new Personas;
+	Ingresar_cedula(&aux->cedula,"del estudiante",Nueva_persona);
+	do{
+		printf("\nIngrese nombre y apellido de la persona: ");
+		fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
+		if (!strcmp(aux->nombre_apellido,""))printf("\nLa materia debe tener un nombre ");else
+		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
+	}while(!strcmp(aux->nombre_apellido,""));
+	Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
+	Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,21,1,"mes de nacimiento");
+	Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"año de nacimiento");
+	do{
+		printf("\n\tIngrese la direccion: ");
+		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
+		if (!strcmp(aux->direccion,""))printf("\nLa materia debe tener un nombre ");else
+		if (validar_numero(aux->direccion) )printf("El nombre de la materia es Numerico\n");
+	}while(!strcmp(aux->direccion,""));
+	aux->prx=*Nueva_persona;
+	*Nueva_persona=aux;
+	(*Nueva_persona)->Record = NULL;
+	printf("\n Estudidante de cedula: [%d] \'%s\' nacido el: [%d] [%d] [%d],con residencia en: %s \n\n Agregado exitosamente \n",aux->cedula,aux->nombre_apellido,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
 }
 
 void Modificar_Materia(Materias **materia)
@@ -892,14 +900,13 @@ void Consultar_materia(Materias *Las_materias)
 					break;
 				case 3:
 					char nombre[30];
+					printf("Ingrese el nombre a buscar:");
 					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (strcmp(consulta->Nombre_de_la_Materia,nombre) >= 0){
-							printf("\n");
-							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-						}
-							consulta=consulta->prx;
+						if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
+							printf("\n -Materia[%d] \"%s\" %s (%i): %s \n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);					
+						consulta=consulta->prx;
 					}system("pause"); 
 					break;
 				case 4:
@@ -1024,14 +1031,14 @@ void Consultar_Personas(Personas *Las_personas)
 			int cont =0;
 			Personas *consulta=Las_personas;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Codigo \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Cedula \n\n 0- SALIR\n\n ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
 				case 1:
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
-						printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+						printf(" -%s [C.I:%d] (%d/%d/%d),residencia: %s \n\n",consulta->nombre_apellido,consulta->cedula,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
 						consulta=consulta->prx;
 					}system("pause"); 
 					break;
@@ -1048,8 +1055,8 @@ void Consultar_Personas(Personas *Las_personas)
 							consulta=consulta->prx;
 					}system("pause"); 
 					if(cont == 0){
-						printf("No hay ningun estudiante con ese nombre");
-						getch();
+						printf("No hay ningun estudiante con ese nombre\n");
+						system("pause"); 
 					}
 					break;
 				case 3:
@@ -1064,8 +1071,8 @@ void Consultar_Personas(Personas *Las_personas)
 							consulta=consulta->prx;
 					}system("pause"); 
 					if(cont == 0){
-						printf("No hay ningun estudiante con esa cedula");
-						getch();
+						printf("No hay ningun estudiante con esa cedula\n");
+						system("pause"); 
 					}
 					break;
 				default:
@@ -1407,9 +1414,8 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		return 0;
     }
 	rewind(Archivo_entrada);//cursor al inicio del archivo
-    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
-	{// Lee cada línea del archivo y lo convierte en un nodo completo
-		
+    while (fgets(linea, sizeof(linea),Archivo_entrada)) 
+	{/* Lee cada línea del archivo y lo convierte en un nodo completo
 		Personas *Nuevo_nodo= new Personas; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
@@ -1439,11 +1445,11 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if(error)printf("%i Errores en el nodo\n",error);
 		else 
-		{/*se imprime para verificar*/
+		{
 			Nuevo_nodo->prx=*nodos;
 			*nodos=Nuevo_nodo;
-			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
-		}
+			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
+		}*/
 		Elemento = strtok(NULL, ",");
 	}system("pause");
 	fclose(Archivo_entrada);
