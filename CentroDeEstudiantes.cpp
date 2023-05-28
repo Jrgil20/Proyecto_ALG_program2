@@ -152,6 +152,7 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
 void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q);
 void Ingresar_cedula( long int *codigo,char De[15], Personas **q);
+void Ingresar_Fecha(year *YY,month *MM,day *dd);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int Existe_codigo_curso(int codigo,Cursos **En_Cursos);
 int Existe_cedula(long int codigo,Personas **En_Personas);
@@ -491,18 +492,7 @@ void Agregar_Persona(Personas **Nueva_persona)
 		if (!strcmp(aux->nombre_apellido,""))printf("\nLa materia debe tener un nombre ");else
 		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
 	}while(!strcmp(aux->nombre_apellido,""));
-	ingresarDato(&aux->Fecha_de_Nacimiento.yyyy,"anio de nacimiento",2100,1900);
-	ingresarDato(&aux->Fecha_de_Nacimiento.mm,"mes de nacimiento",12,1);int mes=aux->Fecha_de_Nacimiento.mm;
-	if(mes==2)
-		if (bisiesto(aux->Fecha_de_Nacimiento.yyyy))
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",29,1);
-		else
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",28,1);
-	else 
-		if (mes==4||mes==6||mes==9||mes==11)
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",30,1);
-		else
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",21,1);
+	Ingresar_Fecha(&aux->Fecha_de_Nacimiento.yyyy,&aux->Fecha_de_Nacimiento.mm,&aux->Fecha_de_Nacimiento.dd);
 	do{
 		printf("\n\tIngrese la direccion: ");
 		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
@@ -633,10 +623,7 @@ void Modificar_Persona(Personas **persona)
 						fflush(stdin);
 						break;
 					case 2://Fecha de nacimiento
-						ingresarDato(&Respaldo->Fecha_de_Nacimiento.dd,"dia ",29,1);
-						ingresarDato(&Respaldo->Fecha_de_Nacimiento.mm,"dia ",12,1);
-						ingresarDato(&Respaldo->Fecha_de_Nacimiento.yyyy,"anio ",1900,2100);
-						break;
+						Ingresar_Fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,&Respaldo->Fecha_de_Nacimiento.mm,&Respaldo->Fecha_de_Nacimiento.dd);break;
 					case 3://Direccion
 						printf("Ingrese la nueva direccion: ");
 						fflush(stdin);
@@ -711,35 +698,35 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 	char copia[10];int Numero_valido;
 	do
 	{
-		system("cls");printf("%s:",De);fflush(stdin); 
+		printf("\n\t%s:",De);fflush(stdin); 
 		fgets(copia,10,stdin);cambio(copia);fflush(stdin); 
 		Numero_valido=validar_numero(copia);
 		*Dato=atoi(copia);
-		if( !DentrodeRango(Dato,vMax,vmin)|| (!(Numero_valido)))printf("\n Este dato no es valido (INGRESE OTRO)\n");
+		if( !DentrodeRango(Dato,vMax,vmin)|| (!(Numero_valido)))
+			{
+				printf("\n Este dato no es valido (INGRESE OTRO)");
+				if (!DentrodeRango(Dato,vMax,vmin))
+					printf("\n no esta dentro del rango(%i,%i)",vmin,vMax);
+			}
 	}while ( !DentrodeRango(Dato,vMax,vmin) || (!(Numero_valido)));
 	*Dato=atoi(copia);
 }
 
-/*
-void IngresarFecha_completa()
+void Ingresar_Fecha(year *YY,month *MM,day *dd)
 {
-	printf("\nIngrese el a%co de nacimiento:",164);
-	DentrodeRango(YY,2100,1900)
-	printf("\nIngrese el mes de nacimiento:");
-	DentrodeRango(MM,12,1)
-	if(MM==2)
-		if (bisiesto(YY))
-			printf("\nIngrese el mes de nacimiento:");
-	DentrodeRango(MM,12,1)
+	ingresarDato(YY,"anio de nacimiento",2100,1900);
+	ingresarDato(YY,"mes de nacimiento",12,1);
+	if(*MM==2)
+		if (bisiesto(*YY))
+			ingresarDato(dd,"dia de nacimiento",29,1);
 		else
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],28,1)
+			ingresarDato(dd," dia de nacimiento",28,1);
 	else 
-		if (mes==4||mes==6||mes==9||mes==11)
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],30,1)
+		if (*MM==4||*MM==6||*MM==9||*MM==11)
+			ingresarDato(dd," dia de nacimiento",30,1);
 		else
-			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],31,1)
+			ingresarDato(dd," dia de nacimiento",31,1);
 }
-*/
 
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
@@ -985,7 +972,7 @@ void Consultar_curso(Cursos *Los_cursos)
 				case 5:
 					int CodigoC;
 					do{
-					ingresarDato(&Codigo,"codigo del curso",maxEntero,1);
+					ingresarDato(&CodigoC,"codigo del curso",maxEntero,1);
 						if (true)
 							;
 					}while(false);
