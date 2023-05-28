@@ -496,9 +496,18 @@ void Agregar_Persona(Personas **Nueva_persona)
 		if (!strcmp(aux->nombre_apellido,""))printf("\nLa materia debe tener un nombre ");else
 		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
 	}while(!strcmp(aux->nombre_apellido,""));
-	Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
-	Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,21,1,"mes de nacimiento");
 	Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"año de nacimiento");
+	Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,12,1,"mes de nacimiento");int mes=aux->Fecha_de_Nacimiento.mm;
+	if(mes==2)
+		if (bisiesto(aux->Fecha_de_Nacimiento.yyyy))
+			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,29,1,"dia de nacimiento");
+		else
+			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,28,1,"dia de nacimiento");
+	else 
+		if (mes==4||mes==6||mes==9||mes==11)
+			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,30,1,"dia de nacimiento");
+		else
+			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
 	do{
 		printf("\n\tIngrese la direccion: ");
 		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
