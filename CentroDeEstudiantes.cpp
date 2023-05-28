@@ -182,7 +182,7 @@ int Importar_Personas(Personas **nodos,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	int opciones=0; char Ruta[150]="J:/"; char Nuevaruta[4];
+	int opciones=0; char Ruta[150]="C:/"; char Nuevaruta[4];
 
 	printf("\tDesea cambiar la ruta de los ficheros?");
 	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
