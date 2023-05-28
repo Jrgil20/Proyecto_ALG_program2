@@ -168,6 +168,7 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat);
 void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
 void Eliminar_persona(Personas **);
+int bisiesto (year Y);
 int LimitarCaracteres (char *copia, int max);
 int compararCadenas(char *cadena1,char *cadena2);
 void cambio(char c1[]);
@@ -1228,6 +1229,20 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 				}
 			 }
 	}
+}
+
+int bisiesto (year Y)
+{
+	if (Y%4)
+		if(Y%100)
+			if(Y%400)
+				return 0;
+			else
+				return 1;
+		else
+			return 0;
+	else
+		return 1;
 }
 
 int LimitarCaracteres (char *copia, int max)
