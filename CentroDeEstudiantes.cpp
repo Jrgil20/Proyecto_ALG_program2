@@ -1318,11 +1318,7 @@ int Exportar_Personas(Personas *nodos,char ruta[])
 	while (nodos)
 	{/*Para cada nodo existente,Guarda el nodo en el archivo y pasa al siguiente nodo*/
 		fprintf (Nuevo_archivo,"%i,%s,%i,%i,%i,%s",nodos->cedula,nodos->nombre_apellido,nodos->Fecha_de_Nacimiento.yyyy,nodos->Fecha_de_Nacimiento.mm,nodos->Fecha_de_Nacimiento.dd,nodos->direccion);
-		while (nodos->Record)
-		{
-			fprintf(Nuevo_archivo,",*%i,*%i",nodos->Record->Codigo_del_curso,nodos->Record->nota);
-			nodos->Record=nodos->Record->prx;
-		}
+		/*no se modifican los respaldan los records academicos por que aun no se usan*/
 		fprintf(Nuevo_archivo,"\n");
 		nodos=nodos->prx;
 	}
