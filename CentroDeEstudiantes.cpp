@@ -170,23 +170,21 @@ void Eliminar_curso (Cursos **Los_cursos);
 void Eliminar_persona(Personas **);
 int LimitarCaracteres (char *copia, int max);
 void cambio(char c1[]);
-int Exportar_Materias(Materias *nodos);
-int Exportar_Cursos(Cursos *nodos);
-int Exportar_Personas(Personas *nodos);
-int Importar_Materias(Materias **nodos);
-int Importar_Cursos(Cursos **nodos);
-int Importar_Personas(Personas **nodos);
+int Exportar_Materias(Materias *nodos,char ruta[]);
+int Exportar_Cursos(Cursos *nodos,char ruta[]);
+int Exportar_Personas(Personas *nodos,char ruta[]);
+int Importar_Materias(Materias **nodos,char ruta[]);
+int Importar_Cursos(Cursos **nodos,char ruta[]);
+int Importar_Personas(Personas **nodos,char ruta[]);
 
 int main ()
 {
-	Materias *Materia=NULL;
-	Cursos *Curso =NULL;
-	Personas *Persona=NULL;
-	int opciones=0; 
+	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
+	int opciones=0; char Ruta[100]="J:/";
 
-	Importar_Materias(&Materia);
-	Importar_Cursos(&Curso);
-	Importar_Personas(&Persona);
+	Importar_Materias(&Materia,Ruta);
+	Importar_Cursos(&Curso,Ruta);
+	Importar_Personas(&Persona,Ruta);
 	do
 	{//Menu
 		system("cls");
@@ -234,7 +232,7 @@ int main ()
 											{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 									}
 							}while (opciones_mantenimiento_Materias);
-							if (Exportar_Materias(Materia));
+							if (Exportar_Materias(Materia,Ruta));
 							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
 						}
@@ -266,7 +264,7 @@ int main ()
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Cursos);
-							if (Exportar_Cursos(Curso));
+							if (Exportar_Cursos(Curso,Ruta));
 							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
 							break;
 						}
@@ -302,7 +300,7 @@ int main ()
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
 							}while (opciones_mantenimiento_Personas);
-							if (Exportar_Personas(Persona));
+							if (Exportar_Personas(Persona,Ruta));
 							else printf("\t se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 							break;
 						}	
@@ -1225,10 +1223,11 @@ void cambio(char c1[])
 			c1[i] = '\0';
 }
 
-int Exportar_Materias(Materias *nodos)
+int Exportar_Materias(Materias *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de las materias*/
-	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/ArchivoMaterias.txt","w");/*Abre el archivo creado*/
+	FILE *Nuevo_archivo = NULL;;char rutaMat[100];
+	strcpy(rutaMat,ruta);strcat(rutaMat,"ArchivoMaterias.txt");
+	Nuevo_archivo = fopen(rutaMat,"w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
 	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -1243,10 +1242,11 @@ int Exportar_Materias(Materias *nodos)
 	return 1;
 }
 
-int Exportar_Cursos(Cursos *nodos)
+int Exportar_Cursos(Cursos *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de los cursos*/
-	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/ArchivoCursos.txt","w");/*Abre el archivo creado*/
+	FILE *Nuevo_archivo = NULL;char rutaCur[100];
+	strcpy(rutaCur,ruta);strcat(rutaCur,"ArchivoCursos.txt"); 
+	Nuevo_archivo = fopen(rutaCur,"w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
 	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -1261,10 +1261,11 @@ int Exportar_Cursos(Cursos *nodos)
 	return 1;
 }
 
-int Exportar_Personas(Personas *nodos)
+int Exportar_Personas(Personas *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de las persdonas*/
-	FILE *Nuevo_archivo = NULL;
-	Nuevo_archivo = fopen("E:/ArchivoPersonas.txt","w");/*Abre el archivo creado*/
+	FILE *Nuevo_archivo = NULL;;char rutaPer[100];
+	strcpy(rutaPer,ruta);strcat(rutaPer,"ArchivoPersonas.txt");
+	Nuevo_archivo = fopen(rutaPer,"w");/*Abre el archivo creado*/
 	if(Nuevo_archivo == NULL ) 
 	{/*verifica que se haya creado correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -1285,10 +1286,11 @@ int Exportar_Personas(Personas *nodos)
 	return 1;
 }
 
-int Importar_Materias(Materias **nodos)
+int Importar_Materias(Materias **nodos,char ruta[])
 {
-	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
-	Archivo_entrada = fopen("E:/ArchivoMaterias.txt","r");/*Abre el archivo creado*/
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaMat[100];
+	strcpy(rutaMat,ruta);strcat(rutaMat,"ArchivoMaterias.txt");
+	Archivo_entrada= fopen(rutaMat,"r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -1335,10 +1337,11 @@ int Importar_Materias(Materias **nodos)
 	return 1;
 } 
 
-int Importar_Cursos(Cursos **nodos)
+int Importar_Cursos(Cursos **nodos,char ruta[])
 {
-	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
-	Archivo_entrada = fopen("E:/ArchivoCursos.txt","r");/*Abre el archivo creado*/
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaCur[100];
+	strcpy(rutaCur,ruta);strcat(rutaCur,"ArchivoCursos.txt"); 
+	Archivo_entrada = fopen(rutaCur,"r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
@@ -1380,10 +1383,11 @@ int Importar_Cursos(Cursos **nodos)
 	return 1;
 }
 
-int Importar_Personas(Personas **nodos)
+int Importar_Personas(Personas **nodos,char ruta[])
 {
-	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento; 
-	Archivo_entrada = fopen("E:/ArchivoPersonas.txt","r");/*Abre el archivo creado*/
+	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaPer[100];
+	strcpy(rutaPer,ruta);strcat(rutaPer,"ArchivoPersonas.txt");
+	Archivo_entrada = fopen(rutaPer,"r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 	{/*verifica que se haya abierto correctamente e informa de no ser asi*/
 		printf("No fue posible abrir el archivo\n");
