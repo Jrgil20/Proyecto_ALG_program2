@@ -169,7 +169,9 @@ void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
 void Eliminar_persona(Personas **);
 int LimitarCaracteres (char *copia, int max);
+int compararCadenas(char *cadena1,char *cadena2);
 void cambio(char c1[]);
+int verificarRuta(char);
 int Exportar_Materias(Materias *nodos,char ruta[]);
 int Exportar_Cursos(Cursos *nodos,char ruta[]);
 int Exportar_Personas(Personas *nodos,char ruta[]);
@@ -892,14 +894,13 @@ void Consultar_materia(Materias *Las_materias)
 					break;
 				case 3:
 					char nombre[30];
+					printf("Ingrese el nombre a buscar:");
 					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (strcmp(consulta->Nombre_de_la_Materia,nombre) >= 0){
-							printf("\n");
-							printf(" -Materia[%d] \"%s\" %s (%i): %s \n\n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);
-						}
-							consulta=consulta->prx;
+						if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
+							printf("\n -Materia[%d] \"%s\" %s (%i): %s \n",consulta->Codigo_de_la_Materia,consulta->Nombre_de_la_Materia,consulta->SemestreEnRomano,consulta->Creditos_de_la_Materia,consulta->Descripcion_de_la_Materia);					
+						consulta=consulta->prx;
 					}system("pause"); 
 					break;
 				case 4:
@@ -1407,9 +1408,8 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		return 0;
     }
 	rewind(Archivo_entrada);//cursor al inicio del archivo
-    while (fgets(linea, sizeof(linea), Archivo_entrada)) 
+    while (fgets(linea, sizeof(linea),Archivo_entrada)) 
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
-		
 		Personas *Nuevo_nodo= new Personas; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
@@ -1442,7 +1442,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		{/*se imprime para verificar*/
 			Nuevo_nodo->prx=*nodos;
 			*nodos=Nuevo_nodo;
-			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
+			printf(" Importar a: %s C.I: (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
 		}
 		Elemento = strtok(NULL, ",");
 	}system("pause");
