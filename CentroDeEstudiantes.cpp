@@ -941,7 +941,7 @@ void Consultar_curso(Cursos *Los_cursos)
 		{
 			 Cursos *consulta=Los_cursos;;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n C-curso especifico \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n 5-curso especifico \n\n 0- SALIR\n\n ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
@@ -994,7 +994,7 @@ void Consultar_curso(Cursos *Los_cursos)
 						consulta=consulta->prx;
 					}system("pause"); 
 					break;
-					case 5:
+				case 5:
 					int CodigoC;
 					do{
 					Ingresar_codigo_aux(&CodigoC,"codigo del curso");printf("\n");
