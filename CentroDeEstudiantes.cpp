@@ -180,11 +180,24 @@ int Importar_Personas(Personas **nodos,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	int opciones=0; char Ruta[100]="J:/";
+	int opciones=0; char Ruta[150]="J:/"; char Nuevaruta[4];
 
-	Importar_Materias(&Materia,Ruta);
-	Importar_Cursos(&Curso,Ruta);
-	Importar_Personas(&Persona,Ruta);
+	printf("\tDesea cambiar la ruta de los ficheros?");
+	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
+	if (Nuevaruta[0]=='Y'||Nuevaruta[0]=='y'||Nuevaruta[0]=='S'||Nuevaruta[0]=='s')
+	{
+		do{
+			printf("\nIngrese la Nueva ruta (disco:/carpeta/): ");
+			fgets(Ruta,130,stdin);cambio(Ruta);fflush(stdin);
+			if (!strcmp(Ruta,""))printf("\nDebe haber una ruta Y ");
+			if (validar_numero(Ruta))printf("\tla ruta no debe ser numerica\n");
+		}while(!strcmp(Ruta,"")||validar_numero(Ruta));
+	}
+
+	if (Importar_Materias(&Materia,Ruta));else {printf("no se pudo importar el archivo de Materias\n");system("pause");}
+	if (Importar_Cursos(&Curso,Ruta));else {printf("no se pudo importar el archivo de cursos\n");system("pause");}
+	if (Importar_Personas(&Persona,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
+
 	do
 	{//Menu
 		system("cls");
