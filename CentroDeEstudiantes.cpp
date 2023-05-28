@@ -147,13 +147,11 @@ void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
 void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo);
 void Agregar_Persona(Personas **);
+int DentrodeRango(int *Valor,int mayor,int menor);
+void ingresarDato(int *Dato,char De[20],int vMax,int vmin);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
 void Ingresar_codigo_curso( int *codigo,char De[15], Cursos **q);
 void Ingresar_cedula( long int *codigo,char De[15], Personas **q);
-void Ingresar_codigo_aux(int *codigo, char De[15]);
-void ingresar_Creditos(int *Rango,int max,int min);
-void Ingresar_lapso(int *Rango,int max,int min);
-void Ingresar_fecha(int *Rango,int max,int min, char De[10]);
 int Existe_codigo(int codigo,Materias **En_Materias);
 int Existe_codigo_curso(int codigo,Cursos **En_Cursos);
 int Existe_cedula(long int codigo,Personas **En_Personas);
@@ -424,7 +422,8 @@ void Agregar_Materia(Materias **Lista_materia)
 		}while(!strcmp(Aux->Descripcion_de_la_Materia,""));
 		Aux->Semestre=Verificar_Semestre();
 		Semestre_Romano(Aux->Semestre,&Aux);fflush(stdin);
-		ingresar_Creditos(&Aux->Creditos_de_la_Materia,5,2);
+		ingresarDato(&Aux->Creditos_de_la_Materia,"Creditos de la materia",5,2);
+		
 		insertar_MateriaOrdenadamente( Lista_materia, &Aux);
 		printf("\n Materia [%d] \'%s\' %s (%i) : %s \n\n Agregada exitosamente \n",Aux->Codigo_de_la_Materia,Aux->Nombre_de_la_Materia,Aux->SemestreEnRomano,Aux->Creditos_de_la_Materia,Aux->Descripcion_de_la_Materia);Sleep(500);
 }
@@ -450,18 +449,14 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 	Cursos *Aux=*c;int cod;
 	if(*Materia)
 	{/*si existen materias procede a generar*/
-		Ingresar_codigo_aux(&cod,"Codigo de la materia");
+		ingresarDato(&cod,"Codigo de la materia",maxEntero,1);
 		if(Existe_codigo(cod,Materia))
 		{
 			Cursos *Aux= new Cursos;printf("\n");
 			Aux->Codigo_de_la_Materia = cod;
 			Ingresar_codigo_curso(&Aux->Codigo_del_curso,"del Curso", c);printf("\n");
-			do
-			{
-				Ingresar_codigo_aux(&Aux->AAAA,"Ingrese el anio");printf("\n");
-				if (Aux->AAAA <1900||Aux->AAAA >2100)printf("el año no esta en un rango plausible, por favor ingrese el formato completo AAAA");Sleep(500);
-			}while(Aux->AAAA <1900||Aux->AAAA >2100);
-			Ingresar_lapso(&Aux->lapso,3,1);
+			ingresarDato(&Aux->AAAA,"anio del curso",2100,1900);printf("\n");
+			ingresarDato(&Aux->lapso,"lapso del curso",3,1);
 			insertar_CursoOrdenadamente(c,&Aux);
 			printf("\n Curso [%d] (%i) (%i) (%i)\n\n Agregado exitosamente \n",Aux->Codigo_del_curso,Aux->Codigo_de_la_Materia,Aux->AAAA,Aux->lapso);Sleep(500);
 		}else
@@ -496,18 +491,18 @@ void Agregar_Persona(Personas **Nueva_persona)
 		if (!strcmp(aux->nombre_apellido,""))printf("\nLa materia debe tener un nombre ");else
 		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
 	}while(!strcmp(aux->nombre_apellido,""));
-	Ingresar_fecha(&aux->Fecha_de_Nacimiento.yyyy,2100,1900,"año de nacimiento");
-	Ingresar_fecha(&aux->Fecha_de_Nacimiento.mm,12,1,"mes de nacimiento");int mes=aux->Fecha_de_Nacimiento.mm;
+	ingresarDato(&aux->Fecha_de_Nacimiento.yyyy,"anio de nacimiento",2100,1900);
+	ingresarDato(&aux->Fecha_de_Nacimiento.mm,"mes de nacimiento",12,1);int mes=aux->Fecha_de_Nacimiento.mm;
 	if(mes==2)
 		if (bisiesto(aux->Fecha_de_Nacimiento.yyyy))
-			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,29,1,"dia de nacimiento");
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",29,1);
 		else
-			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,28,1,"dia de nacimiento");
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",28,1);
 	else 
 		if (mes==4||mes==6||mes==9||mes==11)
-			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,30,1,"dia de nacimiento");
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",30,1);
 		else
-			Ingresar_fecha(&aux->Fecha_de_Nacimiento.dd,31,1,"dia de nacimiento");
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento",21,1);
 	do{
 		printf("\n\tIngrese la direccion: ");
 		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
@@ -526,7 +521,7 @@ void Modificar_Materia(Materias **materia)
 	if (*materia)
 	{
 		Materias *consulta=*materia, *temp=NULL;
-		Ingresar_codigo_aux(&Elegido," Codigo de La materia a modificar");
+		ingresarDato(&Elegido," Codigo de La materia a modificar",maxEntero,1);
 		while((Respaldo)&&(Respaldo->Codigo_de_la_Materia != Elegido))
 			Respaldo=Respaldo->prx;
 		if (!Respaldo)
@@ -560,7 +555,7 @@ void Modificar_Materia(Materias **materia)
 						break;
 
 					case 4://Creditos
-						ingresar_Creditos(&Respaldo->Creditos_de_la_Materia,5,2);
+						ingresarDato(&Respaldo->Creditos_de_la_Materia,"ingrese los creditos ",5,2);
 						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia);Sleep(500);
 						break;
 					
@@ -581,7 +576,7 @@ void Modificar_Curso(Cursos **curso)
 	if (*curso)
 	{
 		Cursos *consulta=*curso, *temp=NULL;
-		Ingresar_codigo_aux(&Elegido," Codigo del curso a modificar");
+		ingresarDato(&Elegido," Codigo del curso a modificar",maxEntero,1);
 		while((Respaldo)&&(Respaldo->Codigo_del_curso != Elegido))Respaldo=Respaldo->prx;
 		if (!Respaldo)
 		{printf("\n\tEl curso [%i] no se encuentra\n", Elegido);system("pause");}
@@ -596,10 +591,9 @@ void Modificar_Curso(Cursos **curso)
 				switch(opciones_de_Modificacion)
 				{
 					case 1://A�o
-						Ingresar_codigo_aux(&Respaldo->AAAA,"Ingrese el nuevo anio");break;
+						ingresarDato(&Respaldo->AAAA,"Ingrese el nuevo anio",maxEntero,1);break;
 					case 2://Lapso
-						Ingresar_lapso(&Respaldo->lapso,3,1);break;
-
+						ingresarDato(&Respaldo->lapso, "Lapso",3,1);break;
 					default:
 						if (opciones_de_Modificacion)
 						{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
@@ -617,7 +611,7 @@ void Modificar_Persona(Personas **persona)
 	if (*persona)
 	{
 		Personas *consulta=*persona, *temp=NULL;
-		Ingresar_codigo_aux(&Elegido," Cedula del estdiante a modificar");
+		ingresarDato(&Elegido," Cedula del estdiante a modificar",maxEntero,1);
 		while((Respaldo)&&(Respaldo->cedula != Elegido))Respaldo=Respaldo->prx;
 		if (!Respaldo)
 		{printf("\n\tEl estudiante de cedula [%i] no se encuentra\n", Elegido);system("pause");}
@@ -639,9 +633,9 @@ void Modificar_Persona(Personas **persona)
 						fflush(stdin);
 						break;
 					case 2://Fecha de nacimiento
-						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.dd,31,1,"dia");
-						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.mm,12,1,"mes");
-						Ingresar_fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,1900,2100,"anio");
+						ingresarDato(&Respaldo->Fecha_de_Nacimiento.dd,"dia ",29,1);
+						ingresarDato(&Respaldo->Fecha_de_Nacimiento.mm,"dia ",12,1);
+						ingresarDato(&Respaldo->Fecha_de_Nacimiento.yyyy,"anio ",1900,2100);
 						break;
 					case 3://Direccion
 						printf("Ingrese la nueva direccion: ");
@@ -706,56 +700,46 @@ void Ingresar_cedula( long int *codigo,char De[15], Personas **q)
 	*codigo=atol(copia);
 }
 
-void Ingresar_codigo_aux( int *codigo,char De[20])
+int DentrodeRango(int *Valor,int mayor,int menor)
+{
+	if (*Valor>mayor||*Valor<menor)return 0;
+	else return 1;
+}
+
+void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 {
 	char copia[10];int Numero_valido;
 	do
 	{
-		system("cls");printf("%s:",De);
-		fgets(copia,10,stdin);cambio(copia);
+		system("cls");printf("%s:",De);fflush(stdin); 
+		fgets(copia,10,stdin);cambio(copia);fflush(stdin); 
 		Numero_valido=validar_numero(copia);
-		*codigo=atoi(copia);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)))printf("\n Este codigo no es valido (INGRESE OTRO)\n");
-	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido)));
-	fflush(stdin); 
-	*codigo=atoi(copia);
+		*Dato=atoi(copia);
+		if( !DentrodeRango(Dato,vMax,vmin)|| (!(Numero_valido)))printf("\n Este dato no es valido (INGRESE OTRO)\n");
+	}while ( !DentrodeRango(Dato,vMax,vmin) || (!(Numero_valido)));
+	*Dato=atoi(copia);
 }
 
-void ingresar_Creditos(int *Rango,int max,int min)
+/*
+void IngresarFecha_completa()
 {
-	char copia[10];
-	do{
-		printf("\nIngrese las unidades de credito de la materia: ");
-		fflush(stdin);gets_s(copia);fflush(stdin); 
-		int Numero_valido=validar_numero(copia);
-		*Rango=atoi(copia);
-		if ((*Rango <min)||(*Rango >max))printf("\n El numero de creditos no esta en el ranco aceptado (%i,%i)\n por favor intente denuevo \n",min,max);
-	}while ((*Rango<min)||(*Rango >max));	
+	printf("\nIngrese el a%co de nacimiento:",164);
+	DentrodeRango(YY,2100,1900)
+	printf("\nIngrese el mes de nacimiento:");
+	DentrodeRango(MM,12,1)
+	if(MM==2)
+		if (bisiesto(YY))
+			printf("\nIngrese el mes de nacimiento:");
+	DentrodeRango(MM,12,1)
+		else
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],28,1)
+	else 
+		if (mes==4||mes==6||mes==9||mes==11)
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],30,1)
+		else
+			ingresarDato(&aux->Fecha_de_Nacimiento.dd,"dia de nacimiento"],31,1)
 }
-
-void Ingresar_lapso(int *Rango,int max,int min)
-{
-	char copia[10];
-	do{
-		printf("\nIngrese el lapso del curso: ");
-		fflush(stdin);gets_s(copia);fflush(stdin); 	
-		int Numero_valido=validar_numero(copia);
-		*Rango=atoi(copia);
-		if ((*Rango <min)||(*Rango >max))printf("\n El lapso introducido es invalido (%i,%i)\n por favor intente denuevo \n",min,max);
-	}while ((*Rango<min)||(*Rango >max));
-}
-
-void Ingresar_fecha(int *Rango,int max,int min, char De[10])
-{
-	char copia[10];
-	do{
-		printf("\nIngrese el %s: ",De);
-		fflush(stdin);gets_s(copia);fflush(stdin); 	
-		int Numero_valido=validar_numero(copia);
-		*Rango=atoi(copia);
-		if ((*Rango <min)||(*Rango >max))printf("\n El %s introducido es invalido (%i,%i)\n por favor intente denuevo \n",De,min,max);
-	}while ((*Rango<min)||(*Rango >max));
-}
+*/
 
 int Existe_codigo(int codigo,Materias **En_Materias)
 {
@@ -920,7 +904,8 @@ void Consultar_materia(Materias *Las_materias)
 					}system("pause"); 
 					break;
 				case 4:
-					int y;Ingresar_codigo_aux(&y,"Codigo a consultar");
+					int y;ingresarDato(&y,"Codigo a consultar",maxEntero,1);
+
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
 						if (y==consulta->Codigo_de_la_Materia){
@@ -964,11 +949,8 @@ void Consultar_curso(Cursos *Los_cursos)
 					break;
 				case 2:
 					int AAAA;
-					do{
-					Ingresar_codigo_aux(&AAAA,"Ingrese el anio");printf("\n");
-						if (AAAA <1900||AAAA >2100)
-							printf("el año no esta en un rango plausible, por favor ingrese el formato completo AAAA");
-					}while(AAAA <1900||AAAA >2100);
+					ingresarDato(&AAAA,"Ingrese el anio",2100,1900);
+					
 					while(consulta)
 					{ 
 						if (AAAA==consulta->AAAA)
@@ -978,11 +960,7 @@ void Consultar_curso(Cursos *Los_cursos)
 					break;
 				case 3:
 					int Lapso;
-					do{
-					Ingresar_codigo_aux(&Lapso,"Ingrese el anio");printf("\n");
-						if (Lapso <1||Lapso>3)
-							printf("el lapso no esta en un rango en el rango(1,3)");
-					}while(Lapso <1||Lapso>3);
+					ingresarDato(&Lapso,"Ingrese el Lapso",3,1);
 					while(consulta)
 					{ 
 						if (Lapso==consulta->lapso)
@@ -993,7 +971,7 @@ void Consultar_curso(Cursos *Los_cursos)
 				case 4:
 					int Codigo;
 					do{
-					Ingresar_codigo_aux(&Codigo,"codigo de la materia");printf("\n");
+						ingresarDato(&Codigo,"codigo de la materia",maxEntero,1);
 						if (true)
 							;
 					}while(false);
@@ -1007,7 +985,7 @@ void Consultar_curso(Cursos *Los_cursos)
 				case 5:
 					int CodigoC;
 					do{
-					Ingresar_codigo_aux(&CodigoC,"codigo del curso");printf("\n");
+					ingresarDato(&Codigo,"codigo del curso",maxEntero,1);
 						if (true)
 							;
 					}while(false);
@@ -1070,7 +1048,7 @@ void Consultar_Personas(Personas *Las_personas)
 					}
 					break;
 				case 3:
-					int y;Ingresar_codigo_aux(&y,"Cedula a consultar");
+					int y;ingresarDato(&y,"Cedula a consultar: ",maxEntero,1);
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
 						if (y==consulta->cedula){
@@ -1103,7 +1081,7 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 
 	if (*Las_materias){
 		Materias *consulta=*Las_materias, *temp=NULL;
-		Ingresar_codigo_aux(&codigo_mat,"Codigo de materia a eliminar");
+		ingresarDato(&codigo_mat,"Codigo de materia a eliminar",maxEntero,1);
 		if(*El_curso)
 			Eliminar_curso_materia(El_curso,codigo_mat);
 		if ((consulta->Codigo_de_la_Materia) == codigo_mat){
@@ -1140,7 +1118,7 @@ void Eliminar_curso (Cursos **Los_cursos)
 
 	if (*Los_cursos){
 		Cursos *consulta=*Los_cursos, *temp=NULL;
-		Ingresar_codigo_aux(&codigo_mat,"Codigo del curso a eliminar");
+		ingresarDato(&codigo_mat,"Codigo del curso a eliminar",maxEntero,1);
 		if ((consulta->Codigo_del_curso) == codigo_mat){
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
@@ -1175,7 +1153,7 @@ void Eliminar_persona (Personas **Las_personas)
 
 	if (*Las_personas){
 		Personas *consulta=*Las_personas, *temp=NULL;
-		Ingresar_codigo_aux(&codigo_per,"Cedula del estudiante a eliminar");
+		ingresarDato(&codigo_per,"Cedula del estudiante a eliminar",maxEntero,1);
 		if ((consulta->cedula) == codigo_per){
 			while(consulta->Record){
 				Participacion *aux2=consulta->Record;
