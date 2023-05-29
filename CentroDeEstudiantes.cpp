@@ -406,14 +406,14 @@ void Agregar_Persona(Personas **Nueva_persona)
 		printf("\n Ingrese nombre y apellido de la persona: ");
 		fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
 		if (!strcmp(aux->nombre_apellido,""))printf("\nLa Persona debe tener un nombre ");else
-		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la Persona es Numerico\n");
-	}while(!strcmp(aux->nombre_apellido,""));
+		if (validar_numero(aux->nombre_apellido))printf("\t El nombre de la Persona es Numerico\n");
+	}while(!strcmp(aux->nombre_apellido,"")||validar_numero(aux->nombre_apellido));
 	Ingresar_Fecha(&aux->Fecha_de_Nacimiento.yyyy,&aux->Fecha_de_Nacimiento.mm,&aux->Fecha_de_Nacimiento.dd);
 	do{
 		printf("\n Ingrese la direccion: ");
 		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
 		if (!strcmp(aux->direccion,""))printf("\nLa direccion debe tener un nombre ");else
-		if (validar_numero(aux->direccion) )printf("Advertencia:la direcion es Numerica\n");
+		if (validar_numero(aux->direccion) )printf("advertencia: la direcion es Numerica\n");
 	}while(!strcmp(aux->direccion,""));
 	aux->prx=*Nueva_persona;
 	*Nueva_persona=aux;
