@@ -1,88 +1,4 @@
-﻿/*
-    Nombre:
-		MINI PROYECTO 1	
-	Objetivo:
-		Se desea crear un programa que maneje el control de estudios de un centro educativo.
-	Descripcion:
-		`En la instituci�n se dictan clases semestralmente, se tienen tres lapsos (1,2,3) anuales, el per�odo corresponde al curso de verano anual.
-		`Las materias a dictar est�n guardadas en el sistema. Se pueden modificar, consultar o eliminar materias. 
-		`Cuando se elimina una materia se deben borrar del sistema todos los cursos con esa materia como contenido. 
-		`El c�digo de materia es �nico y no se puede modificar una vez creado.
-		`Para registrar un curso deben preexistir la materia (c�digo) y los alumnos (c�dula).
-		`Un alumno puede solo puede tener aprobada una materia una vez, luego de ello no puede reinscribirla.
-		`Puede haber reprobado la materia un m�ximo de 4 (cuatro) veces. En caso de reprobar ya no puede volver a inscribirse en el instituto.
-		`Puede haber retirado la materia infinita cantidad de veces. 
-		`El c�digo del curso es �nico y no puede ser modificado una vez creado.
-			-Cuando se elimina un curso, deben borrarse todas sus referencias en el sistema
-			-Cuando se elimina un alumno deben borrarse todas sus referencias en el sistema.
-			-El sistema debe manejarse en listas din�micas en memoria principal y almacenarse en memoria secundaria.
-		Se tienen tres listas principales:
-			*Materias:
-				 c�digo dela materia (entero),
-				 nombre (hasta 30 caracteres),
-				 descripci�n(m�ximo 100 caracteres),
-				 semestre al que pertenece (I,II, �, X),
-				 numero de cr�ditos ( 2 a 5 ).
-			*Cursos:
-				C�digo del curso ( entero ),
-				c�digo materia, a�o ( XXXX), 
-				Lapso (1..3: indica primer semestre, segundo o verano).
-			*Personas:
-				C�dula de identidad ( entero largo ),
-				nombres y apellidos,
-				fecha de nacimiento,
-				direcci�n.
-				La cedula es �nica y no puede ser modificada. 
-				Si se elimina una persona en el sistema deben eliminarse todas sus referencias en el sistema.
-				Igual mente cada estudiante tiene una lista de los cursos en que ha participado.
-				All� se almacenan: c�digo de curso y la nota correspondiente.
-	Caracter�sticas del sistema:
-		El sistema tiene un men� principal que tiene tres (03) opciones principales
-		+Mantenimiento: (tablas base del sistema)
-			-Materias:                             
-				*agregar
-				*modificar
-				*consultar 
-				*eliminar.
-			-Cursos:
-				*agregar, 
-				*modificar
-				*consultar 
-				*eliminar.
-			-Personas:
-				*agregar
-				*modificar
-				*consultar 
-				*eliminar personas (sin datos de cursos)
-		+Control de estudios
-			-Alumnos:
-				*Agregar 
-				*modificar 
-				*eliminar alumnos en cursos con sus notas correspondientes.
-			-Una persona solo se puede inscribir una vez en cada Curso.
-			-No se puede inscribir a un alumno en una materia que ya tenga aprobada. 
-            -Se puede modificar la nota en un curso y alumnos dados
-		+Consultas:
-			- Dado un nombre de curso buscar su c�digo.
-			- Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
-			- Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-			- Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-			-Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
-			-Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
-			-Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
-			-Dada una cedula mostrar todos los cursos con sus notas tomadas por esapersona
-*/
-/*
-	Entrega inicial: 01 de junio 2023 v�a m�dulo 7 (archivo comprimido con todos los fuentesy archivos de datos).
-	Grupos de un m�ximo de 04 (cuatro) personas. (misma secci�n).
-	
-	Contenido de la entrega: 
-	todo el mantenimiento del sistema (tablas):
-		-materias
-		-cursos 
-		-personas 
-		(agregar, modificar y eliminar, as� como el almacenamiento y recuperaci�n de la informaci�n con archivos).
-*/
+﻿/*Gabriel Castellano,Jesus Gil,Andres Guilarte*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,7 +120,7 @@ int main ()
 	{//Menu
 		system("cls");
 		printf("\t MENU\n\n");
-		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n ");
+		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 		scanf_s("%d",&opciones);
 		switch(opciones)
 		{
@@ -213,9 +129,9 @@ int main ()
 				int opciones_mantenimiento=0; 
 				do
 				{//Menu de Mantenimiento del sistema
-					Sleep(1000);system("cls");
+					Sleep(100);system("cls");
 					printf("\t Menu de Mantenimiento\n\n");
-					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n ");
+					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 					scanf_s("%d",&opciones_mantenimiento);
 					switch(opciones_mantenimiento)
 					{
@@ -225,8 +141,8 @@ int main ()
 							do
 							{//Menu de Mantenimiento Materias
 								system("cls");
-								printf("\t Menu de mantenimiento de materias\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								printf("\t Menu de mantenimiento de MATERIAS\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								scanf_s("%d",&opciones_mantenimiento_Materias);
 								switch(opciones_mantenimiento_Materias)
 									{
@@ -257,8 +173,8 @@ int main ()
 							do
 							{//Menu de Mantenimiento Cursos
 								system("cls");
-								printf("\t Menu de mantenimiento de cursos\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								printf("\t Menu de mantenimiento de CURSOS\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								scanf_s("%d",&opciones_mantenimiento_Cursos);
 								switch(opciones_mantenimiento_Cursos)
 								{
@@ -289,8 +205,8 @@ int main ()
 							do
 							{//Menu de Mantenimiento Personas
 								system("cls");
-								printf("\t Menu de mantenimiento de personas\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n ");
+								printf("\t Menu de mantenimiento de PERSONAS\n\n");
+								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								scanf_s("%d",&opciones_mantenimiento_Personas);
 								switch(opciones_mantenimiento_Personas)
 								{
@@ -334,7 +250,7 @@ int main ()
 				{//Menu Control de Estudios
 					system("cls");
 					printf("\t Menu Control de Estudios\n\n");
-					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n  ");
+					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					scanf_s("%d",&opciones_control_estudios);
 					switch(opciones_control_estudios)
 					{
@@ -487,22 +403,22 @@ void Agregar_Persona(Personas **Nueva_persona)
 	Personas *aux=new Personas;
 	Ingresar_cedula(&aux->cedula,"del estudiante",Nueva_persona);
 	do{
-		printf("\nIngrese nombre y apellido de la persona: ");
+		printf("\n Ingrese nombre y apellido de la persona: ");
 		fflush(stdin);fgets(aux->nombre_apellido,40,stdin);cambio(aux->nombre_apellido);fflush(stdin);
-		if (!strcmp(aux->nombre_apellido,""))printf("\nLa materia debe tener un nombre ");else
-		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la materia es Numerico\n");
+		if (!strcmp(aux->nombre_apellido,""))printf("\nLa Persona debe tener un nombre ");else
+		if (validar_numero(aux->nombre_apellido))printf("\tAdvertencia: El nombre de la Persona es Numerico\n");
 	}while(!strcmp(aux->nombre_apellido,""));
 	Ingresar_Fecha(&aux->Fecha_de_Nacimiento.yyyy,&aux->Fecha_de_Nacimiento.mm,&aux->Fecha_de_Nacimiento.dd);
 	do{
-		printf("\n\tIngrese la direccion: ");
+		printf("\n Ingrese la direccion: ");
 		fflush(stdin);fgets(aux->direccion,40,stdin);cambio(aux->direccion);fflush(stdin);
-		if (!strcmp(aux->direccion,""))printf("\nLa materia debe tener un nombre ");else
-		if (validar_numero(aux->direccion) )printf("El nombre de la materia es Numerico\n");
+		if (!strcmp(aux->direccion,""))printf("\nLa direccion debe tener un nombre ");else
+		if (validar_numero(aux->direccion) )printf("Advertencia:la direcion es Numerica\n");
 	}while(!strcmp(aux->direccion,""));
 	aux->prx=*Nueva_persona;
 	*Nueva_persona=aux;
 	(*Nueva_persona)->Record = NULL;
-	printf("\n Estudidante de cedula: [%d] \'%s\' nacido el: [%d] [%d] [%d],con residencia en: %s \n\n Agregado exitosamente \n",aux->cedula,aux->nombre_apellido,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
+	printf("\n Estudiante: \'%s\' C.I.%d nacido el: (%d/%d/%d), De: [%s] \n\tAgregado exitosamente \n",aux->nombre_apellido,aux->cedula,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
 }
 
 void Modificar_Materia(Materias **materia)
@@ -522,31 +438,31 @@ void Modificar_Materia(Materias **materia)
 			do
 			{//Menu de Mantenimiento Cursos
 				system("cls");printf("\t Que desea modificar?\n\n");
-				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n ");
+				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n Escriba su opcion (0-4) =  ");
 				scanf_s("%d",&opciones_de_Modificacion);
 				switch(opciones_de_Modificacion)
 				{
 					case 1://Nombre
 						printf("\nIngrese el nuevo nombre de la materia: ");
 						fflush(stdin);fgets(Respaldo->Nombre_de_la_Materia,30,stdin);cambio(Respaldo->Nombre_de_la_Materia);fflush(stdin);
-						printf("\nNombre de %s modificado exitosamente",Respaldo->Nombre_de_la_Materia);Sleep(500);
+						printf("\nNombre de [%s] modificado exitosamente",Respaldo->Nombre_de_la_Materia);Sleep(1500);
 						break;
 					
 					case 2://Descripcion
 						printf("\nIngrese la nueva Descripcion de la materia: ");
 						fflush(stdin);fgets(Respaldo->Descripcion_de_la_Materia,100,stdin);cambio(Respaldo->Descripcion_de_la_Materia);fflush(stdin);fflush(stdin);
-						printf("\nDescripcion de %s modificado exitosamente",Respaldo->Descripcion_de_la_Materia);Sleep(500);
+						printf("\nDescripcion de [%s] modificado a [%s] exitosamente",Respaldo->Nombre_de_la_Materia,Respaldo->Descripcion_de_la_Materia);Sleep(1500);
 						break;
 
 					case 3://Semestre
 						Respaldo->Semestre=Verificar_Semestre();fflush(stdin);
 						Semestre_Romano(Respaldo->Semestre,&Respaldo);fflush(stdin);
-						printf("\nSemestre de %s modificado exitosamente",Respaldo->SemestreEnRomano);Sleep(500);
+						printf("\nSemestre de [%s] modificado a [%s] exitosamente",Respaldo->Nombre_de_la_Materia,Respaldo->SemestreEnRomano);Sleep(1500);
 						break;
 
 					case 4://Creditos
 						ingresarDato(&Respaldo->Creditos_de_la_Materia,"ingrese los creditos ",5,2);
-						printf("Creditos de %s modificados exitosamente",Respaldo->Creditos_de_la_Materia);Sleep(500);
+						printf("Creditos de [%s] modificados a [%i] exitosamente",Respaldo->Nombre_de_la_Materia, Respaldo->Creditos_de_la_Materia);Sleep(1500);
 						break;
 					
 					default:
@@ -576,11 +492,11 @@ void Modificar_Curso(Cursos **curso)
 			do{//Menu de Mantenimiento Cursos
 				system("cls");
 				printf("\t Que desea modificar?\n\n");
-				printf(" 1- Anio del curso\n 2- Lapso del curso\n 0- SALIR\n\n ");
+				printf(" 1- Anio del curso\n 2- Lapso del curso\n 0- SALIR\n\n Escriba su opcion (0-2) = ");
 				scanf_s("%d",&opciones_de_Modificacion);
 				switch(opciones_de_Modificacion)
 				{
-					case 1://A�o
+					case 1://Anio
 						ingresarDato(&Respaldo->AAAA,"Ingrese el nuevo anio",maxEntero,1);break;
 					case 2://Lapso
 						ingresarDato(&Respaldo->lapso, "Lapso",3,1);break;
@@ -611,7 +527,7 @@ void Modificar_Persona(Personas **persona)
 			do{//Menu de Mantenimiento Cursos
 				system("cls");
 				printf("\t Que desea modificar?\n\n");
-				printf(" 1- Nombre y apellido\n 2- Fecha de nacimiento\n 3.- Direccion\n 0- SALIR\n\n ");
+				printf(" 1- Nombre y apellido\n 2- Fecha de nacimiento\n 3- Direccion\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 				scanf_s("%d",&opciones_de_Modificacion);
 				switch(opciones_de_Modificacion)
 				{
@@ -620,15 +536,19 @@ void Modificar_Persona(Personas **persona)
 						fflush(stdin);
 						fgets(Respaldo->nombre_apellido,40,stdin);
 						cambio(Respaldo->nombre_apellido);
+						printf("\nNombre de [%i] modificado a [%s] exitosamente",Respaldo->cedula, Respaldo->nombre_apellido);Sleep(1500);
 						fflush(stdin);
 						break;
 					case 2://Fecha de nacimiento
-						Ingresar_Fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,&Respaldo->Fecha_de_Nacimiento.mm,&Respaldo->Fecha_de_Nacimiento.dd);break;
+						Ingresar_Fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,&Respaldo->Fecha_de_Nacimiento.mm,&Respaldo->Fecha_de_Nacimiento.dd);
+						printf("\nFecha de nacimiento de [%i] modificado exitosamente",Respaldo->cedula);Sleep(1500);
+						break;
 					case 3://Direccion
 						printf("Ingrese la nueva direccion: ");
 						fflush(stdin);
 						fgets(Respaldo->direccion,40,stdin);
 						cambio(Respaldo->direccion);
+						printf("\nDireccion de [%i] modificado a [%s] exitosamente",Respaldo->cedula, Respaldo->direccion);Sleep(1500);
 						fflush(stdin);
 						break;
 					default:
@@ -682,7 +602,7 @@ void Ingresar_cedula( long int *codigo,char De[15], Personas **q)
 		Numero_valido=validar_numero(copia);
 		*codigo=atol(copia);
 		int z= Existe_cedula(*codigo,q);
-		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Esta cedula no es valido (INGRESE OTRO)\n");
+		if( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(z))printf("\n Esta cedula no es valida (INGRESE OTRO)\n");
 	}while ( (*codigo>=maxEntero) || (*codigo<=0) || (!(Numero_valido))||(Existe_cedula(*codigo,q)));
 	*codigo=atol(copia);
 }
@@ -698,7 +618,7 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 	char copia[10];int Numero_valido;
 	do
 	{
-		printf("\n\t%s:",De);fflush(stdin); 
+		printf("\n%s:",De);fflush(stdin); 
 		fgets(copia,10,stdin);cambio(copia);fflush(stdin); 
 		Numero_valido=validar_numero(copia);
 		*Dato=atoi(copia);
@@ -706,7 +626,7 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 			{
 				printf("\n Este dato no es valido (INGRESE OTRO)");
 				if (!DentrodeRango(Dato,vMax,vmin))
-					printf("\n no esta dentro del rango(%i,%i)",vmin,vMax);
+					printf("\n No esta dentro del rango(%i,%i)",vmin,vMax);
 			}
 	}while ( !DentrodeRango(Dato,vMax,vmin) || (!(Numero_valido)));
 	*Dato=atoi(copia);
@@ -714,18 +634,18 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 
 void Ingresar_Fecha(year *YY,month *MM,day *dd)
 {
-	ingresarDato(YY,"anio de nacimiento",2100,1900);
-	ingresarDato(YY,"mes de nacimiento",12,1);
+	ingresarDato(YY," anio de nacimiento",2100,1900);
+	ingresarDato(MM," mes de nacimiento",12,1);
 	if(*MM==2)
 		if (bisiesto(*YY))
-			ingresarDato(dd,"dia de nacimiento",29,1);
+			ingresarDato(dd," Dia de nacimiento",29,1);
 		else
-			ingresarDato(dd," dia de nacimiento",28,1);
+			ingresarDato(dd," Dia de nacimiento",28,1);
 	else 
 		if (*MM==4||*MM==6||*MM==9||*MM==11)
-			ingresarDato(dd," dia de nacimiento",30,1);
+			ingresarDato(dd," Dia de nacimiento",30,1);
 		else
-			ingresarDato(dd," dia de nacimiento",31,1);
+			ingresarDato(dd," Dia de nacimiento",31,1);
 }
 
 int Existe_codigo(int codigo,Materias **En_Materias)
@@ -856,8 +776,8 @@ void Consultar_materia(Materias *Las_materias)
 		do
 		{
 			Materias *consulta=Las_materias;system("cls");					
-			printf("\t consultar\n\n");
-			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- Nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n ");
+			printf("\t Consultar\n\n");
+			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- Nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
@@ -923,7 +843,7 @@ void Consultar_curso(Cursos *Los_cursos)
 		{
 			 Cursos *consulta=Los_cursos;;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n 5-curso especifico \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n 5- Curso especifico \n\n 0- SALIR\n\n Escriba su opcion (0-5) = ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
@@ -958,7 +878,7 @@ void Consultar_curso(Cursos *Los_cursos)
 				case 4:
 					int Codigo;
 					do{
-						ingresarDato(&Codigo,"codigo de la materia",maxEntero,1);
+						ingresarDato(&Codigo,"Codigo de la materia",maxEntero,1);
 						if (true)
 							;
 					}while(false);
@@ -972,7 +892,7 @@ void Consultar_curso(Cursos *Los_cursos)
 				case 5:
 					int CodigoC;
 					do{
-					ingresarDato(&CodigoC,"codigo del curso",maxEntero,1);
+					ingresarDato(&CodigoC,"Codigo del curso",maxEntero,1);
 						if (true)
 							;
 					}while(false);
@@ -1006,14 +926,14 @@ void Consultar_Personas(Personas *Las_personas)
 			int cont =0;
 			Personas *consulta=Las_personas;system("cls");					
 			printf("\t consultar\n\n");
-			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Cedula \n\n 0- SALIR\n\n ");
+			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Cedula \n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 			scanf_s("%d",&opciones_Consulta);
 			switch(opciones_Consulta)
 			{
 				case 1:
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
-						printf(" -%s [C.I:%d] (%d/%d/%d),residencia: %s \n\n",consulta->nombre_apellido,consulta->cedula,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+						printf("\n Estudiante: \'%s\' C.I.%d nacido el: (%d/%d/%d), De: [%s] \n\tAgregado exitosamente \n",consulta->nombre_apellido,consulta->cedula,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
 						consulta=consulta->prx;
 					}system("pause"); 
 					break;
@@ -1025,7 +945,8 @@ void Consultar_Personas(Personas *Las_personas)
 						if (strcmp(consulta->nombre_apellido,nombre) >= 0){
 							cont +=1;
 							printf("\n");
-							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d]  con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+							printf("\n Estudiante: \'%s\' C.I.%d nacido el: (%d/%d/%d), De: [%s] \n\tAgregado exitosamente \n",consulta->nombre_apellido,consulta->cedula,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+
 						}
 							consulta=consulta->prx;
 					}system("pause"); 
@@ -1041,7 +962,7 @@ void Consultar_Personas(Personas *Las_personas)
 						if (y==consulta->cedula){
 							cont +=1;
 							printf("\n");
-							printf(" -Estudiante de cedula: [%d] llamado: \%s\ nacido el: [%d] [%d] [%d] con residencia en: %s \n\n",consulta->cedula,consulta->nombre_apellido,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
+							printf("\n Estudiante: \'%s\' C.I.%d nacido el: (%d/%d/%d), De: [%s] \n\tAgregado exitosamente \n",consulta->nombre_apellido,consulta->cedula,consulta->Fecha_de_Nacimiento.dd,consulta->Fecha_de_Nacimiento.mm,consulta->Fecha_de_Nacimiento.yyyy,consulta->direccion);
 						}						
 							consulta=consulta->prx;
 					}system("pause"); 
@@ -1226,7 +1147,7 @@ int LimitarCaracteres (char *copia, int max)
 }	
 
 void cambio(char c1[])
-{// evita salto de linea luego de un fgets y cambia las comas por punto para evitar errores en los archivos
+{// // evita salto de linea luego de un fgets y cambia las comas por punto para evitar errores en los archivos
 	for(int i=0;unsigned(i)<strlen(c1);i++)
 		if(c1[i] == '\n')c1[i] = '\0';
 		else if(c1[i]==',')c1[i]='.';
