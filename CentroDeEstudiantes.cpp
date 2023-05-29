@@ -63,6 +63,7 @@ void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo);
 void Agregar_Curso(Cursos **,Materias **Nueva_materia);
 void insertar_CursoOrdenadamente( Cursos **lista, Cursos **Nuevo_nodo);
 void Agregar_Persona(Personas **);
+void insertar_PersonaOrdenadamente( Personas **lista, Personas **Nuevo_nodo);
 int DentrodeRango(int *Valor,int mayor,int menor);
 void ingresarDato(int *Dato,char De[20],int vMax,int vmin);
 void Ingresar_codigo( int *codigo,char De[15], Materias **);
@@ -415,10 +416,25 @@ void Agregar_Persona(Personas **Nueva_persona)
 		if (!strcmp(aux->direccion,""))printf("\nLa direccion debe tener un nombre ");else
 		if (validar_numero(aux->direccion) )printf("advertencia: la direcion es Numerica\n");
 	}while(!strcmp(aux->direccion,""));
-	aux->prx=*Nueva_persona;
-	*Nueva_persona=aux;
+	insertar_PersonaOrdenadamente(Nueva_persona,&aux);
 	(*Nueva_persona)->Record = NULL;
 	printf("\n Estudiante: \'%s\' C.I.%d nacido el: (%d/%d/%d), De: [%s] \n\tAgregado exitosamente \n",aux->nombre_apellido,aux->cedula,aux->Fecha_de_Nacimiento.dd,aux->Fecha_de_Nacimiento.mm,aux->Fecha_de_Nacimiento.yyyy,aux->direccion);Sleep(500);
+}
+
+void insertar_PersonaOrdenadamente( Personas **lista, Personas **Nuevo_nodo)
+{
+	if (*lista==NULL || (*Nuevo_nodo)->cedula<(*lista)->cedula)//mientras el nuevo nodo sea la nueva cabeza
+	{
+		(*Nuevo_nodo)->prx = *lista;//apunta a lo que apuntaba p
+		*lista = *Nuevo_nodo;//hace el nuevo nodo cabeza
+	}else
+	{
+		Personas *aux=*lista;//crea un auxiliar
+		while(aux->prx && aux->prx->cedula <= (*Nuevo_nodo)->cedula)
+			aux=aux->prx;// este avanza hasta encontrar la posicion
+		(*Nuevo_nodo)->prx=aux->prx;//enlazamos el nodo a lo que apunta e auxiliar
+		aux->prx=*Nuevo_nodo; //enlazamos el auxiliar al nuevo nodo
+	}
 }
 
 void Modificar_Materia(Materias **materia)
@@ -1356,8 +1372,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		if(error)printf("%i Errores en el nodo\n",error);
 		else 
 		{
-			Nuevo_nodo->prx=*nodos;
-			*nodos=Nuevo_nodo;
+			insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);
 			printf(" Importar a: %s C.I:%i (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
 		}
 		Elemento = strtok(NULL, ",");
