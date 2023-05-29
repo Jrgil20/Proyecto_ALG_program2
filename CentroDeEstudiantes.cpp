@@ -148,8 +148,8 @@ int main ()
 								system("cls");
 								printf("\t Menu de mantenimiento de MATERIAS\n\n");
 								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
-								fflush(stdin);fgets(opciones_mantenimiento_Materias,2,stdin);cambio(opciones_mantenimiento_Materias);fflush(stdin);
-								switch(opciones_mantenimiento_Materias[0])
+								fflush(stdin);fgets(opciones_mantenimiento_Materia,2,stdin);cambio(opciones_mantenimiento_Materia);fflush(stdin);
+								switch(opciones_mantenimiento_Materia[0])
 									{
 										case '1'://Agregar Materia	
 											Agregar_Materia(&Materia); break;
@@ -164,10 +164,10 @@ int main ()
 											Eliminar_materia(&Materia,&Curso);break;
 
 										default:
-											if (opciones_mantenimiento_Materias[0]!='0')
+											if (opciones_mantenimiento_Materia[0]!='0')
 											{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 									}
-							}while (opciones_mantenimiento_Materias[0]!='0');
+							}while (opciones_mantenimiento_Materia[0]!='0');
 							if (Exportar_Materias(Materia,Ruta));
 							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
