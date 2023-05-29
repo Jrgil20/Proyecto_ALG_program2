@@ -202,28 +202,29 @@ int main ()
 						}
 						case 3:
 						{
-							int opciones_mantenimiento_Personas=0; 
+							char opciones_mantenimiento_Personas[3];
+							opciones_mantenimiento_Personas[0]='0'; 
 							do
 							{//Menu de Mantenimiento Personas
 								system("cls");
 								printf("\t Menu de mantenimiento de PERSONAS\n\n");
 								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
-								scanf_s("%d",&opciones_mantenimiento_Personas);
-								switch(opciones_mantenimiento_Personas)
+								fflush(stdin);fgets(opciones_mantenimiento_Personas,2,stdin);cambio(opciones_mantenimiento_Personas);fflush(stdin);
+								switch(opciones_mantenimiento_Personas[0])
 								{
-									case 1://Agregar
+									case '1'://Agregar
 										Agregar_Persona(&Persona);
 										break;
 
-									case 2://Modificar
+									case '2'://Modificar
 										Modificar_Persona(&Persona);
 										break;
 
-									case 3://Consultar
+									case '3'://Consultar
 										Consultar_Personas(Persona);
 										break;
 
-									case 4:
+									case '4':
 										Eliminar_persona(&Persona);
 										break;
 
@@ -246,71 +247,73 @@ int main ()
 
 			case 2:
 			{
-				int opciones_control_estudios=0;
+				char opciones_control_estudios[3]; 
+				opciones_control_estudios[0]='0';
 				do
 				{//Menu Control de Estudios
 					system("cls");
 					printf("\t Menu Control de Estudios\n\n");
 					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
-					scanf_s("%d",&opciones_control_estudios);
-					switch(opciones_control_estudios)
+					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
+					switch(opciones_control_estudios[0])
 					{
-						case 1://Agregar alumnos
+						case '1'://Agregar alumnos
 							break;
 
-						case 2://Modificar alumnos
+						case '2'://Modificar alumnos
 							break;
 
-						case 3://eliminar alumnos en cursos con sus notas correspondientes.
+						case '3'://eliminar alumnos en cursos con sus notas correspondientes.
 							break;
 
 						default:
-							if (opciones_control_estudios)
+							if (opciones_control_estudios[0]!='0')
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
-				}while (opciones_control_estudios);
+				}while (opciones_control_estudios[0]!='0');
 			}
 
 			case 3:
 			{
-				int opciones_consultas=0;
+				char opciones_consultas[3];
+				opciones_consultas[0]='0';
 				do
 				{//Menu Control de Estudios
 					system("cls");
 					printf("\t Menu Control de Estudios\n\n");
 					printf(" \n\n 0- SALIR\n\n  ");
-					scanf_s("%d",&opciones_consultas);
-					switch(opciones_consultas)
+					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
+					switch(opciones_consultas[0])
 					{
-						case 1://Dado un nombre de curso buscar su c�digo.
+						case '1'://Dado un nombre de curso buscar su c�digo.
 							break;
 
-						case 2://Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
+						case '2'://Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
 							break;
 
-						case 3://Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case '3'://Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							break;
 
-						case 4: //Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case '4': //Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							break;
 
-						case 5://Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+						case '5'://Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
 							break;
 
-						case 6://Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+						case '6'://Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
 							break;
 
-						case 7://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
+						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
 							break;
 
-						case 8://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
+						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
 							break;
 
 						default:
-							if (opciones_consultas)
+							if (opciones_consultas[0]!='0')
 								{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
-				}while (opciones_consultas);
+				}while (opciones_consultas[0]!='0');
 			}
 
 			default:
