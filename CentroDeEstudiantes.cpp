@@ -99,9 +99,9 @@ int Importar_Personas(Personas **nodos,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	int opciones=0; char Ruta[150]="C:/Users/LAB_AUDIOV/"; char Nuevaruta[4];
+	 char Ruta[150]="C:/Users/LAB_AUDIOV/"; char Nuevaruta[4];
 
-	printf("\tDesea cambiar la ruta de los ficheros?");
+	printf("\n\tDesea cambiar la ruta de los ficheros?");
 	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
 	if (Nuevaruta[0]=='Y'||Nuevaruta[0]=='y'||Nuevaruta[0]=='S'||Nuevaruta[0]=='s')
 	{
@@ -117,90 +117,95 @@ int main ()
 	if (Importar_Cursos(&Curso,Ruta));else {printf("no se pudo importar el archivo de cursos\n");system("pause");}
 	if (Importar_Personas(&Persona,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
 
+	char opciones[3];
+	opciones[0]='0'; 
 	do
 	{//Menu
 		system("cls");
 		printf("\t MENU\n\n");
 		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
-		scanf_s("%d",&opciones);
-		switch(opciones)
+		fflush(stdin);fgets(opciones,2,stdin);cambio(opciones);fflush(stdin);
+		switch(opciones[0])
 		{
-			case 1://Mantenimiento del sistema
+			case '1'://Mantenimiento del sistema
 			{
-				int opciones_mantenimiento=0; 
+				char opciones_mantenimiento[3];
+				opciones_mantenimiento[0]='0';  
 				do
 				{//Menu de Mantenimiento del sistema
 					Sleep(100);system("cls");
 					printf("\t Menu de Mantenimiento\n\n");
 					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
-					scanf_s("%d",&opciones_mantenimiento);
-					switch(opciones_mantenimiento)
+					fflush(stdin);fgets(opciones_mantenimiento,2,stdin);cambio(opciones_mantenimiento);fflush(stdin);
+					switch(opciones_mantenimiento[0])
 					{
-						case 1:
+						case '1':
 						{
-							int opciones_mantenimiento_Materias=0; 
+							char opciones_mantenimiento_Materia[3];
+							opciones_mantenimiento_Materia[0]='0';  
 							do
 							{//Menu de Mantenimiento Materias
 								system("cls");
 								printf("\t Menu de mantenimiento de MATERIAS\n\n");
 								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
-								scanf_s("%d",&opciones_mantenimiento_Materias);
-								switch(opciones_mantenimiento_Materias)
+								fflush(stdin);fgets(opciones_mantenimiento_Materias,2,stdin);cambio(opciones_mantenimiento_Materias);fflush(stdin);
+								switch(opciones_mantenimiento_Materias[0])
 									{
-										case 1://Agregar Materia	
+										case '1'://Agregar Materia	
 											Agregar_Materia(&Materia); break;
 
-										case 2://Modificar
+										case '2'://Modificar
 											Modificar_Materia(&Materia);break;
 										
-										case 3://Consultar
+										case '3'://Consultar
 											Consultar_materia(Materia);break;
 										
-										case 4://Eliminar
+										case '4'://Eliminar
 											Eliminar_materia(&Materia,&Curso);break;
 
 										default:
-											if (opciones_mantenimiento_Materias)
+											if (opciones_mantenimiento_Materias[0]!='0')
 											{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 									}
-							}while (opciones_mantenimiento_Materias);
+							}while (opciones_mantenimiento_Materias[0]!='0');
 							if (Exportar_Materias(Materia,Ruta));
 							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
 							break;
 						}
-						case 2:
+						case '2':
 						{
-							int opciones_mantenimiento_Cursos=0; 
+							char opciones_mantenimiento_Cursos[3];
+							opciones_mantenimiento_Cursos[0]='0';  
 							do
 							{//Menu de Mantenimiento Cursos
 								system("cls");
 								printf("\t Menu de mantenimiento de CURSOS\n\n");
 								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
-								scanf_s("%d",&opciones_mantenimiento_Cursos);
-								switch(opciones_mantenimiento_Cursos)
+								fflush(stdin);fgets(opciones_mantenimiento_Cursos,2,stdin);cambio(opciones_mantenimiento_Cursos);fflush(stdin);
+								switch(opciones_mantenimiento_Cursos[0])
 								{
-									case 1://Agregar
+									case '1'://Agregar
 										Agregar_Curso(&Curso,&Materia);break;
 
-									case 2://Modificar
+									case '2'://Modificar
 										Modificar_Curso(&Curso);break;
 
-									case 3://Consultar
+									case '3'://Consultar
 										Consultar_curso(Curso);break;
 
-									case 4://Eliminar
+									case '4'://Eliminar
 										Eliminar_curso(&Curso);break;
 
 									default:
-										if (opciones_mantenimiento_Cursos)
+										if (opciones_mantenimiento_Cursos[0]!='0')
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
-							}while (opciones_mantenimiento_Cursos);
+							}while (opciones_mantenimiento_Cursos[0]!='0');
 							if (Exportar_Cursos(Curso,Ruta));
 							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
 							break;
 						}
-						case 3:
+						case '3':
 						{
 							char opciones_mantenimiento_Personas[3];
 							opciones_mantenimiento_Personas[0]='0'; 
@@ -229,23 +234,23 @@ int main ()
 										break;
 
 									default:
-										if (opciones_mantenimiento_Personas)
+										if (opciones_mantenimiento_Personas[0]!='0')
 										{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 								}
-							}while (opciones_mantenimiento_Personas);
+							}while (opciones_mantenimiento_Personas[0]!='0');
 							if (Exportar_Personas(Persona,Ruta));
 							else printf("\t se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 							break;
 						}	
 						default:
-							if (opciones_mantenimiento)
+							if (opciones_mantenimiento[0]!='0')
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 						}
-					}while (opciones_mantenimiento);
+					}while (opciones_mantenimiento[0]!='0');
 					break;
 				}
 
-			case 2:
+			case '2':
 			{
 				char opciones_control_estudios[3]; 
 				opciones_control_estudios[0]='0';
@@ -273,7 +278,7 @@ int main ()
 				}while (opciones_control_estudios[0]!='0');
 			}
 
-			case 3:
+			case '3':
 			{
 				char opciones_consultas[3];
 				opciones_consultas[0]='0';
@@ -317,10 +322,10 @@ int main ()
 			}
 
 			default:
-				if (opciones)
+				if (opciones[0]!='0')
 					{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 		}
-	}while (opciones);
+	}while (opciones[0]!='0');
 	system("pause");
 	return 0;
 }
