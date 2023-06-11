@@ -1,4 +1,4 @@
-﻿/*Gabriel Castellano C.I:28059781,Jesus Gil C.I:30175126,Andres Guilarte C.I:30246084*/
+/*Gabriel Castellano C.I:28059781,Jesus Gil C.I:30175126,Andres Guilarte C.I:30246084*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,7 +83,6 @@ void Eliminar_materia (Materias **Las_materias,Cursos **);
 void Eliminar_curso (Cursos **Los_cursos);
 void Eliminar_persona(Personas **);
 int isdigit(char);
-void mes(month *MM,char **m);
 int bisiesto (year Y);
 int LimitarCaracteres (char *copia, int max);
 int compararCadenas(char *cadena1,char *cadena2);
@@ -99,7 +98,7 @@ int Importar_Personas(Personas **nodos,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	 char Ruta[150]="C:/Users/LAB_AUDIOV/"; char Nuevaruta[4];
+	 char Ruta[150]=""; char Nuevaruta[4];
 
 	printf("\n\tDesea cambiar la ruta de los ficheros?");
 	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
@@ -681,7 +680,7 @@ void Ingresar_Fecha(year *YY,month *MM,char **m,day *dd)
 {
 	ingresarDato(YY," anio de nacimiento",2100,1900);
 	ingresarDato(MM," mes de nacimiento",12,1);
-	mes(MM,m);
+
 	if(*MM==2)
 		if (bisiesto(*YY))
 			ingresarDato(dd," Dia de nacimiento",29,1);
@@ -692,12 +691,6 @@ void Ingresar_Fecha(year *YY,month *MM,char **m,day *dd)
 			ingresarDato(dd," Dia de nacimiento",30,1);
 		else
 			ingresarDato(dd," Dia de nacimiento",31,1);
-}
-
-void mes(month *MM,char **m)
-{
-	if(*MM==1)strcpy(*m,"ene");else if(*MM==2)strcpy(*m,"feb");else if(*MM==3)strcpy(*m,"mar");else if(*MM==4)strcpy(*m,"abr");else if(*MM==5)strcpy(*m,"may");else if(*MM==6)strcpy(*m,"jun");
-	else if(*MM==7)strcpy(*m,"jul");else if(*MM==8)strcpy(*m,"ago");else if(*MM==9)strcpy(*m,"sep");else if(*MM==10)strcpy(*m,"oct");else if(*MM==11)strcpy(*m,"nov");else if(*MM==12)strcpy(*m,"dic");
 }
 
 int Existe_codigo(int codigo,Materias **En_Materias)
@@ -1165,6 +1158,7 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
 			delete temp;
+			Eliminar_curso_materia (Los_cursos, codigo_mat);
 		}else{
 				while(consulta->prx)
 				{
@@ -1412,7 +1406,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		if (atoi(Elemento)<1||atoi(Elemento)>12) 
 			error++;
 		else
-			{Nuevo_nodo->Fecha_de_Nacimiento.mm=atoi(Elemento);mes(&Nuevo_nodo->Fecha_de_Nacimiento.mm,&Nuevo_nodo->Fecha_de_Nacimiento.m);}
+			{Nuevo_nodo->Fecha_de_Nacimiento.mm=atoi(Elemento);}
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1||atoi(Elemento)>31) 
 			error++;
@@ -1427,7 +1421,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		else 
 		{
 			insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);
-			printf(" Importar a: %s C.I:%i (%i/%s/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.m,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
+			printf(" Importar a: %s C.I:%i (%i/%i/%i) [%s]\n",Nuevo_nodo->nombre_apellido,Nuevo_nodo->cedula,Nuevo_nodo->Fecha_de_Nacimiento.dd,Nuevo_nodo->Fecha_de_Nacimiento.mm,Nuevo_nodo->Fecha_de_Nacimiento.yyyy,Nuevo_nodo->direccion);	
 		}
 		Elemento = strtok(NULL, ",");
 	}system("pause");
