@@ -81,6 +81,8 @@ void Eliminar_curso_materia (Cursos**,int);
 void Eliminar_materia (Materias**,Cursos **);
 void Eliminar_curso (Cursos**);
 void Eliminar_persona(Personas**);
+void Agregar_nota(Personas **, int,int);
+void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 int isdigit(char);
 int bisiesto (year);
 int LimitarCaracteres (char*,int);
@@ -265,6 +267,7 @@ int main ()
 					switch(opciones_control_estudios[0])
 					{
 						case '1'://Agregar alumnos
+							Agregar_Curso_persona(Persona,Curso,Materia);
 							break;
 
 						case '2'://Modificar alumnos
@@ -1239,6 +1242,39 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 			}
 		}
 	}
+}
+
+void Agregar_nota(Personas **p, int n,int c){
+	Participacion *aux=new Participacion;
+	aux->Codigo_del_curso=c;
+	aux->nota=n;
+	aux->prx=(*p)->Record;
+	(*p)->Record=aux;
+}
+
+void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat){
+	if((Listaper)&&(listamat)&&(listacur)){
+		int cod=0;
+		ingresarDato(&cod,"Cedula del estudiante a agregar al curso",maxEntero,1);
+		while((Listaper)&&(Listaper->cedula != cod))
+			Listaper=Listaper->prx;
+		if(Listaper){
+			int nota=0,codicur=0;
+			ingresarDato(&codicur,"Codigo del curso",maxEntero,1);
+			if(Existe_codigo_curso(codicur,&listacur)){
+			 ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
+			 Agregar_nota(&Listaper,nota,codicur);
+			 printf("Estudiante de cedula: %i fue agregado al curso: %i con la calificacion de :%i puntos\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);
+			}
+			else
+				printf("El curso no existe\n");
+		}
+		else
+            printf("Ese curso no se encuenttra en el sistema\n");
+	}
+	else
+		printf("No se cumplen las condiciones para registrar a una persona en un curso\n");
+	system("pause");
 }
 
 int isdigit(char c)
