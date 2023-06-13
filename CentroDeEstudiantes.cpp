@@ -83,6 +83,8 @@ void Eliminar_curso (Cursos**);
 void Eliminar_persona(Personas**);
 void Agregar_nota(Personas **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
+void C_NombreMateria(Materias* ,Cursos* );
+void C_NombreAlumno(Personas*);
 int isdigit(char);
 int bisiesto (year);
 int LimitarCaracteres (char*,int);
@@ -92,7 +94,7 @@ int verificarRuta(char);
 void FormatoFecha(fecha);
 void FormatoMateria(Materias*);
 void FormatoCurso(Cursos*);
-void FormatoPersona(Personas*);
+void FormatoPersona(Personas*,int);
 int Exportar_Materias(Materias*,char ruta[]);
 int Exportar_Cursos(Cursos*,char ruta[]);
 int Exportar_Personas(Personas*,char ruta[]);
@@ -291,14 +293,18 @@ int main ()
 				{//Menu Control de Estudios
 					system("cls");
 					printf("\t Menu Control de Estudios\n\n");
-					printf(" \n\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
 					{
-						case '1'://Dado un nombre de curso buscar su c�digo.
+						case '1'://Dado un nombre de curso(materia ya que los cursos no tienen nombre) buscar su c�digo.
+							printf("\n\tDado un nombre de materia buscar sus codigos asociados\n\n");
+							C_NombreMateria(Materia,Curso);
 							break;
 
 						case '2'://Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
+							printf("\n\tDado un nombre Buscar Cedulas asociadas\n\n");
+							C_NombreAlumno(Persona);
 							break;
 
 						case '3'://Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
@@ -442,7 +448,7 @@ void Agregar_Persona(Personas **Nueva_persona)
 	}while(!strcmp(aux->direccion,""));
 	aux->Record = NULL;
 	insertar_PersonaOrdenadamente(Nueva_persona,&aux);
-	printf("\n  Se agrego a : \n");FormatoPersona(aux);system("Pause");
+	printf("\n  Se agrego a : \n");FormatoPersona(aux,false);system("Pause");
 }
 
 void insertar_PersonaOrdenadamente( Personas **lista, Personas **Nuevo_nodo)
@@ -932,16 +938,18 @@ void Consultar_materia(Materias *Las_materias)
 					break;
 
 				case '3':
-					char nombre[30];
-					printf("Ingrese el nombre a buscar:");
+					char nombre[30];int Mats;Mats=0;
+					printf("\n\tIngrese el nombre a buscar:");
 					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
 						if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
-							FormatoMateria(consulta);
+							{FormatoMateria(consulta);Mats++;}
 						consulta=consulta->prx;
 					}
-					system("pause"); 
+					if (!Mats)
+						printf("\n\t No hay materias con nombres que coincidan\n");
+					system("pause");
 					break;
 
 				case '4':
@@ -963,6 +971,34 @@ void Consultar_materia(Materias *Las_materias)
 		}while (opciones_Consulta[0]!='0');
 	}else
 		{printf("No hay materias para consultar\n");system("pause");}
+}
+
+void C_NombreMateria(Materias* consulta,Cursos* CursosAsociado)
+{
+	char nombre[30];int cont=0;
+	printf("\n\tIngrese el nombre a buscar:");
+	fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
+	while(consulta)
+	{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
+		if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
+		{
+			FormatoMateria(consulta);int cont2=0;
+			printf("\tCursos asociados a %s:\n\n",consulta->Nombre_de_la_Materia);
+			while(CursosAsociado)
+			{
+				if(consulta->Codigo_de_la_Materia==CursosAsociado->Codigo_de_la_Materia)
+					{FormatoCurso(CursosAsociado);cont2++;}
+				CursosAsociado=CursosAsociado->prx;
+			}
+			if (!cont2)
+				printf("\tNingun curso fue asociado a esta materia\n\n");
+			cont++;
+		}
+		consulta=consulta->prx;
+	}
+	if (!cont)
+		printf("\n\t No hay materias con nombres que coincidan\n");
+	system("pause"); 
 }
 
 void Consultar_curso(Cursos *Los_cursos)
@@ -1056,16 +1092,18 @@ void Consultar_Personas(Personas *Las_personas)
 			{
 				case '1':
 					while(consulta)
-						{FormatoPersona(consulta);consulta=consulta->prx;}
+						{FormatoPersona(consulta,true);consulta=consulta->prx;}
 					system("pause"); 
 					break;
 
 				case '2':
-					char nombre[40];printf("Introduzca el nombre a consultar: ");fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
+					char nombre[40];
+					printf("Introduzca el nombre a consultar: ");
+					fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
 						if (strstr(consulta->nombre_apellido,nombre)!=NULL)
-							{FormatoPersona(consulta);cont++;}	
+							{FormatoPersona(consulta,false);cont++;}	
 						consulta=consulta->prx;
 					}
 					if(!cont)
@@ -1074,16 +1112,7 @@ void Consultar_Personas(Personas *Las_personas)
 					break;
 
 				case '3':
-					int y;ingresarDato(&y,"Cedula a consultar: ",maxEntero,1);
-					while(consulta)
-					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
-						if (y==consulta->cedula)
-							{FormatoPersona(consulta);cont++;}						
-						consulta=consulta->prx;
-					} 
-					if(!cont)
-						printf("No hay ningun estudiante con esa cedula\n");
-					system("pause");
+					C_NombreAlumno(consulta);
 					break; 
 
 				default:
@@ -1096,6 +1125,22 @@ void Consultar_Personas(Personas *Las_personas)
 	}
 	else
 		{printf("No hay personas para consultar\n");system("pause");}
+}
+
+void C_NombreAlumno(Personas*consulta)
+{
+	char nombre[40];int cont =0;
+	printf("\n\tIntroduzca el nombre a consultar: ");
+	fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
+	while(consulta)
+	{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
+		if (strstr(consulta->nombre_apellido,nombre)!=NULL)
+			{FormatoPersona(consulta,false);cont++;}	
+		consulta=consulta->prx;
+	}
+	if(!cont)
+	printf("No hay ningun estudiante con ese nombre\n");
+	system("pause"); 
 }
 
 void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
@@ -1364,21 +1409,24 @@ void FormatoMateria(Materias* Nodo)
 void FormatoCurso(Cursos* Nodo)
 {printf("\tCurso[%d] \"%i\" (%i): %i \n\n",Nodo->Codigo_de_la_Materia,Nodo->Codigo_del_curso,Nodo->lapso,Nodo->AAAA);}
 
-void FormatoPersona(Personas* Nodo)
+void FormatoPersona(Personas* Nodo,int todo)
 {
 	printf("\t%s C.I:%i ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]",Nodo->direccion);
-	if (Nodo->Record!=NULL)
-	{
-		Participacion* inscripcion=Nodo->Record;
-		printf("\n\t    inscrito en [Curso] (nota)\n");
-		while (inscripcion)
+	if (todo)
+		if (Nodo->Record!=NULL)
 		{
-			printf("\t\t\t[%d] (%i/20)\n",inscripcion->Codigo_del_curso,inscripcion->nota);
-			inscripcion=inscripcion->prx;
-		}printf("\n");
-	}
+			Participacion* inscripcion=Nodo->Record;
+			printf("\n\t    inscrito en [Curso] (nota)\n");
+			while (inscripcion)
+			{
+				printf("\t\t\t[%d] (%i/20)\n",inscripcion->Codigo_del_curso,inscripcion->nota);
+				inscripcion=inscripcion->prx;
+			}printf("\n");
+		}
+		else
+			printf("\n\t sin inscripciones\n\n");
 	else
-		printf("\n\t sin inscripciones\n\n");
+		printf("\n\n");
 }
 
 int Exportar_Materias(Materias *nodos,char ruta[])
@@ -1600,7 +1648,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		if(error)
 			printf("%i Errores en el nodo\n",error);
 		else 
-			{insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);FormatoPersona(Nuevo_nodo);}
+			{insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);FormatoPersona(Nuevo_nodo,true);}
 		Elemento = strtok(NULL, ",");
 	}
 	system("pause");fclose(Archivo_entrada);return 1;
