@@ -440,7 +440,8 @@ void Agregar_Persona(Personas **Nueva_persona)
 			if (validar_numero(aux->direccion))
 				printf("advertencia: la direcion es Numerica\n");
 	}while(!strcmp(aux->direccion,""));
-	insertar_PersonaOrdenadamente(Nueva_persona,&aux);(*Nueva_persona)->Record = NULL;
+	aux->Record = NULL;
+	insertar_PersonaOrdenadamente(Nueva_persona,&aux);
 	printf("\n  Se agrego a : \n");FormatoPersona(aux);system("Pause");
 }
 
@@ -1364,7 +1365,21 @@ void FormatoCurso(Cursos* Nodo)
 {printf("\tCurso[%d] \"%i\" (%i): %i \n\n",Nodo->Codigo_de_la_Materia,Nodo->Codigo_del_curso,Nodo->lapso,Nodo->AAAA);}
 
 void FormatoPersona(Personas* Nodo)
-{printf("\t%s C.I:%i ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]\n\n",Nodo->direccion);}
+{
+	printf("\t%s C.I:%i ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]",Nodo->direccion);
+	if (Nodo->Record!=NULL)
+	{
+		Participacion* inscripcion=Nodo->Record;
+		printf("\n\t    inscrito en [Curso] (nota)\n");
+		while (inscripcion)
+		{
+			printf("\t\t\t[%d] (%i/20)\n",inscripcion->Codigo_del_curso,inscripcion->nota);
+			inscripcion=inscripcion->prx;
+		}printf("\n");
+	}
+	else
+		printf("\n\t sin inscripciones\n\n");
+}
 
 int Exportar_Materias(Materias *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de las materias*/
@@ -1400,8 +1415,16 @@ int Exportar_Personas(Personas *nodos,char ruta[])
 	while (nodos)
 	{
 		fprintf (Nuevo_archivo,"%i,%s,%i,%i,%i,%s",nodos->cedula,nodos->nombre_apellido,nodos->Fecha_de_Nacimiento.yyyy,nodos->Fecha_de_Nacimiento.mm,nodos->Fecha_de_Nacimiento.dd,nodos->direccion);
-		/*no se modifican los respaldan los records academicos por que aun no se usan*/
-		fprintf(Nuevo_archivo,"\n");
+		if (nodos->Record!=NULL)
+		{
+			Participacion *aux=nodos->Record;
+			while (aux)
+			{
+				fprintf(Nuevo_archivo,",%i,%i",aux->Codigo_del_curso,aux->nota);
+				aux=aux->prx;
+			}
+		}
+		fprintf(Nuevo_archivo,",0\n");
 		nodos=nodos->prx;
 	}
 	fclose(Nuevo_archivo);return 1;
@@ -1548,6 +1571,32 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		else 
 			error++;	
 		
+		Elemento = strtok(NULL, ",");cambio(Elemento);		
+		if (Elemento[0]=='0')
+			Nuevo_nodo->Record=NULL;
+		else 
+		{	
+			Nuevo_nodo->Record=NULL;
+			while((Elemento[0]!='0'))
+			{
+				
+				Participacion* NuevaInscripcion= new Participacion;
+				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+					error++;
+				else
+				NuevaInscripcion->Codigo_del_curso=atoi(Elemento);
+
+				Elemento = strtok(NULL, ",");cambio(Elemento);
+				if ( atoi(Elemento)>=20||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+					error++;
+				else
+					NuevaInscripcion->nota=atoi(Elemento);
+				
+				NuevaInscripcion->prx=Nuevo_nodo->Record;
+				Nuevo_nodo->Record=NuevaInscripcion;
+				Elemento = strtok(NULL, ",");cambio(Elemento);
+			}
+		}
 		if(error)
 			printf("%i Errores en el nodo\n",error);
 		else 
