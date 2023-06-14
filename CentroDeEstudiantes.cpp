@@ -53,6 +53,7 @@ struct Personas
 };
 
 /*Rutinas*/
+void Encabezado (char Menu[]);
 int Verificar_Semestre();
 void Semestre_Romano(int,Materias**);
 void Agregar_Materia(Materias**);
@@ -105,7 +106,7 @@ int Importar_Personas(Personas**,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	 char Ruta[150]=""; char Nuevaruta[4]; char UbicacionMenu[80]="MENU PRINCIPAL/";
+	 char Ruta[150]=""; char Nuevaruta[4]; char UbicacionMenu[80]="MENU PRINCIPAL";
 
 	printf("\n\tDesea cambiar la ruta de los ficheros?");
 	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
@@ -128,7 +129,7 @@ int main ()
 	do
 	{//Menu
 		system("cls");
-		printf("\t MENU PRINCIPAL\n\n");
+		Encabezado(UbicacionMenu);
 		printf("Ruta = %s \n", UbicacionMenu);
 		printf("\n 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 		fflush(stdin);fgets(opciones,2,stdin);cambio(opciones);fflush(stdin);
@@ -141,7 +142,7 @@ int main ()
 				do
 				{//Menu de Mantenimiento del sistema
 					system("cls");
-					printf("\t Menu de Mantenimiento\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/";strcat(UbicacionMenu, "MANTENIMIENTO/");
+					Encabezado("MENU DE MANTENIMIENTO");char UbicacionMenu[80]="MENU PRINCIPAL/";strcat(UbicacionMenu, "MANTENIMIENTO/");
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf("\n 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 					fflush(stdin);fgets(opciones_mantenimiento,2,stdin);cambio(opciones_mantenimiento);fflush(stdin);
@@ -154,7 +155,7 @@ int main ()
 							do
 							{//Menu de Mantenimiento Materias
 								system("cls");
-								printf("\t Menu de mantenimiento de MATERIAS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/MATERIAS");
+								Encabezado("MENU DE MANTENIMIENTO DE MATERIAS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/MATERIAS");
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Materia,2,stdin);cambio(opciones_mantenimiento_Materia);fflush(stdin);
@@ -188,7 +189,7 @@ int main ()
 							do
 							{//Menu de Mantenimiento Cursos
 								system("cls");
-								printf("\t Menu de mantenimiento de CURSOS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/CURSOS");
+								Encabezado("MENU DE MANTENIMIENTO DE CURSOS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/CURSOS");
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Cursos,2,stdin);cambio(opciones_mantenimiento_Cursos);fflush(stdin);
@@ -222,7 +223,7 @@ int main ()
 							do
 							{//Menu de Mantenimiento Personas
 								system("cls");
-								printf("\t Menu de mantenimiento de PERSONAS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/PERSONAS");
+								Encabezado("MENU MANTENIMIENTO DE PERSONAS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/PERSONAS");
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Personas,2,stdin);cambio(opciones_mantenimiento_Personas);fflush(stdin);
@@ -268,7 +269,7 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					printf("\t Menu Control de Estudios\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
+					Encabezado("MENU CONTROL DE ESTUDIOS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
@@ -300,7 +301,7 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					printf("\t Menu Consultas\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONSULTAS/");
+					Encabezado("MENU DE CONSULTAS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONSULTAS/");
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
@@ -349,6 +350,10 @@ int main ()
 	}while (opciones[0]!='0');
 	system("pause");
 	return 0;
+}
+
+void Encabezado (char Menu[40]){
+	printf ("\n\t %s\n\n", Menu);
 }
 
 void Agregar_Materia(Materias **Lista_materia)
