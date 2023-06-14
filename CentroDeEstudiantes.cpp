@@ -105,7 +105,7 @@ int Importar_Personas(Personas**,char ruta[]);
 int main ()
 {
 	Materias *Materia=NULL;Cursos *Curso =NULL;Personas *Persona=NULL;
-	 char Ruta[150]=""; char Nuevaruta[4];
+	 char Ruta[150]=""; char Nuevaruta[4]; char UbicacionMenu[80]="MENU PRINCIPAL/";
 
 	printf("\n\tDesea cambiar la ruta de los ficheros?");
 	fgets(Nuevaruta,4,stdin);cambio(Nuevaruta);fflush(stdin);
@@ -128,8 +128,9 @@ int main ()
 	do
 	{//Menu
 		system("cls");
-		printf("\t MENU\n\n");
-		printf(" 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
+		printf("\t MENU PRINCIPAL\n\n");
+		printf("Ruta = %s \n", UbicacionMenu);
+		printf("\n 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 		fflush(stdin);fgets(opciones,2,stdin);cambio(opciones);fflush(stdin);
 		switch(opciones[0])
 		{
@@ -140,8 +141,9 @@ int main ()
 				do
 				{//Menu de Mantenimiento del sistema
 					system("cls");
-					printf("\t Menu de Mantenimiento\n\n");
-					printf(" 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
+					printf("\t Menu de Mantenimiento\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/";strcat(UbicacionMenu, "MANTENIMIENTO/");
+					printf("Ruta = %s \n", UbicacionMenu);
+					printf("\n 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 					fflush(stdin);fgets(opciones_mantenimiento,2,stdin);cambio(opciones_mantenimiento);fflush(stdin);
 					switch(opciones_mantenimiento[0])
 					{
@@ -152,8 +154,9 @@ int main ()
 							do
 							{//Menu de Mantenimiento Materias
 								system("cls");
-								printf("\t Menu de mantenimiento de MATERIAS\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
+								printf("\t Menu de mantenimiento de MATERIAS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/MATERIAS");
+								printf("Ruta = %s \n", UbicacionMenu);
+								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Materia,2,stdin);cambio(opciones_mantenimiento_Materia);fflush(stdin);
 								switch(opciones_mantenimiento_Materia[0])
 									{
@@ -185,8 +188,9 @@ int main ()
 							do
 							{//Menu de Mantenimiento Cursos
 								system("cls");
-								printf("\t Menu de mantenimiento de CURSOS\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
+								printf("\t Menu de mantenimiento de CURSOS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/CURSOS");
+								printf("Ruta = %s \n", UbicacionMenu);
+								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Cursos,2,stdin);cambio(opciones_mantenimiento_Cursos);fflush(stdin);
 								switch(opciones_mantenimiento_Cursos[0])
 								{
@@ -218,8 +222,9 @@ int main ()
 							do
 							{//Menu de Mantenimiento Personas
 								system("cls");
-								printf("\t Menu de mantenimiento de PERSONAS\n\n");
-								printf(" 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
+								printf("\t Menu de mantenimiento de PERSONAS\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "MANTENIMIENTO/PERSONAS");
+								printf("Ruta = %s \n", UbicacionMenu);
+								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Personas,2,stdin);cambio(opciones_mantenimiento_Personas);fflush(stdin);
 								switch(opciones_mantenimiento_Personas[0])
 								{
@@ -263,7 +268,8 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					printf("\t Menu Control de Estudios\n\n");
+					printf("\t Menu Control de Estudios\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
+					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
 					switch(opciones_control_estudios[0])
@@ -282,8 +288,10 @@ int main ()
 							if (opciones_control_estudios[0]!='0')
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
+					
 				}while (opciones_control_estudios[0]!='0');
-			}
+				break;
+		}
 
 			case '3':
 			{
@@ -292,7 +300,8 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					printf("\t Menu Control de Estudios\n\n");
+					printf("\t Menu Consultas\n\n");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONSULTAS/");
+					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
@@ -330,6 +339,7 @@ int main ()
 								{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
 				}while (opciones_consultas[0]!='0');
+				break;
 			}
 
 			default:
@@ -1310,13 +1320,13 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 			if(Existe_codigo_curso(codicur,&listacur)){
 			 ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
 			 Agregar_nota(&Listaper,nota,codicur);
-			 printf("Estudiante de cedula: %i fue agregado al curso: %i con la calificacion de :%i puntos\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);
+			 printf("Estudiante de cedula: [%i] fue agregado al curso: [%i] con la calificacion de :[%i] puntos\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);
 			}
 			else
 				printf("El curso no existe\n");
 		}
 		else
-            printf("Ese curso no se encuenttra en el sistema\n");
+            printf("Esa persona no se encuentra en el sistema\n");
 	}
 	else
 		printf("No se cumplen las condiciones para registrar a una persona en un curso\n");
