@@ -2,5 +2,5 @@
 5678,Ana Lopez,2001,10,3,Chacao. Caracas,15200,15,0
 1123,Jenny Torres,2005,8,31,Rochester. Inglaterra,15200,16,0
 3456,Jose Mata,2005,3,15,Merida Merida.,15235,10,0
-7890,Andres Gomez,2003,6,7,Valencia. Carabobo,0
-9012,Carla Diaz,1986,7,4,Maturin. Monagas,0
+7890,Andres Gomez,2003,6,7,Valencia. Carabobo,15235,3,0
+9012,Carla Diaz,1986,7,4,Maturin. Monagas,15235,9,,0
