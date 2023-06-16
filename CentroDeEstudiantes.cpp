@@ -87,6 +87,8 @@ void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void C_NombreMateria(Materias* ,Cursos* );
 void C_NombreAlumno(Personas*);
 void C_Aprobados(Personas*,Cursos*);
+void C_Cursos(Materias* ,Cursos*,Personas*);
+void C_CursosPeriodo(Cursos*,Personas*);
 void C_Alumno(Personas*);
 int isdigit(char);
 int bisiesto (year);
@@ -307,9 +309,9 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTEs/");
+					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 6-Alumnos aprobados en una materia \n 8-Notas por cedula\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
 					{
@@ -327,9 +329,12 @@ int main ()
 							break;
 
 						case '4': //Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+							
 							break;
 
 						case '5'://Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+							printf("\n\tTodos los cursos con Materia, Personas y notas \n\n");			
+							C_Cursos(Materia,Curso,Persona);
 							break;
 
 						case '6'://Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
@@ -339,6 +344,8 @@ int main ()
 							break;
 
 						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
+							printf("\n\ttTodos los cursos De un periodo Con Personas y notas \n\n");
+							C_CursosPeriodo(Curso,Persona);
 							break;
 
 						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
@@ -1211,6 +1218,95 @@ void C_Aprobados(Personas* aprobado,Cursos* materia)
 		materia=materia->prx;
 	}
 	printf("\n\tNo Existe dicha materia\n\n");
+}
+
+void C_Cursos(Materias* Mats,Cursos*cursosDados,Personas*PersonasInscritas)
+{//Todos los cursos (con sus alumnos y notas) 
+	Personas *Aux;Participacion *Inscritoencurso; int Inscritos;
+	while (cursosDados)
+	{
+		Materias *M=Mats;
+		printf("\tCurso=\n\n");
+		FormatoCurso(cursosDados);
+		if (M)
+			while (M)
+			{
+				if(M->Codigo_de_la_Materia==cursosDados->Codigo_de_la_Materia)
+				{	
+					printf("\tMateria del curso=\n\n");FormatoMateria(M);
+					break;
+				}
+				M=M->prx;
+			}
+		Aux=PersonasInscritas;
+		Inscritos=0;
+		printf("\tPersonas del curso=\n\n");
+		while(Aux)
+		{
+			Inscritoencurso=Aux->Record;
+			while(Inscritoencurso)
+			{
+				if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+				{
+					Inscritos++;
+					FormatoPersona(Aux,false);
+					printf("\t Nota: %i\n\n",Inscritoencurso->nota);
+				}
+				Inscritoencurso=Inscritoencurso->prx;
+			}
+			Aux=Aux->prx;
+		}
+		if(Inscritos)
+			printf("\n\t *Total de inscritos: %i\n\n\n",Inscritos);
+		else
+			printf("\t este curso no tiene personas inscritas\n\n");
+	cursosDados=cursosDados->prx;
+	}
+	system("Pause");
+}
+
+void C_CursosPeriodo(Cursos*cursosDados,Personas*PersonasInscritas)
+{
+	Personas *Aux;Participacion *Inscritoencurso; int Inscritos,ComienzoDelPeriodo,FinDelPeriodo,DelPeriodo=0;
+	ingresarDato(&ComienzoDelPeriodo,"Comienzo Del periodo",2100,1900);
+	ingresarDato(&FinDelPeriodo,"Fin Del periodo",2100,1900);
+	while (cursosDados)
+	{
+		if(cursosDados->AAAA>=ComienzoDelPeriodo && cursosDados->AAAA<=FinDelPeriodo)
+		{
+			DelPeriodo++;
+			printf("\tCurso=\n\n");
+			FormatoCurso(cursosDados);
+			Aux=PersonasInscritas;
+			Inscritos=0;
+			printf("\tPersonas del curso=\n\n");
+			while(Aux)
+			{
+				Inscritoencurso=Aux->Record;
+				while(Inscritoencurso)
+				{
+					if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+					{
+						Inscritos++;
+						FormatoPersona(Aux,false);
+						printf("\t Nota: %i\n\n",Inscritoencurso->nota);
+					}
+					Inscritoencurso=Inscritoencurso->prx;
+				}
+				Aux=Aux->prx;
+			}
+			if(Inscritos)
+				printf("\n\t *Total de inscritos: %i\n\n\n",Inscritos);
+			else
+				printf("\t este curso no tiene personas inscritas\n\n");
+		}
+		cursosDados=cursosDados->prx;
+	}
+	if (DelPeriodo==0)
+	{
+		printf("\n\tNo hay cursos en este periodo\n\n");
+	}
+	system("Pause");
 }
 
 void C_Alumno(Personas* consulta)
