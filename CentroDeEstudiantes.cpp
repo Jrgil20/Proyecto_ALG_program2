@@ -280,7 +280,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU CONTROL DE ESTUDIOS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
+					printf(" 1- Agregar alumnos \n 2- *Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
 					switch(opciones_control_estudios[0])
 					{
@@ -312,7 +312,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 3-*cursos de cierta fecha 2-Buscar cedula por nombre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
 					{
@@ -326,7 +326,8 @@ int main ()
 							C_NombreAlumno(Persona);
 							break;
 
-						case '3'://Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case '3'://Dado un anyo y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+							printf("\n\tDado un anyo y lapso mostrar cursos \n\n");
 							break;
 
 						case '4': //Dado un codigo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
