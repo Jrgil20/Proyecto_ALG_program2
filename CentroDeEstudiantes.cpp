@@ -86,6 +86,7 @@ void Agregar_nota(Personas **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void C_NombreMateria(Materias* ,Cursos* );
 void C_NombreAlumno(Personas*);
+void C_Aprobados(Personas*,Cursos*);
 void C_Alumno(Personas*);
 int isdigit(char);
 int bisiesto (year);
@@ -100,6 +101,7 @@ void FormatoFecha(fecha);
 void FormatoMateria(Materias*);
 void FormatoCurso(Cursos*);
 void FormatoPersona(Personas*,int);
+void calificaciones(Participacion* calificacion);
 int Exportar_Materias(Materias*,char ruta[]);
 int Exportar_Cursos(Cursos*,char ruta[]);
 int Exportar_Personas(Personas*,char ruta[]);
@@ -307,7 +309,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTEs/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 6-Alumnos aprobados en una materia \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
 					{
@@ -331,12 +333,16 @@ int main ()
 							break;
 
 						case '6'://Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+							printf("\n\tDada Materia mostrar alumnos aprobados \n\n");
+							C_Aprobados(Persona,Curso);
+							system("Pause");
 							break;
 
 						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
 							break;
 
 						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
+							printf("\n\tDada una cedula mostrar Datos con cursos y notas \n\n");
 							C_Alumno(Persona);
 							break;
 
@@ -1172,14 +1178,52 @@ void C_NombreAlumno(Personas*consulta)
 	system("pause"); 
 }
 
+void C_Aprobados(Personas* aprobado,Cursos* materia)
+{//Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+	int CodigoIngresado,Aprobados=0;
+	ingresarDato(&CodigoIngresado,"\t Codigo de la materia",maxEntero,0);
+	while (materia)
+	{
+		if(materia->Codigo_de_la_Materia==CodigoIngresado)
+		{
+			while(aprobado)
+			{
+				while (aprobado->Record)
+				{
+					if (aprobado->Record->Codigo_del_curso==materia->Codigo_del_curso)
+					{
+						if(aprobado->Record->nota>9)
+						{
+							FormatoPersona(aprobado,false);
+							Aprobados++;
+						}
+					}
+					aprobado->Record=aprobado->Record->prx;
+				}
+				aprobado=aprobado->prx;
+			}
+			if (Aprobados)
+				printf("\n\tTotal de aprobados %i\n\n",Aprobados);
+			else
+				printf("\n\tNo hubo aprobados en esta maetria\n\n");
+			return;
+		}
+		materia=materia->prx;
+	}
+	printf("\n\tNo Existe dicha materia\n\n");
+}
+
 void C_Alumno(Personas* consulta)
 {//Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
-	int Cedula;
-	ingresarDato(&Cedula,"\t cedula de la persona",maxEntero,0);
-	while(consulta && consulta->cedula<Cedula)
+	int CedulaIngresada;
+	ingresarDato(&CedulaIngresada,"\t cedula de la persona",maxEntero,0);
+	while(consulta && consulta->cedula<CedulaIngresada)
 		consulta=consulta->prx;
-	if (consulta->cedula==Cedula)
-		FormatoPersona(consulta,true);
+	if (consulta->cedula==CedulaIngresada)
+	{
+		printf("\t%s",consulta->nombre_apellido);
+		calificaciones(consulta->Record);
+	}
 	else
 		printf("\tNo existe registro de dicha persona");
 	system("Pause");
@@ -1464,9 +1508,15 @@ void FormatoPersona(Personas* Nodo,int todo)
 {
 	printf("\t%s\tC.I:%i  ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]",Nodo->direccion);
 	if (todo)
-		if (Nodo->Record!=NULL)
+		calificaciones(Nodo->Record);
+	else
+		printf("\n\n");
+}
+
+void calificaciones(Participacion* calificacion)
+{if (calificacion!=NULL)
 		{
-			Participacion* inscripcion=Nodo->Record;
+			Participacion* inscripcion=calificacion;
 			printf("\n\t    inscrito en [Curso] (nota)\n");
 			while (inscripcion)
 			{
@@ -1475,10 +1525,7 @@ void FormatoPersona(Personas* Nodo,int todo)
 			}printf("\n");
 		}
 		else
-			printf("\n\t sin inscripciones\n\n");
-	else
-		printf("\n\n");
-}
+			printf("\n\t sin inscripciones\n\n");}
 
 int Exportar_Materias(Materias *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de las materias*/
