@@ -92,6 +92,9 @@ int LimitarCaracteres (char*,int);
 int compararCadenas(char*,char*);
 void cambio(char c1[]);
 int verificarRuta(char);
+void HM();
+void HC();
+void HP();
 void FormatoFecha(fecha);
 void FormatoMateria(Materias*);
 void FormatoCurso(Cursos*);
@@ -352,9 +355,8 @@ int main ()
 	return 0;
 }
 
-void Encabezado (char Menu[40]){
-	printf ("\n\t %s\n\n", Menu);
-}
+void Encabezado (char Menu[40])
+{printf ("\n\t %s\n\n", Menu);}
 
 void Agregar_Materia(Materias **Lista_materia)
 {/*Crea un nodo llamado aux y lo ingresa en la lista de materias*/
@@ -382,7 +384,7 @@ void Agregar_Materia(Materias **Lista_materia)
 	Semestre_Romano(Aux->Semestre,&Aux);fflush(stdin);
 	ingresarDato(&Aux->Creditos_de_la_Materia,"Creditos de la materia",5,2);
 	insertar_MateriaOrdenadamente( Lista_materia, &Aux);
-	printf("\n  Se agrego a : \n");FormatoMateria(Aux);system("Pause");
+	printf("\n  Se agrego a : \n");HM();FormatoMateria(Aux);system("Pause");
 }
 
 void insertar_MateriaOrdenadamente( Materias **lista, Materias **Nuevo_nodo)
@@ -415,7 +417,7 @@ void Agregar_Curso(Cursos **c,Materias **Materia)
 			ingresarDato(&Aux->AAAA,"anio del curso",2100,1900);printf("\n");
 			ingresarDato(&Aux->lapso,"lapso del curso",3,1);
 			insertar_CursoOrdenadamente(c,&Aux);
-			printf("\n  Se agrego a : \n");FormatoCurso(Aux);system("Pause");
+			printf("\n  Se agrego a : \n");HC();FormatoCurso(Aux);system("Pause");
 		}else
 			{printf("La materia no existe, por lo que no se creara el curso\n");system("Pause");}
 	}else
@@ -463,7 +465,7 @@ void Agregar_Persona(Personas **Nueva_persona)
 	}while(!strcmp(aux->direccion,""));
 	aux->Record = NULL;
 	insertar_PersonaOrdenadamente(Nueva_persona,&aux);
-	printf("\n  Se agrego a : \n");FormatoPersona(aux,false);system("Pause");
+	printf("\n  Se agrego a : \n");HP();FormatoPersona(aux,false);system("Pause");
 }
 
 void insertar_PersonaOrdenadamente( Personas **lista, Personas **Nuevo_nodo)
@@ -934,6 +936,7 @@ void Consultar_materia(Materias *Las_materias)
 			switch(opciones_Consulta[0])
 			{
 				case '1':
+					HM();
 					while(consulta)
 						{ FormatoMateria(consulta);consulta=consulta->prx;}
 					system("pause"); 
@@ -941,6 +944,7 @@ void Consultar_materia(Materias *Las_materias)
 
 				case '2':
 					int x,cont;x=Verificar_Semestre();cont=0;
+					HM();
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
 						if (x==consulta->Semestre)
@@ -969,6 +973,7 @@ void Consultar_materia(Materias *Las_materias)
 
 				case '4':
 					int y;ingresarDato(&y,"Codigo a consultar",maxEntero,1);
+					HM();
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
 						if (y==consulta->Codigo_de_la_Materia)
@@ -993,12 +998,13 @@ void C_NombreMateria(Materias* consulta,Cursos* CursosAsociado)
 	char nombre[30];int cont=0;
 	printf("\n\tIngrese el nombre a buscar:");
 	fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
+	HM();
 	while(consulta)
 	{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
 		if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
 		{
 			FormatoMateria(consulta);int cont2=0;
-			printf("\tCursos asociados a %s:\n\n",consulta->Nombre_de_la_Materia);
+			printf("\tCursos asociados a %s:\n\n",consulta->Nombre_de_la_Materia);HC();
 			while(CursosAsociado)
 			{
 				if(consulta->Codigo_de_la_Materia==CursosAsociado->Codigo_de_la_Materia)
@@ -1031,6 +1037,7 @@ void Consultar_curso(Cursos *Los_cursos)
 			switch(opciones_Consulta[0])
 			{
 				case '1':
+					HC();
 					while(consulta)
 						{FormatoCurso(consulta);consulta=consulta->prx;}
 					system("pause"); 
@@ -1038,6 +1045,7 @@ void Consultar_curso(Cursos *Los_cursos)
 
 				case '2':
 					int AAAA;ingresarDato(&AAAA,"Ingrese el anio",2100,1900);
+					HC();
 					while(consulta)
 					{ 
 						if (AAAA==consulta->AAAA)
@@ -1049,6 +1057,7 @@ void Consultar_curso(Cursos *Los_cursos)
 
 				case '3':
 					int Lapso;ingresarDato(&Lapso,"Ingrese el Lapso",3,1);
+					HC();
 					while(consulta)
 					{ 
 						if (Lapso==consulta->lapso)
@@ -1071,6 +1080,7 @@ void Consultar_curso(Cursos *Los_cursos)
 
 				case '5':
 					int CodigoC;ingresarDato(&CodigoC,"Codigo del curso",maxEntero,1);
+					HC();
 					while(consulta)
 					{ 
 						if (CodigoC==consulta->Codigo_del_curso)
@@ -1106,6 +1116,7 @@ void Consultar_Personas(Personas *Las_personas)
 			switch(opciones_Consulta[0])
 			{
 				case '1':
+					HP();
 					while(consulta)
 						{FormatoPersona(consulta,true);consulta=consulta->prx;}
 					system("pause"); 
@@ -1114,7 +1125,7 @@ void Consultar_Personas(Personas *Las_personas)
 				case '2':
 					char nombre[40];
 					printf("Introduzca el nombre a consultar: ");
-					fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
+					fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);HP();
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
 						if (strstr(consulta->nombre_apellido,nombre)!=NULL)
@@ -1147,6 +1158,7 @@ void C_NombreAlumno(Personas*consulta)
 	char nombre[40];int cont =0;
 	printf("\n\tIntroduzca el nombre a consultar: ");
 	fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);
+	HP();
 	while(consulta)
 	{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
 		if (strstr(consulta->nombre_apellido,nombre)!=NULL)
@@ -1377,6 +1389,15 @@ void cambio(char c1[])
 				c1[i]='.';
 }
 
+void HM()
+{printf("\n\tCodigo | \"Materia\" | Semestre | Creditos | Descripcion \n\n");}
+
+void HC()
+{printf("\n\t Materia | Curso | (Lapso) | AAAA\n\n");}
+
+void HP()
+{printf("\n\tNombre\t\t| Cedula | (dd/mm/aaaa) | Direccion\n\n");}
+
 void FormatoFecha(fecha F)
 {
 	printf("(%i",F.dd);
@@ -1419,14 +1440,14 @@ void FormatoFecha(fecha F)
 }
 
 void FormatoMateria(Materias* Nodo)
-{printf("\tMateria[%d] \"%s\" %s (%i): %s \n\n",Nodo->Codigo_de_la_Materia,Nodo->Nombre_de_la_Materia,Nodo->SemestreEnRomano,Nodo->Creditos_de_la_Materia,Nodo->Descripcion_de_la_Materia);}
+{printf("\t[%d] \"%s\"    %s   (%i)   : %s \n\n",Nodo->Codigo_de_la_Materia,Nodo->Nombre_de_la_Materia,Nodo->SemestreEnRomano,Nodo->Creditos_de_la_Materia,Nodo->Descripcion_de_la_Materia);}
 
 void FormatoCurso(Cursos* Nodo)
-{printf("\tCurso[%d] \"%i\" (%i): %i \n\n",Nodo->Codigo_de_la_Materia,Nodo->Codigo_del_curso,Nodo->lapso,Nodo->AAAA);}
+{printf("\t [%d]   \"%i\"   (%i):    %i \n\n",Nodo->Codigo_de_la_Materia,Nodo->Codigo_del_curso,Nodo->lapso,Nodo->AAAA);}
 
 void FormatoPersona(Personas* Nodo,int todo)
 {
-	printf("\t%s C.I:%i ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]",Nodo->direccion);
+	printf("\t%s\tC.I:%i  ",Nodo->nombre_apellido,Nodo->cedula);FormatoFecha(Nodo->Fecha_de_Nacimiento);printf(" [%s]",Nodo->direccion);
 	if (todo)
 		if (Nodo->Record!=NULL)
 		{
@@ -1500,7 +1521,7 @@ int Importar_Materias(Materias **nodos,char ruta[])
 	Archivo_entrada= fopen(rutaMat,"r");
 	if(Archivo_entrada == NULL ) 
 		{printf("No fue posible abrir el archivo\n");return 0;}
-	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");
+	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");HM();
     while (fgets(linea, sizeof(linea), Archivo_entrada)) 
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Materias *Nuevo_nodo= new Materias; int error=0;
@@ -1550,7 +1571,7 @@ int Importar_Cursos(Cursos **nodos,char ruta[])
 	Archivo_entrada = fopen(rutaCur,"r");/*Abre el archivo creado*/
 	if(Archivo_entrada == NULL ) 
 		{printf("No fue posible abrir el archivo\n");return 0;}
-	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");
+	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");HC();
     while (fgets(linea, sizeof(linea), Archivo_entrada)) 
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Cursos *Nuevo_nodo= new Cursos; int error=0;
@@ -1594,7 +1615,7 @@ int Importar_Personas(Personas **nodos,char ruta[])
 	Archivo_entrada = fopen(rutaPer,"r");
 	if(Archivo_entrada == NULL ) 
 		{printf("No fue posible abrir el archivo\n");return 0;}
-	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");
+	rewind(Archivo_entrada);printf("\n  Importar a:\n\n");HP();
     while (fgets(linea, sizeof(linea),Archivo_entrada)) 
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Personas *Nuevo_nodo= new Personas; int error=0;
