@@ -86,6 +86,7 @@ void Agregar_nota(Personas **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void C_NombreMateria(Materias* ,Cursos* );
 void C_NombreAlumno(Personas*);
+void C_Alumno(Personas*);
 int isdigit(char);
 int bisiesto (year);
 int LimitarCaracteres (char*,int);
@@ -304,7 +305,7 @@ int main ()
 				do
 				{//Menu Control de Estudios
 					system("cls");
-					Encabezado("MENU DE CONSULTAS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONSULTAS/");
+					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTEs/");
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
@@ -336,6 +337,7 @@ int main ()
 							break;
 
 						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
+							C_Alumno(Persona);
 							break;
 
 						default:
@@ -1168,6 +1170,19 @@ void C_NombreAlumno(Personas*consulta)
 	if(!cont)
 	printf("No hay ningun estudiante con ese nombre\n");
 	system("pause"); 
+}
+
+void C_Alumno(Personas* consulta)
+{//Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
+	int Cedula;
+	ingresarDato(&Cedula,"\t cedula de la persona",maxEntero,0);
+	while(consulta && consulta->cedula<Cedula)
+		consulta=consulta->prx;
+	if (consulta->cedula==Cedula)
+		FormatoPersona(consulta,true);
+	else
+		printf("\tNo existe registro de dicha persona");
+	system("Pause");
 }
 
 void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
