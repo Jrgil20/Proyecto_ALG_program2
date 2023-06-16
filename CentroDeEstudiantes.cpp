@@ -85,6 +85,7 @@ void Eliminar_persona(Personas**);
 void Agregar_nota(Personas **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void C_NombreMateria(Materias* ,Cursos* );
+void c_Materia(Materias*,Cursos*,Personas*);
 void C_NombreAlumno(Personas*);
 void C_Aprobados(Personas*,Cursos*);
 void C_Cursos(Materias* ,Cursos*,Personas*);
@@ -311,7 +312,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					switch(opciones_consultas[0])
 					{
@@ -329,7 +330,8 @@ int main ()
 							break;
 
 						case '4': //Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-							
+							printf("\n\tDada una materia se muestran todos sus datos relacionados \n\n");
+							c_Materia(Materia,Curso,Persona);
 							break;
 
 						case '5'://Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
@@ -1183,6 +1185,53 @@ void C_NombreAlumno(Personas*consulta)
 	if(!cont)
 	printf("No hay ningun estudiante con ese nombre\n");
 	system("pause"); 
+}
+
+void c_Materia(Materias*M,Cursos*cursosDados,Personas*PersonasInscritas)
+{
+	Personas *Aux;Participacion *Inscritoencurso; int CodigoDado,cursosdelamateria=0,Inscritos=0,Aprobados=0;
+	ingresarDato(&CodigoDado,"Codido de la materia",maxEntero,0);
+	while (M && M->Codigo_de_la_Materia!=CodigoDado)
+		M=M->prx;
+	if(M)
+	{
+		printf("\n\tMateria=\n\n");
+		FormatoMateria(M);
+		printf("\tCursos=\n\n");
+		while (cursosDados)
+		{
+			if(cursosDados->Codigo_de_la_Materia==M->Codigo_de_la_Materia)
+			{
+				FormatoCurso(cursosDados);cursosdelamateria++;
+				Aux=PersonasInscritas;
+				while(Aux)
+				{
+					Inscritoencurso=Aux->Record;
+					while(Inscritoencurso)
+					{
+						if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+						{
+							Inscritos++;
+							if(Inscritoencurso->nota>9)
+								Aprobados++;
+						}
+						Inscritoencurso=Inscritoencurso->prx;
+					}
+					Aux=Aux->prx;
+				}
+			}
+			cursosDados=cursosDados->prx;
+		}
+		if(!cursosdelamateria)
+			printf("\n\tEsta Materia no tiene cursos asociados\n\n");
+		if(Inscritos)
+			printf("\n\t *Inscritos: %i, *Aprobados: %i, *Reprobados: %i\n\n\n",Inscritos,Aprobados,Inscritos-Aprobados);
+		else
+			printf("\n\t esta Materia no tiene personas inscritas\n\n");
+	}
+	else
+		printf("\n\tLa materia solicitada no se encuentra registrada\n\n");
+	system("Pause");
 }
 
 void C_Aprobados(Personas* aprobado,Cursos* materia)
