@@ -329,17 +329,17 @@ int main ()
 						case '3'://Dado un a�o y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							break;
 
-						case '4': //Dado un c�digo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
+						case '4': //Dado un codigo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							printf("\n\tDada una materia se muestran todos sus datos relacionados \n\n");
 							c_Materia(Materia,Curso,Persona);
 							break;
 
-						case '5'://Dado un c�digo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
+						case '5'://Dado un codigo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
 							printf("\n\tTodos los cursos con Materia, Personas y notas \n\n");			
 							C_Cursos(Materia,Curso,Persona);
 							break;
 
-						case '6'://Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
+						case '6'://Dada una materia ( codigo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
 							printf("\n\tDada Materia mostrar alumnos aprobados \n\n");
 							C_Aprobados(Persona,Curso);
 							system("Pause");
@@ -979,7 +979,7 @@ void Consultar_materia(Materias *Las_materias)
 					fflush(stdin);fgets(nombre,30,stdin);cambio(nombre);fflush(stdin);
 					while(consulta)
 					{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-						if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
+						if (strstr(strupr(consulta->Nombre_de_la_Materia),strupr(nombre))!=NULL)
 							{FormatoMateria(consulta);Mats++;}
 						consulta=consulta->prx;
 					}
@@ -1018,7 +1018,7 @@ void C_NombreMateria(Materias* consulta,Cursos* CursosAsociado)
 	HM();
 	while(consulta)
 	{ /*imprime los datos del nodo de la materia y pasa al siguiente nodo*/
-		if (strstr(consulta->Nombre_de_la_Materia,nombre)!=NULL)
+		if (strstr(strupr (consulta->Nombre_de_la_Materia),strupr (nombre))!=NULL)
 		{
 			FormatoMateria(consulta);int cont2=0;
 			printf("\tCursos asociados a %s:\n\n",consulta->Nombre_de_la_Materia);HC();
@@ -1145,7 +1145,7 @@ void Consultar_Personas(Personas *Las_personas)
 					fflush(stdin);fgets(nombre,40,stdin);cambio(nombre);fflush(stdin);HP();
 					while(consulta)
 					{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
-						if (strstr(consulta->nombre_apellido,nombre)!=NULL)
+						if (strstr(strupr(consulta->nombre_apellido),strupr(nombre))!=NULL)
 							{FormatoPersona(consulta,false);cont++;}	
 						consulta=consulta->prx;
 					}
@@ -1178,7 +1178,7 @@ void C_NombreAlumno(Personas*consulta)
 	HP();
 	while(consulta)
 	{ /*imprime los datos del nodo de la persona y pasa al siguiente nodo*/
-		if (strstr(consulta->nombre_apellido,nombre)!=NULL)
+		if (strstr(strupr(consulta->nombre_apellido),strupr(nombre))!=NULL)
 			{FormatoPersona(consulta,false);cont++;}	
 		consulta=consulta->prx;
 	}
