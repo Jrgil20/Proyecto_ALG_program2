@@ -299,6 +299,9 @@ int main ()
 							if (opciones_control_estudios[0]!='0')
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
+					if (Exportar_Personas(Persona,Ruta));
+					else 
+						printf("\t se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 					
 				}while (opciones_control_estudios[0]!='0');
 				break;
@@ -1582,19 +1585,60 @@ void Agregar_nota(Personas **p, int n,int c){
 	(*p)->Record=aux;
 }
 
-void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat){
-	if((Listaper)&&(listamat)&&(listacur)){
+void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat)
+{
+	if((Listaper)&&(listamat)&&(listacur))
+	{
 		int cod=0;
 		ingresarDato(&cod,"Cedula del estudiante a agregar al curso",maxEntero,1);
 		while((Listaper)&&(Listaper->cedula != cod))
 			Listaper=Listaper->prx;
-		if(Listaper){
+		if(Listaper)
+		{
 			int nota=0,codicur=0;
 			ingresarDato(&codicur,"Codigo del curso",maxEntero,1);
-			if(Existe_codigo_curso(codicur,&listacur)){
-			 ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
-			 Agregar_nota(&Listaper,nota,codicur);
-			 printf("Estudiante de cedula: [%i] fue agregado al curso: [%i] con la calificacion de :[%i] puntos\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);
+			Cursos *Copia=listacur;Participacion *AUX=Listaper->Record;int ExisteCurso=0,Registrado=0,Aprobado=0,RegistradoEnCurso=0;
+			while (Copia)
+			{/*Debe ser una funcion, que devuelva el codigo de materia, dada un codigo de curso en caso de que el curso exista*/
+				if(codicur==Copia->Codigo_del_curso)
+					ExisteCurso=Copia->Codigo_de_la_Materia;
+				Copia=Copia->prx;
+			}
+			if(ExisteCurso)
+			{
+				while(AUX)
+				{
+					while (Copia)
+					{
+						if(AUX->Codigo_del_curso==Copia->Codigo_del_curso)
+							if(Copia->Codigo_de_la_Materia==ExisteCurso)
+							{
+								Registrado++;
+								if(AUX->nota>9)
+									Aprobado++;
+							}
+						Copia=Copia->prx;
+					}
+					if(AUX->Codigo_del_curso==codicur)
+						RegistradoEnCurso++;
+					AUX=AUX->prx;
+				}
+				if (RegistradoEnCurso)
+					printf("\n\tEste Estudiante ya fue registrado en el curso, no se puede registrar nuevamente\n\n");
+				else
+				{
+					if(!Aprobado)
+					{
+						if(Registrado<=4)
+						{
+							ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
+							Agregar_nota(&Listaper,nota,codicur);
+							printf("Estudiante de cedula: [%i] fue agregado a: CURSO[%i] con la nota:(%i/20 pts)\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);	
+						}else
+							printf("\n\tEsta Persona ya rebrobo esta materia mas veces de las que se permite\n\n");
+					}else
+						printf("\n\tEsta Persona ya aprobo esta materia en otro curso\n\n");
+				}
 			}
 			else
 				printf("El curso no existe\n");
