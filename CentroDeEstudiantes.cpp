@@ -309,7 +309,7 @@ int main ()
 				char opciones_consultas[3];
 				opciones_consultas[0]='0';
 				do
-				{//Menu Control de Estudios
+				{//Menu Reportes
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
@@ -329,7 +329,7 @@ int main ()
 
 						case '3'://Dado un anyo y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
 							printf("\n\tDado un a%co(AAAA) y lapso mostrar cursos \n\n",164);
-							 c_CursosDe(Materia,Curso,Persona);
+							c_CursosDe(Materia,Curso,Persona);
 							break;
 
 						case '4': //Dado un codigo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
@@ -1286,27 +1286,28 @@ void c_CursosDe(Materias*Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 	system("Pause");
 }
 
-void C_Aprobados(Personas* aprobado,Cursos* materia)
+void C_Aprobados(Personas* aprobado,Cursos* Cursomateria)
 {//Dada una materia ( c�digo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
 	int CodigoIngresado,Aprobados=0;
 	ingresarDato(&CodigoIngresado,"\t Codigo de la materia",maxEntero,0);
-	while (materia)
+	while (Cursomateria)
 	{
-		if(materia->Codigo_de_la_Materia==CodigoIngresado)
+		if(Cursomateria->Codigo_de_la_Materia==CodigoIngresado)
 		{
 			while(aprobado)
 			{
-				while (aprobado->Record)
+				Participacion *Aux=aprobado->Record;
+				while (Aux)
 				{
-					if (aprobado->Record->Codigo_del_curso==materia->Codigo_del_curso)
+					if (Aux->Codigo_del_curso==Cursomateria->Codigo_del_curso)
 					{
-						if(aprobado->Record->nota>9)
+						if(Aux->nota>9)
 						{
 							FormatoPersona(aprobado,false);
 							Aprobados++;
 						}
 					}
-					aprobado->Record=aprobado->Record->prx;
+					Aux=Aux->prx;
 				}
 				aprobado=aprobado->prx;
 			}
@@ -1316,7 +1317,7 @@ void C_Aprobados(Personas* aprobado,Cursos* materia)
 				printf("\n\tNo hubo aprobados en esta maetria\n\n");
 			return;
 		}
-		materia=materia->prx;
+		Cursomateria=Cursomateria->prx;
 	}
 	printf("\n\tNo Existe dicha materia\n\n");
 }
@@ -1691,7 +1692,7 @@ void FormatoFecha(fecha F)
 											printf("/nov");
 										else
 											if (F.mm==12)
-												printf("/feb");
+												printf("/dic");
 	printf("/%i)",F.yyyy);
 }
 
