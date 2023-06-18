@@ -1606,7 +1606,7 @@ int Inscribe_o_no(Cursos *c,Participacion *p){
 	  return 0;
 	 }
 	else
-		return 0;
+		return 1;
 }
 
 int Regresa_cod_mat(Cursos *c, int x){
@@ -1637,14 +1637,14 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 			Listaper=Listaper->prx;
 		if(Listaper)
 		{
-			int nota=0,codicur=0;
+			int nota=0,codicur=0,Registrado;
+			Registrado=Inscribe_o_no(listacur,Listaper->Record);
+			if(Registrado){
 			ingresarDato(&codicur,"Codigo del curso",maxEntero,1);
-			Cursos *Copia=listacur;Participacion *AUX=Listaper->Record;int ExisteCurso=0,Registrado=0,Aprobado=0,RegistradoEnCurso=0;
+			Cursos *Copia=listacur;Participacion *AUX=Listaper->Record;int ExisteCurso=0,Aprobado=0,RegistradoEnCurso=0;
 			ExisteCurso=Regresa_cod_mat(listacur,codicur);
 			if(ExisteCurso)
 			{
-                Registrado=Inscribe_o_no(Copia,AUX);
-				if(Registrado){
 				while(AUX)
 				{
 					while (Copia)
@@ -1673,20 +1673,17 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 					}else
 						printf("\n\tEsta Persona ya aprobo esta materia en otro curso\n\n");
 				}
-			 }
-				else
+			}
+			else
+				printf("El curso no existe\n");
+		 }else
 				{
 					printf("Esta persona reprobo mas de 4 veces una materia\n");
 					printf("Por lo que ya no puede ser inscrito en el instituto\n");
 				}
-			}
-			else
-				printf("El curso no existe\n");
-		}
-		else
+		}else
             printf("Esa persona no se encuentra en el sistema\n");
-	}
-	else
+	}else
 		printf("No se cumplen las condiciones para registrar a una persona en un curso\n");
 	system("pause");
 }
