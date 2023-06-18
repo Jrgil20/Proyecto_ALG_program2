@@ -84,6 +84,8 @@ void Eliminar_curso (Cursos**);
 void Eliminar_persona(Personas**);
 void Agregar_nota(Personas **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
+int Regresa_cod_mat(Cursos *, int x);
+int Inscribe_o_no(Cursos *, Participacion *);
 void C_NombreMateria(Materias* ,Cursos* );
 void c_Materia(Materias*,Cursos*,Personas*);
 void c_CursosDe(Materias*,Cursos*,Personas*);
@@ -1577,6 +1579,46 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 	}
 }
 
+int Inscribe_o_no(Cursos *c,Participacion *p){
+	if(p){
+	 int cont=0;
+	 while(p){
+		 int n=Regresa_cod_mat(c,p->Codigo_del_curso);
+		  Participacion *q=p->prx;
+		 if(p->nota <= 9)
+			 cont+=1;
+		 while(q){
+			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9))
+			   cont+=1;
+			 q=q->prx;
+		 }
+		 if(cont>4)
+			 break;
+		 else
+		 {
+			 cont=0;
+			 p=p->prx;
+		 }
+	 }
+	 if (cont<=4)
+		 return 1;
+	 else
+	  return 0;
+	 }
+	else
+		return 0;
+}
+
+int Regresa_cod_mat(Cursos *c, int x){
+	while((c)&&(c->Codigo_del_curso != x)){
+     c=c->prx;
+	}
+	if(c)
+		return c->Codigo_de_la_Materia;
+	else
+	 return 0;
+}
+
 void Agregar_nota(Personas **p, int n,int c){
 	Participacion *aux=new Participacion;
 	aux->Codigo_del_curso=c;
@@ -1598,14 +1640,11 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 			int nota=0,codicur=0;
 			ingresarDato(&codicur,"Codigo del curso",maxEntero,1);
 			Cursos *Copia=listacur;Participacion *AUX=Listaper->Record;int ExisteCurso=0,Registrado=0,Aprobado=0,RegistradoEnCurso=0;
-			while (Copia)
-			{/*Debe ser una funcion, que devuelva el codigo de materia, dada un codigo de curso en caso de que el curso exista*/
-				if(codicur==Copia->Codigo_del_curso)
-					ExisteCurso=Copia->Codigo_de_la_Materia;
-				Copia=Copia->prx;
-			}
+			ExisteCurso=Regresa_cod_mat(listacur,codicur);
 			if(ExisteCurso)
 			{
+                Registrado=Inscribe_o_no(Copia,AUX);
+				if(Registrado){
 				while(AUX)
 				{
 					while (Copia)
@@ -1613,7 +1652,6 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 						if(AUX->Codigo_del_curso==Copia->Codigo_del_curso)
 							if(Copia->Codigo_de_la_Materia==ExisteCurso)
 							{
-								Registrado++;
 								if(AUX->nota>9)
 									Aprobado++;
 							}
@@ -1629,15 +1667,17 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 				{
 					if(!Aprobado)
 					{
-						if(Registrado<=4)
-						{
 							ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
 							Agregar_nota(&Listaper,nota,codicur);
 							printf("Estudiante de cedula: [%i] fue agregado a: CURSO[%i] con la nota:(%i/20 pts)\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);	
-						}else
-							printf("\n\tEsta Persona ya rebrobo esta materia mas veces de las que se permite\n\n");
 					}else
 						printf("\n\tEsta Persona ya aprobo esta materia en otro curso\n\n");
+				}
+			 }
+				else
+				{
+					printf("Esta persona reprobo mas de 4 veces una materia\n");
+					printf("Por lo que ya no puede ser inscrito en el instituto\n");
 				}
 			}
 			else
