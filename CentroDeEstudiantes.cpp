@@ -82,6 +82,8 @@ void Eliminar_curso_materia (Cursos**,int);
 void Eliminar_materia (Materias**,Cursos **);
 void Eliminar_curso (Cursos**);
 void Eliminar_persona(Personas**);
+void Eliminar_curso_persona(Personas *);
+void Eliminar_persona_curso(Participacion **, int x);
 void Agregar_nota(Participacion **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void Modificar_Curso_persona(Personas **, Cursos **c);
@@ -298,6 +300,7 @@ int main ()
 							break;
 
 						case '3'://eliminar alumnos en cursos con sus notas correspondientes.
+							Eliminar_curso_persona(Persona);
 							break;
 
 						default:
@@ -1580,6 +1583,57 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 			}
 		}
 	}
+}
+
+void Eliminar_persona_curso(Participacion **cur, int x){
+	if(*cur)
+	{
+	  if((*cur)->Codigo_del_curso == x)
+	  {
+		  Participacion *aux=*cur;
+		  *cur=(*cur)->prx;
+		  delete aux;
+		  printf("Estudiante eliminado del curso correctamente\n");
+	  }
+	  else
+	  {
+		  Participacion *t=*cur;
+		  while((t->prx)&&(t->prx->Codigo_del_curso != x))
+			  t=t->prx;
+		  if(t->prx)
+		  {
+			  Participacion *aux=t->prx;
+			  t->prx=aux->prx;
+			  delete aux;
+			  printf("Estudiante eliminado del curso correctamente\n");
+		  }
+		  else
+			  printf("El estudiante no se encuentra en el curso [%i]\n",x);
+	  }
+	}
+	else
+		printf("El estudiante no se encuentra en ningun curso\n");
+}
+
+void Eliminar_curso_persona(Personas *p){
+	if(p)
+	{
+		int Ele=0;
+		ingresarDato(&Ele,"Cedula del estudiante",maxEntero,1);
+		while((p)&&(p->cedula != Ele))
+			p=p->prx;
+		if(p)
+		{
+			int cod=0;
+			ingresarDato(&cod,"Codigo del curso a eliminar",maxEntero,1);
+			Eliminar_persona_curso(&p->Record,cod);
+		}
+		else
+			printf("El estudiante de cedula [%i] no esta en el sistema\n",Ele);
+	}
+	else
+		printf("No existen estudiantes en el sistema\n");
+	system("pause");
 }
 
 int Inscribe_o_no(Cursos *c,Participacion *p){
