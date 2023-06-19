@@ -2139,7 +2139,7 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 				NuevaInscripcion->Codigo_del_curso=atoi(Elemento);
 
 				Elemento = strtok(NULL, ",");cambio(Elemento);
-				if ( atoi(Elemento)>=20||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+				if ( atoi(Elemento)<=20||atoi(Elemento)>=0 || !validar_numero(Elemento) ) 
 					error++;
 				else
 					NuevaInscripcion->nota=atoi(Elemento);
