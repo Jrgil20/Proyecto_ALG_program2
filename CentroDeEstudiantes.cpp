@@ -115,7 +115,7 @@ int Exportar_Cursos(Cursos*,char ruta[]);
 int Exportar_Personas(Personas*,char ruta[]);
 int Importar_Materias(Materias**,char ruta[]);
 int Importar_Cursos(Cursos**,Materias*,char ruta[]);
-int Importar_Personas(Personas**,char ruta[]);
+int Importar_Personas(Personas**,Cursos *,char ruta[]);
 
 int main ()
 {
@@ -136,7 +136,7 @@ int main ()
 
 	if (Importar_Materias(&Materia,Ruta));else {printf("no se pudo importar el archivo de Materias\n");system("pause");}
 	if (Importar_Cursos(&Curso,Materia,Ruta));else {printf("no se pudo importar el archivo de cursos\n");system("pause");}
-	if (Importar_Personas(&Persona,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
+	if (Importar_Personas(&Persona,Curso,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
 
 	char opciones[3];
 	opciones[0]='0'; 
@@ -2022,7 +2022,7 @@ int Importar_Cursos(Cursos **nodos,Materias *materia,char ruta[])
 	system("pause");fclose(Archivo_entrada);return 1;
 }
 
-int Importar_Personas(Personas **nodos,char ruta[])
+int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 {
 	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaPer[100];
 	strcpy(rutaPer,ruta);strcat(rutaPer,"ArchivoPersonas.txt");
@@ -2079,8 +2079,8 @@ int Importar_Personas(Personas **nodos,char ruta[])
 			{
 				
 				Participacion* NuevaInscripcion= new Participacion;
-				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
-					error++;/*Validar que exista el curso*/
+				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)/*||Regresa_cod_mat(curso,atoi(Elemento))*/ ) 
+					error++;
 				else
 				NuevaInscripcion->Codigo_del_curso=atoi(Elemento);
 
