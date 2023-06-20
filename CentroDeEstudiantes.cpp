@@ -1667,9 +1667,8 @@ int Inscribe_o_no(Cursos *c,Participacion *p){
 }
 
 int Regresa_cod_mat(Cursos *c, int x){
-	while((c)&&(c->Codigo_del_curso != x)){
-     c=c->prx;
-	}
+	while((c)&&(c->Codigo_del_curso != x))
+		c=c->prx;
 	if(c)
 		return c->Codigo_de_la_Materia;
 	else
@@ -2176,26 +2175,36 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 			Nuevo_nodo->Record=NULL;
 			while((Elemento[0]!='0'))
 			{
+				Participacion* NuevaInscripcion= new Participacion;int ErrorSubNodo=0;
 				
-				Participacion* NuevaInscripcion= new Participacion;
-				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)/*||Regresa_cod_mat(curso,atoi(Elemento))*/ ) 
-					error++;
+				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)|| !Regresa_cod_mat(curso,atoi(Elemento)) ) 
+				{
+					printf("\t||Se encontro un error en el codigo del curso||\n");
+					ErrorSubNodo++;
+				}
 				else
 				NuevaInscripcion->Codigo_del_curso=atoi(Elemento);
 
 				Elemento = strtok(NULL, ",");cambio(Elemento);
-				if ( atoi(Elemento)<=20 && atoi(Elemento)>=0  && !validar_numero(Elemento) ) 
-					error++;
+				if ( atoi(Elemento)>20 || atoi(Elemento)<0  || !validar_numero(Elemento) ) 
+				{
+					printf("\t||Se encontro un error en la nota||\n");
+					ErrorSubNodo++;
+				}	
 				else
 					NuevaInscripcion->nota=atoi(Elemento);
-				
-				NuevaInscripcion->prx=Nuevo_nodo->Record;
-				Nuevo_nodo->Record=NuevaInscripcion;
+
+				if (ErrorSubNodo==0)
+				{
+					NuevaInscripcion->prx=Nuevo_nodo->Record;
+					Nuevo_nodo->Record=NuevaInscripcion;
+				}else
+					printf("\t%i Errores al agregar el curso, se omite\n\n",ErrorSubNodo);
 				Elemento = strtok(NULL, ",");cambio(Elemento);
 			}
 		}
 		if(error)
-			printf("%i Errores en el nodo, no se pudo guardar la persona\n",error);
+			printf("\t%i Errores en el nodo, no se pudo guardar la persona\n",error);
 		else 
 			{insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);FormatoPersona(Nuevo_nodo,true);}
 		Elemento = strtok(NULL, ",");
