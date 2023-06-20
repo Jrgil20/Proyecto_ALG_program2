@@ -2116,7 +2116,10 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 		Personas *Nuevo_nodo= new Personas; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+		{
+			printf("\t Se encontro un error en la cedula de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->cedula=atoi(Elemento);
 		
@@ -2124,23 +2127,35 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 		if (LimitarCaracteres (Elemento, 30))
 			strcpy(Nuevo_nodo->nombre_apellido,Elemento);
 		else 
-			error++;	
+		{
+			printf("\t Se encontro un error en el nombre de la persona de este nodo\n");
+			error++;
+		}		
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+		{
+			printf("\t Se encontro un error en el a%co de nacimiento de la persona de este nodo\n",164);
 			error++;
+		}	
 		else
 			Nuevo_nodo->Fecha_de_Nacimiento.yyyy=atoi(Elemento);
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1||atoi(Elemento)>12) 
+		{
+			printf("\t Se encontro un error en el mes de nacimiento de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			{Nuevo_nodo->Fecha_de_Nacimiento.mm=atoi(Elemento);}
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1||atoi(Elemento)>31) 
+		{/*Esta validacion no es la que verifica el mes o si el anyo es bisiesto*/
+			printf("\t Se encontro un error en dia de naciemiento de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->Fecha_de_Nacimiento.dd=atoi(Elemento);
 		
@@ -2148,7 +2163,10 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 		if (LimitarCaracteres (Elemento, 40))
 			strcpy(Nuevo_nodo->direccion,Elemento);
 		else 
-			error++;	
+		{
+			printf("\t Se encontro un error en la direcion de la persona de este nodo\n");
+			error++;
+		}		
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);		
 		if (Elemento[0]=='0')
@@ -2177,7 +2195,7 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 			}
 		}
 		if(error)
-			printf("%i Errores en el nodo\n",error);
+			printf("%i Errores en el nodo, no se pudo guardar la persona\n",error);
 		else 
 			{insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);FormatoPersona(Nuevo_nodo,true);}
 		Elemento = strtok(NULL, ",");
