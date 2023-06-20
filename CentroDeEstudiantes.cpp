@@ -2039,7 +2039,7 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		}
 		
 		if(error)
-			printf("%i errores en el nodo, no se pudo guradar la materia\n",error);
+			printf("%i errores en el nodo, no se pudo guardar la materia\n",error);
 		else 
 			{insertar_MateriaOrdenadamente(nodos, &Nuevo_nodo);FormatoMateria(Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");
@@ -2060,30 +2060,42 @@ int Importar_Cursos(Cursos **nodos,Materias *materia,char ruta[])
 		Cursos *Nuevo_nodo= new Cursos; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)||!Existe_codigo(atoi(Elemento),&materia) ) 
+		{
+			printf("\t Se encontro un error en el Codigo de materia del curso de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");
 		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !(validar_numero(Elemento)) ) 
+		{
+			printf("\t Se encontro un error en el Codigo del curso de este nodo\n");
 			error++;
+		}	
 		else 
 			Nuevo_nodo->Codigo_del_curso=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");
 		if (atoi(Elemento)<1||atoi(Elemento)>3) 
+		{
+			printf("\t Se encontro un error en el Lapso del curso de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->lapso=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+		{
+			printf("\t Se encontro un error en el a%co del curso de este nodo\n",164);
 			error++;
+		}	
 		else
 			Nuevo_nodo->AAAA=atoi(Elemento);
 
 		if(error)
-			printf("Errores en el nodo: %i\n",error);
+			printf("%i errores en el nodo, no se pudo guardar este curso\n",error);
 		else 
 			{insertar_CursoOrdenadamente(nodos,&Nuevo_nodo); FormatoCurso(Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");
