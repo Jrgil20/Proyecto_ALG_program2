@@ -1995,7 +1995,10 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		Materias *Nuevo_nodo= new Materias; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !validar_numero(Elemento) || Existe_codigo(atoi(Elemento),nodos) ) 
+		{
+			printf("\t Se encontro un error en el codigo de la materia de este nodo\n");
 			error++;
+		}
 		else 
 			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 		
@@ -2003,17 +2006,26 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 30))
 			strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
 		else 
-			error++;	
-		
+		{
+			printf("\t Se encontro un error en el nombre de la materia de este nodo\n");
+			error++;
+		}
+
 		Elemento = strtok(NULL, ",");
 		if ((atoi(Elemento) <2)||(atoi(Elemento) >5)) 
+		{
+			printf("\t Se encontro un error en los creditos de la materia de este nodo\n");
 			error++;
+		}
 		else
 			Nuevo_nodo->Creditos_de_la_Materia=atoi(Elemento);
 		
 		Elemento = strtok(NULL, ",");
 		if ((atoi(Elemento) <1)||(atoi(Elemento) >10))
-			error++;	
+		{
+			printf("\t Se encontro un error en el semestre de la materia de este nodo\n");
+			error++;
+		}
 		else 
 			{Nuevo_nodo->Semestre=atoi(Elemento);Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);}
 		
@@ -2021,10 +2033,13 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 100))
 			strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
 		else
+		{
+			printf("\t Se encontro un error en la descripcion de la materia de este nodo\n");
 			error++;
+		}
 		
 		if(error)
-			printf("Errores en el nodo: %i\n",error);
+			printf("%i errores en el nodo, no se pudo guradar la materia\n",error);
 		else 
 			{insertar_MateriaOrdenadamente(nodos, &Nuevo_nodo);FormatoMateria(Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");
