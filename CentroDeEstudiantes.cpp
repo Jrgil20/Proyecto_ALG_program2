@@ -82,8 +82,14 @@ void Eliminar_curso_materia (Cursos**,int);
 void Eliminar_materia (Materias**,Cursos **);
 void Eliminar_curso (Cursos**);
 void Eliminar_persona(Personas**);
-void Agregar_nota(Personas **, int,int);
+void Eliminar_curso_persona(Personas *);
+void Eliminar_persona_curso(Participacion **, int x);
+void Agregar_nota(Participacion **, int,int);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
+void Modificar_Curso_persona(Personas **, Cursos **c);
+void Modificar_cod_persona(Participacion *, Cursos **);
+int Regresa_cod_mat(Cursos *, int x);
+int Inscribe_o_no(Cursos *, Participacion *);
 void C_NombreMateria(Materias* ,Cursos* );
 void c_Materia(Materias*,Cursos*,Personas*);
 void c_CursosDe(Materias*,Cursos*,Personas*);
@@ -110,8 +116,8 @@ int Exportar_Materias(Materias*,char ruta[]);
 int Exportar_Cursos(Cursos*,char ruta[]);
 int Exportar_Personas(Personas*,char ruta[]);
 int Importar_Materias(Materias**,char ruta[]);
-int Importar_Cursos(Cursos**,char ruta[]);
-int Importar_Personas(Personas**,char ruta[]);
+int Importar_Cursos(Cursos**,Materias*,char ruta[]);
+int Importar_Personas(Personas**,Cursos *,char ruta[]);
 
 int main ()
 {
@@ -131,8 +137,8 @@ int main ()
 	}
 
 	if (Importar_Materias(&Materia,Ruta));else {printf("no se pudo importar el archivo de Materias\n");system("pause");}
-	if (Importar_Cursos(&Curso,Ruta));else {printf("no se pudo importar el archivo de cursos\n");system("pause");}
-	if (Importar_Personas(&Persona,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
+	if (Importar_Cursos(&Curso,Materia,Ruta));else {printf("no se pudo importar el archivo de cursos\n");system("pause");}
+	if (Importar_Personas(&Persona,Curso,Ruta));else {printf("no se pudo importar el archivo de personas\n");system("pause");}
 
 	char opciones[3];
 	opciones[0]='0'; 
@@ -281,7 +287,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU CONTROL DE ESTUDIOS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" 1- Agregar alumnos \n 2- *Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
+					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
 					switch(opciones_control_estudios[0])
 					{
@@ -290,15 +296,20 @@ int main ()
 							break;
 
 						case '2'://Modificar alumnos
+							Modificar_Curso_persona(&Persona,&Curso);
 							break;
 
 						case '3'://eliminar alumnos en cursos con sus notas correspondientes.
+							Eliminar_curso_persona(Persona);
 							break;
 
 						default:
 							if (opciones_control_estudios[0]!='0')
 							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
 					}
+					if (Exportar_Personas(Persona,Ruta));
+					else 
+						printf("\t se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 					
 				}while (opciones_control_estudios[0]!='0');
 				break;
@@ -761,8 +772,8 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 
 void Ingresar_Fecha(year *YY,month *MM,day *dd)
 {
-	ingresarDato(YY," anio de nacimiento",2100,1900);
-	ingresarDato(MM," mes de nacimiento",12,1);
+	ingresarDato(YY," Anio de nacimiento",2100,1900);
+	ingresarDato(MM," Mes de nacimiento",12,1);
 	if(*MM==2)
 		if (bisiesto(*YY))
 			ingresarDato(dd," Dia de nacimiento",29,1);
@@ -1574,36 +1585,232 @@ void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
 	}
 }
 
-void Agregar_nota(Personas **p, int n,int c){
+void Eliminar_persona_curso(Participacion **cur, int x){
+	if(*cur)
+	{
+	  if((*cur)->Codigo_del_curso == x)
+	  {
+		  Participacion *aux=*cur;
+		  *cur=(*cur)->prx;
+		  delete aux;
+		  printf("Estudiante eliminado del curso correctamente\n");
+	  }
+	  else
+	  {
+		  Participacion *t=*cur;
+		  while((t->prx)&&(t->prx->Codigo_del_curso != x))
+			  t=t->prx;
+		  if(t->prx)
+		  {
+			  Participacion *aux=t->prx;
+			  t->prx=aux->prx;
+			  delete aux;
+			  printf("Estudiante eliminado del curso correctamente\n");
+		  }
+		  else
+			  printf("El estudiante no se encuentra en el curso [%i]\n",x);
+	  }
+	}
+	else
+		printf("El estudiante no se encuentra en ningun curso\n");
+}
+
+void Eliminar_curso_persona(Personas *p){
+	if(p)
+	{
+		int Ele=0;
+		ingresarDato(&Ele,"Cedula del estudiante",maxEntero,1);
+		while((p)&&(p->cedula != Ele))
+			p=p->prx;
+		if(p)
+		{
+			int cod=0;
+			ingresarDato(&cod,"Codigo del curso a eliminar",maxEntero,1);
+			Eliminar_persona_curso(&p->Record,cod);
+		}
+		else
+			printf("El estudiante de cedula [%i] no esta en el sistema\n",Ele);
+	}
+	else
+		printf("No existen estudiantes en el sistema\n");
+	system("pause");
+}
+
+int Inscribe_o_no(Cursos *c,Participacion *p){
+	if(p){
+	 int cont=0;
+	 while(p){
+		 int n=Regresa_cod_mat(c,p->Codigo_del_curso);
+		  Participacion *q=p->prx;
+		 if(p->nota <= 9)
+			 cont+=1;
+		 while(q){
+			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9))
+			   cont+=1;
+			 q=q->prx;
+		 }
+		 if(cont>4)
+			 break;
+		 else
+		 {
+			 cont=0;
+			 p=p->prx;
+		 }
+	 }
+	 if (cont<=4)
+		 return 1;
+	 else
+	  return 0;
+	 }
+	else
+		return 1;
+}
+
+int Regresa_cod_mat(Cursos *c, int x){
+	while((c)&&(c->Codigo_del_curso != x))
+		c=c->prx;
+	if(c)
+		return c->Codigo_de_la_Materia;
+	else
+	 return 0;
+}
+
+void Agregar_nota(Participacion **p, int n,int c){
 	Participacion *aux=new Participacion;
 	aux->Codigo_del_curso=c;
 	aux->nota=n;
-	aux->prx=(*p)->Record;
-	(*p)->Record=aux;
+	aux->prx=*p;
+	*p=aux;
 }
 
-void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat){
-	if((Listaper)&&(listamat)&&(listacur)){
+void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat)
+{
+	if((Listaper)&&(listamat)&&(listacur))
+	{
 		int cod=0;
 		ingresarDato(&cod,"Cedula del estudiante a agregar al curso",maxEntero,1);
 		while((Listaper)&&(Listaper->cedula != cod))
 			Listaper=Listaper->prx;
-		if(Listaper){
-			int nota=0,codicur=0;
+		if(Listaper)
+		{
+			int nota=0,codicur=0,Registrado;
+			Registrado=Inscribe_o_no(listacur,Listaper->Record);
+			if(Registrado){
 			ingresarDato(&codicur,"Codigo del curso",maxEntero,1);
-			if(Existe_codigo_curso(codicur,&listacur)){
-			 ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
-			 Agregar_nota(&Listaper,nota,codicur);
-			 printf("Estudiante de cedula: [%i] fue agregado al curso: [%i] con la calificacion de :[%i] puntos\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);
+			Cursos *Copia=listacur;Participacion *AUX=Listaper->Record;int ExisteCurso=0,Aprobado=0,RegistradoEnCurso=0;
+			ExisteCurso=Regresa_cod_mat(listacur,codicur);
+			if(ExisteCurso)
+			{
+				while(AUX)
+				{
+					while (Copia)
+					{
+						if(AUX->Codigo_del_curso==Copia->Codigo_del_curso)
+							if(Copia->Codigo_de_la_Materia==ExisteCurso)
+							{
+								if(AUX->nota>9)
+									Aprobado++;
+							}
+						Copia=Copia->prx;
+					}
+					if(AUX->Codigo_del_curso==codicur)
+						RegistradoEnCurso++;
+					AUX=AUX->prx;
+				}
+				if (RegistradoEnCurso)
+					printf("\n\tEste Estudiante ya fue registrado en el curso, no se puede registrar nuevamente\n\n");
+				else
+				{
+					if(!Aprobado)
+					{
+							ingresarDato(&nota,"Nota del estudiante en el curso",20,1);
+							Agregar_nota(&Listaper->Record,nota,codicur);
+							printf("Estudiante de cedula: [%i] fue agregado a: CURSO[%i] con la nota:(%i/20 pts)\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);	
+					}else
+						printf("\n\tEsta Persona ya aprobo esta materia en otro curso\n\n");
+				}
 			}
 			else
 				printf("El curso no existe\n");
+		 }else
+				{
+					printf("Esta persona reprobo mas de 4 veces una materia\n");
+					printf("Por lo que ya no puede ser inscrita en el instituto\n");
+				}
+		}else
+            printf("Esa persona no se encuentra en el sistema\n");
+	}else
+		printf("No se cumplen las condiciones para registrar a una persona en un curso\n");
+	system("pause");
+}
+
+void Modificar_cod_persona(Participacion *p, Cursos **cu){
+	if(p){
+		int nuevocod;
+		ingresarDato(&nuevocod," Codigo del nuevo curso",maxEntero,1);
+		if(Existe_codigo_curso(nuevocod,cu)){
+			p->Codigo_del_curso=nuevocod;
+            printf("El alumno ahora esta inscrito en el curso [%i]\n",nuevocod);
 		}
 		else
-            printf("Esa persona no se encuentra en el sistema\n");
+			printf("El curso seleccionado no se encuentra en el sistema\n");
 	}
 	else
-		printf("No se cumplen las condiciones para registrar a una persona en un curso\n");
+		printf("El estudiante a no esta inscrita en ningun curso\n");
+ system("pause");
+}
+
+void Modificar_Curso_persona(Personas **persona, Cursos **c){
+	Personas *Respaldo= *persona; int Elegido,Ele2;
+	if((*persona)&&(*c)){
+		Personas *consulta=*persona, *temp=NULL;
+		ingresarDato(&Elegido," Cedula del estdiante a modificar",maxEntero,1);
+		while((Respaldo)&&(Respaldo->cedula != Elegido))
+			Respaldo=Respaldo->prx;
+		if (!Respaldo)
+			{printf("\n\tEl estudiante de cedula [%i] no se encuentra\n", Elegido);system("pause");}
+		else
+		{
+			ingresarDato(&Ele2," Curso a modificar",maxEntero,1);
+			Participacion *aux=Respaldo->Record;
+			while((Respaldo->Record)&&(Respaldo->Record->Codigo_del_curso != Ele2))
+			 Respaldo->Record=Respaldo->Record->prx;
+			if(Respaldo->Record){
+			 char opciones_de_Modificacion[3];
+			 opciones_de_Modificacion[0]=0;	
+			 do{//Menu de Mantenimiento Cursos
+				system("cls");
+				printf("\t Que desea modificar?\n\n");
+				printf(" 1- Nota en el curso\n 2- Codigo del curso \n 0- SALIR\n\n Escriba su opcion (0-2) = ");
+				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
+				switch(opciones_de_Modificacion[0])
+				{
+					case '1'://Nota
+						ingresarDato(&Respaldo->Record->nota," Nueva nota del curso",20,0);
+						printf_s("Nota del curso [%i] modificada exitosamente a [%i]\n",Ele2,Respaldo->Record->nota);system("pause");
+						break;
+
+					case '2'://Fecha de nacimiento
+						Modificar_cod_persona(Respaldo->Record,c);
+						break;
+					default:
+						if (opciones_de_Modificacion[0]!='0')
+							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+				}
+			}while (opciones_de_Modificacion[0]!='0');
+            Respaldo->Record=aux;
+			Respaldo = *persona;
+		 }
+			else
+				printf("El estudiante no se encuentra en el curso [%i]",Ele2);
+		}
+	}
+	else if(!(*persona))
+		printf("No existen personas para modificar sus cursos\n");
+	else if(!(*c))
+		printf("No hay cursos en el sistema\n");
+	else
+		printf("No hay ni personas ni cursos en el sistema\n");
 	system("pause");
 }
 
@@ -1787,7 +1994,10 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		Materias *Nuevo_nodo= new Materias; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !validar_numero(Elemento) || Existe_codigo(atoi(Elemento),nodos) ) 
+		{
+			printf("\t Se encontro un error en el codigo de la materia de este nodo\n");
 			error++;
+		}
 		else 
 			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 		
@@ -1795,17 +2005,26 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 30))
 			strcpy(Nuevo_nodo->Nombre_de_la_Materia,Elemento);
 		else 
-			error++;	
-		
+		{
+			printf("\t Se encontro un error en el nombre de la materia de este nodo\n");
+			error++;
+		}
+
 		Elemento = strtok(NULL, ",");
 		if ((atoi(Elemento) <2)||(atoi(Elemento) >5)) 
+		{
+			printf("\t Se encontro un error en los creditos de la materia de este nodo\n");
 			error++;
+		}
 		else
 			Nuevo_nodo->Creditos_de_la_Materia=atoi(Elemento);
 		
 		Elemento = strtok(NULL, ",");
 		if ((atoi(Elemento) <1)||(atoi(Elemento) >10))
-			error++;	
+		{
+			printf("\t Se encontro un error en el semestre de la materia de este nodo\n");
+			error++;
+		}
 		else 
 			{Nuevo_nodo->Semestre=atoi(Elemento);Semestre_Romano(Nuevo_nodo->Semestre,&Nuevo_nodo);}
 		
@@ -1813,10 +2032,13 @@ int Importar_Materias(Materias **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 100))
 			strcpy(Nuevo_nodo->Descripcion_de_la_Materia,Elemento);
 		else
+		{
+			printf("\t Se encontro un error en la descripcion de la materia de este nodo\n");
 			error++;
+		}
 		
 		if(error)
-			printf("Errores en el nodo: %i\n",error);
+			printf("%i errores en el nodo, no se pudo guardar la materia\n",error);
 		else 
 			{insertar_MateriaOrdenadamente(nodos, &Nuevo_nodo);FormatoMateria(Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");
@@ -1824,7 +2046,7 @@ int Importar_Materias(Materias **nodos,char ruta[])
 	system("pause");fclose(Archivo_entrada);return 1;
 } 
 
-int Importar_Cursos(Cursos **nodos,char ruta[])
+int Importar_Cursos(Cursos **nodos,Materias *materia,char ruta[])
 {
 	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaCur[100];
 	strcpy(rutaCur,ruta);strcat(rutaCur,"ArchivoCursos.txt"); 
@@ -1836,31 +2058,43 @@ int Importar_Cursos(Cursos **nodos,char ruta[])
 	{// Lee cada línea del archivo y lo convierte en un nodo completo
 		Cursos *Nuevo_nodo= new Cursos; int error=0;
         Elemento = strtok(linea, ",");      
-		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
-			error++;/*||!Existe_codigo(atoi(Elemento),Materia)*/
+		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)||!Existe_codigo(atoi(Elemento),&materia) ) 
+		{
+			printf("\t Se encontro un error en el Codigo de materia del curso de este nodo\n");
+			error++;
+		}	
 		else
 			Nuevo_nodo->Codigo_de_la_Materia=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");
 		if ( atoi(Elemento)>=maxEntero || atoi(Elemento)<=0 || !(validar_numero(Elemento)) ) 
+		{
+			printf("\t Se encontro un error en el Codigo del curso de este nodo\n");
 			error++;
+		}	
 		else 
 			Nuevo_nodo->Codigo_del_curso=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");
 		if (atoi(Elemento)<1||atoi(Elemento)>3) 
+		{
+			printf("\t Se encontro un error en el Lapso del curso de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->lapso=atoi(Elemento);
 
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+		{
+			printf("\t Se encontro un error en el a%co del curso de este nodo\n",164);
 			error++;
+		}	
 		else
 			Nuevo_nodo->AAAA=atoi(Elemento);
 
 		if(error)
-			printf("Errores en el nodo: %i\n",error);
+			printf("%i errores en el nodo, no se pudo guardar este curso\n",error);
 		else 
 			{insertar_CursoOrdenadamente(nodos,&Nuevo_nodo); FormatoCurso(Nuevo_nodo);}
 		Elemento = strtok(NULL, ",");
@@ -1868,7 +2102,7 @@ int Importar_Cursos(Cursos **nodos,char ruta[])
 	system("pause");fclose(Archivo_entrada);return 1;
 }
 
-int Importar_Personas(Personas **nodos,char ruta[])
+int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 {
 	FILE *Archivo_entrada = NULL;char linea[150];char *Elemento;char rutaPer[100];
 	strcpy(rutaPer,ruta);strcat(rutaPer,"ArchivoPersonas.txt");
@@ -1881,7 +2115,10 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		Personas *Nuevo_nodo= new Personas; int error=0;
         Elemento = strtok(linea, ",");      
 		if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
+		{
+			printf("\t Se encontro un error en la cedula de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->cedula=atoi(Elemento);
 		
@@ -1889,23 +2126,35 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 30))
 			strcpy(Nuevo_nodo->nombre_apellido,Elemento);
 		else 
-			error++;	
+		{
+			printf("\t Se encontro un error en el nombre de la persona de este nodo\n");
+			error++;
+		}		
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1900||atoi(Elemento)>2100) 
+		{
+			printf("\t Se encontro un error en el a%co de nacimiento de la persona de este nodo\n",164);
 			error++;
+		}	
 		else
 			Nuevo_nodo->Fecha_de_Nacimiento.yyyy=atoi(Elemento);
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1||atoi(Elemento)>12) 
+		{
+			printf("\t Se encontro un error en el mes de nacimiento de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			{Nuevo_nodo->Fecha_de_Nacimiento.mm=atoi(Elemento);}
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);
 		if (atoi(Elemento)<1||atoi(Elemento)>31) 
+		{/*Esta validacion no es la que verifica el mes o si el anyo es bisiesto*/
+			printf("\t Se encontro un error en dia de naciemiento de la persona de este nodo\n");
 			error++;
+		}	
 		else
 			Nuevo_nodo->Fecha_de_Nacimiento.dd=atoi(Elemento);
 		
@@ -1913,7 +2162,10 @@ int Importar_Personas(Personas **nodos,char ruta[])
 		if (LimitarCaracteres (Elemento, 40))
 			strcpy(Nuevo_nodo->direccion,Elemento);
 		else 
-			error++;	
+		{
+			printf("\t Se encontro un error en la direcion de la persona de este nodo\n");
+			error++;
+		}		
 		
 		Elemento = strtok(NULL, ",");cambio(Elemento);		
 		if (Elemento[0]=='0')
@@ -1923,26 +2175,36 @@ int Importar_Personas(Personas **nodos,char ruta[])
 			Nuevo_nodo->Record=NULL;
 			while((Elemento[0]!='0'))
 			{
+				Participacion* NuevaInscripcion= new Participacion;int ErrorSubNodo=0;
 				
-				Participacion* NuevaInscripcion= new Participacion;
-				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
-					error++;
+				if ( atoi(Elemento)>=maxEntero ||atoi(Elemento)<=0 || !validar_numero(Elemento)|| !Regresa_cod_mat(curso,atoi(Elemento)) ) 
+				{
+					printf("\t||Se encontro un error en el codigo del curso||\n");
+					ErrorSubNodo++;
+				}
 				else
 				NuevaInscripcion->Codigo_del_curso=atoi(Elemento);
 
 				Elemento = strtok(NULL, ",");cambio(Elemento);
-				if ( atoi(Elemento)>=20||atoi(Elemento)<=0 || !validar_numero(Elemento) ) 
-					error++;
+				if ( atoi(Elemento)>20 || atoi(Elemento)<0  || !validar_numero(Elemento) ) 
+				{
+					printf("\t||Se encontro un error en la nota||\n");
+					ErrorSubNodo++;
+				}	
 				else
 					NuevaInscripcion->nota=atoi(Elemento);
-				
-				NuevaInscripcion->prx=Nuevo_nodo->Record;
-				Nuevo_nodo->Record=NuevaInscripcion;
+
+				if (ErrorSubNodo==0)
+				{
+					NuevaInscripcion->prx=Nuevo_nodo->Record;
+					Nuevo_nodo->Record=NuevaInscripcion;
+				}else
+					printf("\t%i Errores al agregar el curso, se omite\n\n",ErrorSubNodo);
 				Elemento = strtok(NULL, ",");cambio(Elemento);
 			}
 		}
 		if(error)
-			printf("%i Errores en el nodo\n",error);
+			printf("\t%i Errores en el nodo, no se pudo guardar la persona\n",error);
 		else 
 			{insertar_PersonaOrdenadamente(nodos,&Nuevo_nodo);FormatoPersona(Nuevo_nodo,true);}
 		Elemento = strtok(NULL, ",");
