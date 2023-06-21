@@ -1763,7 +1763,7 @@ void Apro_Reti_Ina(char EstatusDelALumno)
 		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
 		printf("\n\n\t Nt:solo se considera el primer caracter\n");
 		EstatusDelALumno=Estatus[0];
-	}while(validarStatus(EstatusDelALumno));
+	}while(!validarStatus(EstatusDelALumno));
 }
 
 int validarStatus(char stats)
