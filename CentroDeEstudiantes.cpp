@@ -153,6 +153,8 @@ int main ()
 		printf("Ruta = %s \n", UbicacionMenu);
 		printf("\n 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 		fflush(stdin);fgets(opciones,2,stdin);cambio(opciones);fflush(stdin);
+		if(opciones[1]!='\0')
+			printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones[0],opciones);						
 		switch(opciones[0])
 		{
 			case '1'://Mantenimiento del sistema
@@ -179,6 +181,8 @@ int main ()
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Materia,2,stdin);cambio(opciones_mantenimiento_Materia);fflush(stdin);
+								if(opciones_mantenimiento_Materia[1]!='\0')
+									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Materia[0],opciones_mantenimiento_Materia);
 								switch(opciones_mantenimiento_Materia[0])
 									{
 										case '1'://Agregar Materia	
@@ -213,6 +217,8 @@ int main ()
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Cursos,2,stdin);cambio(opciones_mantenimiento_Cursos);fflush(stdin);
+								if(opciones_mantenimiento_Cursos[1]!='\0')
+									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Cursos[0],opciones_mantenimiento_Cursos);
 								switch(opciones_mantenimiento_Cursos[0])
 								{
 									case '1'://Agregar
@@ -247,6 +253,8 @@ int main ()
 								printf("Ruta = %s \n", UbicacionMenu);
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Personas,2,stdin);cambio(opciones_mantenimiento_Personas);fflush(stdin);
+								if(opciones_mantenimiento_Personas[1]!='\0')
+									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Personas[0],opciones_mantenimiento_Personas);
 								switch(opciones_mantenimiento_Personas[0])
 								{
 									case '1'://Agregar
@@ -293,6 +301,8 @@ int main ()
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
+					if(opciones_control_estudios[1]!='\0')
+						printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_control_estudios[0],opciones_control_estudios);
 					switch(opciones_control_estudios[0])
 					{
 						case '1'://Agregar alumnos
@@ -330,6 +340,8 @@ int main ()
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-cursos de cierto Semestre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
+					if(opciones_consultas[1]!='\0')
+						printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_consultas[0],opciones_consultas);
 					switch(opciones_consultas[0])
 					{
 						case '1'://Dado un nombre de curso(materia ya que los cursos no tienen nombre) buscar su c�digo.
@@ -539,6 +551,8 @@ void Modificar_Materia(Materias **materia)
 				system("cls");printf("\t Que desea modificar?\n\n");
 				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n Escriba su opcion (0-4) =  ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
+				if(opciones_de_Modificacion[1]!='\0')
+					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nombre
@@ -609,6 +623,8 @@ void Modificar_Curso(Cursos **curso)
 				printf("\t Que desea modificar?\n\n");
 				printf(" 1- Anio del curso\n 2- Lapso del curso\n 0- SALIR\n\n Escriba su opcion (0-2) = ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
+				if(opciones_de_Modificacion[1]!='\0')
+					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Anio
@@ -654,6 +670,8 @@ void Modificar_Persona(Personas **persona)
 				printf("\t Que desea modificar?\n\n");
 				printf(" 1- Nombre y apellido\n 2- Fecha de nacimiento\n 3- Direccion\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
+				if(opciones_de_Modificacion[1]!='\0')
+					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nombre y apellido
@@ -766,9 +784,9 @@ void ingresarDato(int *Dato,char De[20],int vMax,int vmin)
 		*Dato=atoi(copia);
 		if( !DentrodeRango(Dato,vMax,vmin)|| (!(Numero_valido)))
 			{
-				printf("\n Este dato no es valido (INGRESE OTRO)");
+				printf("\n\tEste dato no es valido (INGRESE OTRO)");
 				if (!DentrodeRango(Dato,vMax,vmin))
-					printf("\n No esta dentro del rango(%i,%i)",vmin,vMax);
+					printf("\n\tNo esta dentro del rango(%i,%i)",vmin,vMax);
 			}
 	}while ( !DentrodeRango(Dato,vMax,vmin) || (!(Numero_valido)));
 	*Dato=atoi(copia);
@@ -901,7 +919,7 @@ int Verificar_Semestre()
 			return 9;
 		if (((aux[0]=='X')||(aux[0]=='x'))&&(aux[1]=='\0'))
 			return 10;
-		printf(" El semestre ingresado no es valido, intente denuevo");	fflush(stdin);
+		printf("\tEl semestre ingresado no es valido, intente denuevo");	fflush(stdin);
 	}while(true);
 }
 
@@ -968,6 +986,8 @@ void Consultar_materia(Materias *Las_materias)
 			printf("\t Consultar\n\n");
 			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- Nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
+			if(opciones_Consulta[1]!='\0')
+				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_Consulta[0],opciones_Consulta);
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1069,6 +1089,8 @@ void Consultar_curso(Cursos *Los_cursos)
 			printf("\t Consultar\n\n");
 			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n 5- Curso especifico \n\n 0- SALIR\n\n Escriba su opcion (0-5) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
+			if(opciones_Consulta[1]!='\0')
+				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_Consulta[0],opciones_Consulta);
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1127,12 +1149,12 @@ void Consultar_curso(Cursos *Los_cursos)
 
 				default:
 					if (opciones_Consulta[0]!='0')
-						{printf("\n\nEsta opcion no es valida\n");system("pause");}
+						{printf("\n\n\tEsta opcion no es valida\n");system("pause");}
 					break;
 			}
 		}while (opciones_Consulta[0]!='0');
 	}else
-		{printf("No hay cursos para consultar\n");system("pause");}
+		{printf("\tNo hay cursos para consultar\n");system("pause");}
 }
 
 void Consultar_Personas(Personas *Las_personas)
@@ -1148,6 +1170,8 @@ void Consultar_Personas(Personas *Las_personas)
 			printf("\t Consultar\n\n");
 			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Cedula \n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
+			if(opciones_Consulta[1]!='\0')
+				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s ",opciones_Consulta[0],opciones_Consulta);
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1185,7 +1209,7 @@ void Consultar_Personas(Personas *Las_personas)
 
 	}
 	else
-		{printf("No hay personas para consultar\n");system("pause");}
+		{printf("\tNo hay personas para consultar\n");system("pause");}
 }
 
 void C_NombreAlumno(Personas*consulta)
@@ -1201,7 +1225,7 @@ void C_NombreAlumno(Personas*consulta)
 		consulta=consulta->prx;
 	}
 	if(!cont)
-	printf("No hay ningun estudiante con ese nombre\n");
+	printf("\tNo hay ningun estudiante con ese nombre\n");
 	system("pause"); 
 }
 
@@ -1601,7 +1625,7 @@ void Eliminar_persona_curso(Participacion **cur, int x){
 		  Participacion *aux=*cur;
 		  *cur=(*cur)->prx;
 		  delete aux;
-		  printf("Estudiante eliminado del curso correctamente\n");
+		  printf("\tEstudiante eliminado del curso correctamente\n");
 	  }
 	  else
 	  {
@@ -1613,14 +1637,14 @@ void Eliminar_persona_curso(Participacion **cur, int x){
 			  Participacion *aux=t->prx;
 			  t->prx=aux->prx;
 			  delete aux;
-			  printf("Estudiante eliminado del curso correctamente\n");
+			  printf("\tEstudiante eliminado del curso correctamente\n");
 		  }
 		  else
-			  printf("El estudiante no se encuentra en el curso [%i]\n",x);
+			  printf("\tEl estudiante no se encuentra en el curso [%i]\n",x);
 	  }
 	}
 	else
-		printf("El estudiante no se encuentra en ningun curso\n");
+		printf("\tEl estudiante no se encuentra en ningun curso\n");
 }
 
 void Eliminar_curso_persona(Personas *p){
@@ -1637,10 +1661,10 @@ void Eliminar_curso_persona(Personas *p){
 			Eliminar_persona_curso(&p->Record,cod);
 		}
 		else
-			printf("El estudiante de cedula [%i] no esta en el sistema\n",Ele);
+			printf("E\tl estudiante de cedula [%i] no esta en el sistema\n",Ele);
 	}
 	else
-		printf("No existen estudiantes en el sistema\n");
+		printf("\tNo existen estudiantes en el sistema\n");
 	system("pause");
 }
 
@@ -1720,8 +1744,9 @@ void Apro_Reti_Ina(char EstatusDelALumno)
 	char Estatus[12];
 	do{
 		printf("\n\tIntroduzca El estatus actual del Alumno(Normal,Inasistente,retirado)\n");
-		printf("NT:Solo SeConsidera el primer caracter:\n\t");
+		printf("\t:");
 		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
+		printf("\n\n\t Nt:solo se considera el primer caracter\n");
 		EstatusDelALumno=Estatus[0];
 	}while(validarStatus(EstatusDelALumno));
 }
@@ -1761,46 +1786,46 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 							ingresarDato(&nota,"Nota del estudiante en el curso",20,0);
 							Agregar_nota(&Listaper->Record,nota,codicur);
 							Apro_Reti_Ina(Listaper->Record->status);
-							printf("Estudiante de cedula: [%i] fue agregado a: CURSO[%i] con la nota:(%i/20 pts)\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);	
+							printf("\tEstudiante de c.i: [%i] agregado a: CURSO[%i] con nota:(%i/20 pts) y estatus: %c",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota,Listaper->Record->status);	
 							if((Listaper->Record->status=='N'||Listaper->Record->status=='n'))
-								printf("Habiendo cursado la materia\n");
+								printf("ormal\n\n");
 							else
 								if((Listaper->Record->status=='R'||Listaper->Record->status=='r'))
-								  printf("Habiendo retirado la materia\n");
+								  printf("etirado\n");
 							else 
 								if((Listaper->Record->status=='I'||Listaper->Record->status=='i'))
-								  printf("Quedando inasistente la materia\n");
+								  printf("nasistente\n");
 					}else
 						printf("\n\tEste estudiante ya aprobo esta materia en otro curso\n\n");
 				}
 			}
 			else
-				printf("El curso no existe\n");
+				printf("\tEl curso no existe\n");
 		 }else
-				{
-					printf("Este estudiante reprobo mas de 4 veces una materia\n");
-					printf("Por lo que ya no puede ser inscrito en el instituto\n");
-				}
+			printf("\tEste estudiante reprobo mas de 4 veces una materia\n\tPor lo que ya no puede ser inscrito en el instituto\n");
 		}else
-            printf("Ese estudiante no se encuentra en el sistema\n");
+            printf("\tEse estudiante no se encuentra en el sistema\n");
 	}else
-		printf("No se cumplen las condiciones para registrar a un estudiante en un curso\n");
+		printf("\tNo se cumplen las condiciones para registrar a un estudiante en un curso\n");
 	system("pause");
 }
 
-void Modificar_cod_persona(Participacion *p, Cursos **cu){
-	if(p){
+void Modificar_cod_persona(Participacion *p, Cursos **cu)
+{
+	if(p)
+	{
 		int nuevocod;
 		ingresarDato(&nuevocod," Codigo del nuevo curso",maxEntero,1);
-		if(Existe_codigo_curso(nuevocod,cu)){
+		if(Existe_codigo_curso(nuevocod,cu))
+		{
 			p->Codigo_del_curso=nuevocod;
-            printf("El estudiante ahora esta inscrito en el curso [%i]\n",nuevocod);
+            printf("\tEl estudiante ahora esta inscrito en el curso [%i]\n",nuevocod);
 		}
 		else
-			printf("El curso seleccionado no se encuentra en el sistema\n");
+			printf("\tEl curso seleccionado no se encuentra en el sistema\n");
 	}
 	else
-		printf("El estudiante no esta inscrito en ningun curso\n");
+		printf("\tEl estudiante no esta inscrito en ningun curso\n");
  system("pause");
 }
 
@@ -1831,7 +1856,7 @@ void Modificar_Curso_persona(Personas **persona, Cursos **c){
 				{
 					case '1'://Nota
 						ingresarDato(&Respaldo->Record->nota," Nueva nota del curso",20,0);
-						printf_s("Nota del curso [%i] modificada exitosamente a [%i]\n",Ele2,Respaldo->Record->nota);system("pause");
+						printf_s("\tNota del curso [%i] modificada exitosamente a [%i]\n",Ele2,Respaldo->Record->nota);system("pause");
 						break;
 
 					case '2'://Fecha de nacimiento
@@ -1839,22 +1864,22 @@ void Modificar_Curso_persona(Personas **persona, Cursos **c){
 						break;
 					default:
 						if (opciones_de_Modificacion[0]!='0')
-							{printf("\n\nEsta opcion no es valida\n");system("pause");break;}
+							{printf("\n\n\tEsta opcion no es valida\n");system("pause");break;}
 				}
 			}while (opciones_de_Modificacion[0]!='0');
             Respaldo->Record=aux;
 			Respaldo = *persona;
 		 }
 			else
-				printf("El estudiante no se encuentra en el curso [%i]",Ele2);
+				printf("\tEl estudiante no se encuentra en el curso [%i]",Ele2);
 		}
 	}
 	else if(!(*persona))
-		printf("No existen estudiantes para modificar sus cursos\n");
+		printf("\tNo existen estudiantes para modificar sus cursos\n");
 	else if(!(*c))
-		printf("No hay estudiantes en el sistema\n");
+		printf("\tNo hay estudiantes en el sistema\n");
 	else
-		printf("No hay ni personas ni cursos en el sistema\n");
+		printf("\tNo hay ni personas ni cursos en el sistema\n");
 	system("pause");
 }
 
@@ -1966,10 +1991,10 @@ void calificaciones(Participacion* calificacion)
 {if (calificacion!=NULL)
 		{
 			Participacion* inscripcion=calificacion;
-			printf("\n\t    inscrito en [Curso] (nota)\n");
+			printf("\n\t    inscrito en [Curso] (nota) 'Status'\n");
 			while (inscripcion)
 			{
-				printf("\t\t\t[%d] (%i/20)\n",inscripcion->Codigo_del_curso,inscripcion->nota);
+				printf("\t\t\t[%d] (%i/20)  '%c'\n",inscripcion->Codigo_del_curso,inscripcion->nota,inscripcion->status);
 				inscripcion=inscripcion->prx;
 			}printf("\n");
 		}
