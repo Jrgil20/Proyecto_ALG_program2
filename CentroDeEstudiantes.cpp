@@ -87,7 +87,6 @@ void Eliminar_curso_persona(Personas *);
 void Eliminar_persona_curso(Participacion **, int x);
 int Aprob(Participacion *,Cursos *, int ,int ,int *);
 void Agregar_nota(Participacion **, int,int);
-void Apro_Reti_Ina(char c[]);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void Modificar_Curso_persona(Personas **, Cursos **c);
 void Modificar_cod_persona(Participacion *, Cursos **);
@@ -101,6 +100,7 @@ void C_Aprobados(Personas*,Cursos*);
 void C_Cursos(Materias* ,Cursos*,Personas*);
 void C_CursosPeriodo(Cursos*,Personas*);
 void C_Alumno(Personas*);
+char IngresarEstatus();
 int validarStatus(char);
 int isdigit(char);
 int bisiesto (year);
@@ -154,7 +154,8 @@ int main ()
 		printf("\n 1- MANTENIMIENTO\n 2- CONTROL DE ESTUDIOS\n 3- CONSULTAS\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 		fflush(stdin);fgets(opciones,2,stdin);cambio(opciones);fflush(stdin);
 		if(opciones[1]!='\0')
-			printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones[0],opciones);						
+			printf(" \n Esta opcion no es valida\n\n");	
+		else
 		switch(opciones[0])
 		{
 			case '1'://Mantenimiento del sistema
@@ -168,6 +169,9 @@ int main ()
 					printf("Ruta = %s \n", UbicacionMenu);
 					printf("\n 1- Materias\n 2- Cursos\n 3- Personas\n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 					fflush(stdin);fgets(opciones_mantenimiento,2,stdin);cambio(opciones_mantenimiento);fflush(stdin);
+					if(opciones_mantenimiento[1]!='\0')
+						printf(" \n Esta opcion no es valida\n\n");	
+					else
 					switch(opciones_mantenimiento[0])
 					{
 						case '1':
@@ -182,8 +186,9 @@ int main ()
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Materia,2,stdin);cambio(opciones_mantenimiento_Materia);fflush(stdin);
 								if(opciones_mantenimiento_Materia[1]!='\0')
-									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Materia[0],opciones_mantenimiento_Materia);
-								switch(opciones_mantenimiento_Materia[0])
+									printf(" \n Esta opcion no es valida\n\n");	
+								else
+									switch(opciones_mantenimiento_Materia[0])
 									{
 										case '1'://Agregar Materia	
 											Agregar_Materia(&Materia); break;
@@ -218,7 +223,8 @@ int main ()
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Cursos,2,stdin);cambio(opciones_mantenimiento_Cursos);fflush(stdin);
 								if(opciones_mantenimiento_Cursos[1]!='\0')
-									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Cursos[0],opciones_mantenimiento_Cursos);
+									printf(" \n Esta opcion no es valida\n\n");	
+								else
 								switch(opciones_mantenimiento_Cursos[0])
 								{
 									case '1'://Agregar
@@ -254,7 +260,8 @@ int main ()
 								printf("\n 1- Agregar\n 2- Modificar\n 3- Consultar\n 4- Eliminar\n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 								fflush(stdin);fgets(opciones_mantenimiento_Personas,2,stdin);cambio(opciones_mantenimiento_Personas);fflush(stdin);
 								if(opciones_mantenimiento_Personas[1]!='\0')
-									printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_mantenimiento_Personas[0],opciones_mantenimiento_Personas);
+									printf(" \n Esta opcion no es valida\n\n");	
+								else
 								switch(opciones_mantenimiento_Personas[0])
 								{
 									case '1'://Agregar
@@ -302,7 +309,8 @@ int main ()
 					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
 					if(opciones_control_estudios[1]!='\0')
-						printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_control_estudios[0],opciones_control_estudios);
+						printf(" \n Esta opcion no es valida\n\n");	
+					else
 					switch(opciones_control_estudios[0])
 					{
 						case '1'://Agregar alumnos
@@ -341,7 +349,8 @@ int main ()
 					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-cursos de cierto Semestre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					if(opciones_consultas[1]!='\0')
-						printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_consultas[0],opciones_consultas);
+						printf(" \n Esta opcion no es valida\n\n");	
+					else
 					switch(opciones_consultas[0])
 					{
 						case '1'://Dado un nombre de curso(materia ya que los cursos no tienen nombre) buscar su c�digo.
@@ -552,7 +561,8 @@ void Modificar_Materia(Materias **materia)
 				printf(" 1- Nombre de la materia\n 2- Descripcion de la materia\n 3- Semestre de la materia\n 4- Creditos de la materia\n\n 0- SALIR\n\n Escriba su opcion (0-4) =  ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
 				if(opciones_de_Modificacion[1]!='\0')
-					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
+					printf(" \n Esta opcion no es valida\n\n");	
+				else
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nombre
@@ -624,7 +634,8 @@ void Modificar_Curso(Cursos **curso)
 				printf(" 1- Anio del curso\n 2- Lapso del curso\n 0- SALIR\n\n Escriba su opcion (0-2) = ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
 				if(opciones_de_Modificacion[1]!='\0')
-					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
+					printf(" \n Esta opcion no es valida\n\n");	
+				else
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Anio
@@ -671,7 +682,8 @@ void Modificar_Persona(Personas **persona)
 				printf(" 1- Nombre y apellido\n 2- Fecha de nacimiento\n 3- Direccion\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
 				if(opciones_de_Modificacion[1]!='\0')
-					printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_de_Modificacion[0],opciones_de_Modificacion);
+					printf(" \n Esta opcion no es valida\n\n");	
+				else
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nombre y apellido
@@ -987,7 +999,8 @@ void Consultar_materia(Materias *Las_materias)
 			printf(" 1- Todas las materias\n 2- Materias Del Semestre \n 3- Nombres que coinciden\n 4- Codigo \n\n 0- SALIR\n\n Escriba su opcion (0-4) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
 			if(opciones_Consulta[1]!='\0')
-				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_Consulta[0],opciones_Consulta);
+				printf(" \n Esta opcion no es valida\n\n");	
+			else
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1090,7 +1103,8 @@ void Consultar_curso(Cursos *Los_cursos)
 			printf(" 1- Todas los cursos\n 2- Cursos de cierto año \n 3- Cursos de cierto lapso\n 4- Cursos de cierta materia\n 5- Curso especifico \n\n 0- SALIR\n\n Escriba su opcion (0-5) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
 			if(opciones_Consulta[1]!='\0')
-				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s \n\n",opciones_Consulta[0],opciones_Consulta);
+				printf(" \n Esta opcion no es valida\n\n");	
+			else
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1171,7 +1185,8 @@ void Consultar_Personas(Personas *Las_personas)
 			printf(" 1- Todas las personas\n 2- Nombres que coinciden\n 3- Cedula \n\n 0- SALIR\n\n Escriba su opcion (0-3) = ");
 			fflush(stdin);fgets(opciones_Consulta,2,stdin);cambio(opciones_Consulta);fflush(stdin);
 			if(opciones_Consulta[1]!='\0')
-				printf(" \n Nt: Solo se esta considerando el primer caracter %c de %s ",opciones_Consulta[0],opciones_Consulta);
+				printf(" \n Esta opcion no es valida\n\n");	
+			else
 			switch(opciones_Consulta[0])
 			{
 				case '1':
@@ -1739,16 +1754,19 @@ void Agregar_nota(Participacion **p, int n,int c){
 	*p=aux;
 }
 
-void Apro_Reti_Ina(char EstatusDelALumno)
+char IngresarEstatus()
 {
 	char Estatus[12];
-	do{
+	while(true)
+	{
 		printf("\n\tIntroduzca El estatus actual del Alumno(Normal,Inasistente,retirado)\n");
 		printf("\t:");
 		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
-		printf("\n\n\t Nt:solo se considera el primer caracter\n");
-		EstatusDelALumno=Estatus[0];
-	}while(validarStatus(EstatusDelALumno));
+		if(Estatus[1]!='\0')
+		printf("\n\t Nt:solo se considera el primer caracter %c de %s\n",Estatus[0],Estatus);
+		if(validarStatus(Estatus[0]))
+			return Estatus[0];
+	}
 }
 
 int validarStatus(char stats)
@@ -1785,7 +1803,7 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 					{
 							ingresarDato(&nota,"Nota del estudiante en el curso",20,0);
 							Agregar_nota(&Listaper->Record,nota,codicur);
-							Apro_Reti_Ina(Listaper->Record->status);
+							Listaper->Record->status=IngresarEstatus();
 							printf("\tEstudiante de c.i: [%i] agregado a: CURSO[%i] con nota:(%i/20 pts) y estatus: %c",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota,Listaper->Record->status);	
 							if((Listaper->Record->status=='N'||Listaper->Record->status=='n'))
 								printf("ormal\n\n");
@@ -1852,6 +1870,9 @@ void Modificar_Curso_persona(Personas **persona, Cursos **c){
 				printf("\t Que desea modificar?\n\n");
 				printf(" 1- Nota en el curso\n 2- Codigo del curso \n 0- SALIR\n\n Escriba su opcion (0-2) = ");
 				fflush(stdin);fgets(opciones_de_Modificacion,2,stdin);cambio(opciones_de_Modificacion);fflush(stdin);
+				if(opciones_de_Modificacion[1]!='\0')
+					printf(" \n Esta opcion no es valida\n\n");	
+				else
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nota
