@@ -87,7 +87,6 @@ void Eliminar_curso_persona(Personas *);
 void Eliminar_persona_curso(Participacion **, int x);
 int Aprob(Participacion *,Cursos *, int ,int ,int *);
 void Agregar_nota(Participacion **, int,int);
-void Apro_Reti_Ina(char c[]);
 void Agregar_Curso_persona(Personas *,Cursos *,Materias *);
 void Modificar_Curso_persona(Personas **, Cursos **c);
 void Modificar_cod_persona(Participacion *, Cursos **);
@@ -101,6 +100,7 @@ void C_Aprobados(Personas*,Cursos*);
 void C_Cursos(Materias* ,Cursos*,Personas*);
 void C_CursosPeriodo(Cursos*,Personas*);
 void C_Alumno(Personas*);
+char IngresarEstatus();
 int validarStatus(char);
 int isdigit(char);
 int bisiesto (year);
@@ -1754,16 +1754,19 @@ void Agregar_nota(Participacion **p, int n,int c){
 	*p=aux;
 }
 
-void Apro_Reti_Ina(char EstatusDelALumno)
+char IngresarEstatus()
 {
 	char Estatus[12];
-	do{
+	while(true)
+	{
 		printf("\n\tIntroduzca El estatus actual del Alumno(Normal,Inasistente,retirado)\n");
 		printf("\t:");
 		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
-		printf("\n\n\t Nt:solo se considera el primer caracter\n");
-		EstatusDelALumno=Estatus[0];
-	}while(!validarStatus(EstatusDelALumno));
+		if(Estatus[1]!='\0')
+		printf("\n\t Nt:solo se considera el primer caracter %c de %s\n",Estatus[0],Estatus);
+		if(validarStatus(Estatus[0]))
+			return Estatus[0];
+	}
 }
 
 int validarStatus(char stats)
@@ -1800,7 +1803,7 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 					{
 							ingresarDato(&nota,"Nota del estudiante en el curso",20,0);
 							Agregar_nota(&Listaper->Record,nota,codicur);
-							Apro_Reti_Ina(Listaper->Record->status);
+							Listaper->Record->status=IngresarEstatus();
 							printf("\tEstudiante de c.i: [%i] agregado a: CURSO[%i] con nota:(%i/20 pts) y estatus: %c",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota,Listaper->Record->status);	
 							if((Listaper->Record->status=='N'||Listaper->Record->status=='n'))
 								printf("ormal\n\n");
