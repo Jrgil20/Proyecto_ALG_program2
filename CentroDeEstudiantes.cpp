@@ -18,7 +18,7 @@ struct Participacion
 {
 	Codigo_curso Codigo_del_curso;	
 	int nota;
-	char ap[2];
+	char status;
 	Participacion *prx;
 };
 
@@ -101,6 +101,7 @@ void C_Aprobados(Personas*,Cursos*);
 void C_Cursos(Materias* ,Cursos*,Personas*);
 void C_CursosPeriodo(Cursos*,Personas*);
 void C_Alumno(Personas*);
+int validarStatus(char);
 int isdigit(char);
 int bisiesto (year);
 int LimitarCaracteres (char*,int);
@@ -1649,10 +1650,10 @@ int Inscribe_o_no(Cursos *c,Participacion *p){
 	 while(p){
 		 int n=Regresa_cod_mat(c,p->Codigo_del_curso);
 		  Participacion *q=p->prx;
-		 if((p->nota <= 9)&&(strcmp(p->ap,"N")==0))
+		  if((p->nota <= 9)&&(p->status=='N'||p->status=='n'))
 			 cont+=1;
 		 while(q){
-			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9)&&(strcmp(q->ap,"N")==0))
+			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9)&&(p->status=='N'||p->status=='n'))
 			   cont+=1;
 			 q=q->prx;
 		 }
@@ -1691,7 +1692,7 @@ int Aprob(Participacion *AUX,Cursos *Copia, int e,int codicur,int *cont){
 						if(AUX->Codigo_del_curso==Copia->Codigo_del_curso)
 							if(Copia->Codigo_de_la_Materia==e)
 							{
-								if((AUX->nota>9)&&(strcmp(AUX->ap,"N")==0))
+								if((AUX->nota>9)&&(AUX->status=='N'||AUX->status=='n'))
 									c2++;
 							}
 						Copia=Copia->prx;
@@ -1714,17 +1715,22 @@ void Agregar_nota(Participacion **p, int n,int c){
 	*p=aux;
 }
 
-void Apro_Reti_Ina(char c[]){
+void Apro_Reti_Ina(char EstatusDelALumno)
+{
+	char Estatus[12];
 	do{
-		system("cls");
-		printf("Introduzca N para establecer que el alumno curso normalmente la materia\n");
-		printf("Introduzca R para establecer que el alumno retiro la materia\n ");
-		printf("Introduzca I para establecer que el alumno esta inasistente la materia\n ");
-		fflush(stdin);
-		fgets(c,2,stdin);
-		cambio(c);
-		fflush(stdin);
-	}while((((strcmp(c,"N")!=0)&&(strcmp(c,"R")!=0))&&(strcmp(c,"I")!=0)));
+		printf("\n\tIntroduzca El estatus actual del Alumno(Normal,Inasistente,retirado)\n");
+		printf("NT:Solo SeConsidera el primer caracter:\n\t");
+		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
+		EstatusDelALumno=Estatus[0];
+	}while(validarStatus(EstatusDelALumno));
+}
+
+int validarStatus(char stats)
+{
+	if(stats=='N'||stats=='n'||stats=='I'||stats=='i'||stats=='R'||stats=='r')
+		return true;
+	return false;
 }
 
 void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *listamat)
@@ -1754,13 +1760,15 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 					{
 							ingresarDato(&nota,"Nota del estudiante en el curso",20,0);
 							Agregar_nota(&Listaper->Record,nota,codicur);
-							Apro_Reti_Ina(Listaper->Record->ap);
+							Apro_Reti_Ina(Listaper->Record->status);
 							printf("Estudiante de cedula: [%i] fue agregado a: CURSO[%i] con la nota:(%i/20 pts)\n",Listaper->cedula,Listaper->Record->Codigo_del_curso,Listaper->Record->nota);	
-							if(strcmp(Listaper->Record->ap,"N")==0)
+							if((Listaper->Record->status=='N'||Listaper->Record->status=='n'))
 								printf("Habiendo cursado la materia\n");
-							else if(strcmp(Listaper->Record->ap,"R")==0)
+							else
+								if((Listaper->Record->status=='R'||Listaper->Record->status=='r'))
 								  printf("Habiendo retirado la materia\n");
-							else if(strcmp(Listaper->Record->ap,"I")==0)
+							else 
+								if((Listaper->Record->status=='I'||Listaper->Record->status=='i'))
 								  printf("Quedando inasistente la materia\n");
 					}else
 						printf("\n\tEste estudiante ya aprobo esta materia en otro curso\n\n");
@@ -2007,7 +2015,7 @@ int Exportar_Personas(Personas *nodos,char ruta[])
 			Participacion *aux=nodos->Record;
 			while (aux)
 			{
-				fprintf(Nuevo_archivo,",%i,%i",aux->Codigo_del_curso,aux->nota);
+				fprintf(Nuevo_archivo,",%i,%i,%c",aux->Codigo_del_curso,aux->nota,aux->status);
 				aux=aux->prx;
 			}
 		}
@@ -2229,6 +2237,15 @@ int Importar_Personas(Personas **nodos,Cursos *curso,char ruta[])
 				}	
 				else
 					NuevaInscripcion->nota=atoi(Elemento);
+
+				Elemento = strtok(NULL, ",");cambio(Elemento);
+				if ( !validarStatus(Elemento[0]) ) 
+				{
+					printf("\t||Se encontro un error en el Status ||\n");
+					ErrorSubNodo++;
+				}	
+				else
+					NuevaInscripcion->status=Elemento[0];
 
 				if (ErrorSubNodo==0)
 				{
