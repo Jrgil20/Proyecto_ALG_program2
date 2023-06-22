@@ -79,9 +79,9 @@ void Modificar_Persona(Personas**);
 void Consultar_materia(Materias*);
 void Consultar_curso(Cursos*);
 void Consultar_Personas(Personas*);
-void Eliminar_curso_materia (Cursos**,int);
-void Eliminar_materia (Materias**,Cursos **);
-void Eliminar_curso (Cursos**);
+void Eliminar_curso_materia (Cursos**,int,Personas *);
+void Eliminar_materia (Materias**,Cursos **,Personas *);
+void Eliminar_curso (Cursos**,Personas *);
 void Eliminar_persona(Personas**);
 void Eliminar_curso_persona(Personas *);
 void Eliminar_persona_curso(Participacion **, int x);
@@ -200,7 +200,7 @@ int main ()
 											Consultar_materia(Materia);break;
 										
 										case '4'://Eliminar
-											Eliminar_materia(&Materia,&Curso);break;
+											Eliminar_materia(&Materia,&Curso,Persona);break;
 
 										default:
 											if (opciones_mantenimiento_Materia[0]!='0')
@@ -208,7 +208,11 @@ int main ()
 									}
 							}while (opciones_mantenimiento_Materia[0]!='0');
 							if (Exportar_Materias(Materia,Ruta));
-							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
+							else printf("\t Se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
+							if (Exportar_Cursos(Curso,Ruta));
+							else printf("\t Se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
+							if (Exportar_Personas(Persona,Ruta));
+							else printf("\t Se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 							break;
 						}
 						case '2':
@@ -237,7 +241,7 @@ int main ()
 										Consultar_curso(Curso);break;
 
 									case '4'://Eliminar
-										Eliminar_curso(&Curso);break;
+										Eliminar_curso(&Curso,Persona);break;
 
 									default:
 										if (opciones_mantenimiento_Cursos[0]!='0')
@@ -245,7 +249,9 @@ int main ()
 								}
 							}while (opciones_mantenimiento_Cursos[0]!='0');
 							if (Exportar_Cursos(Curso,Ruta));
-							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
+							else printf("\t Se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
+							if (Exportar_Personas(Persona,Ruta));
+							else printf("\t Se genero un error al exportar las personas, no se guardo en memoria secundaria\n");
 							break;
 						}
 						case '3':
@@ -1485,7 +1491,7 @@ void C_Alumno(Personas* consulta)
 	system("Pause");
 }
 
-void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
+void Eliminar_materia (Materias **Las_materias, Cursos **El_curso,Personas *Las_Personas)
 {
 	int codigo_mat,cont=0;
 	if (*Las_materias)
@@ -1493,7 +1499,7 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 		Materias *consulta=*Las_materias, *temp=NULL;
 		ingresarDato(&codigo_mat,"Codigo de materia a eliminar",maxEntero,1);
 		if(*El_curso)
-			Eliminar_curso_materia(El_curso,codigo_mat);
+			Eliminar_curso_materia(El_curso,codigo_mat,Las_Personas);
 		if ((consulta->Codigo_de_la_Materia) == codigo_mat)
 		{
 			temp = *Las_materias;
@@ -1516,13 +1522,13 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso)
 					consulta = consulta->prx;
 			}
 			if(cont != 1)
-			 printf("\n\tLa materia [%i] no se encuentra\n", codigo_mat);
+				{printf("\n\tLa materia [%i] no se encuentra\n", codigo_mat);system("pause");}
 		}
 	}else
 		{printf("\n\tNO HAY MATERIAS PARA ELIMINAR\n");system("pause");}
 }
 
-void Eliminar_curso (Cursos **Los_cursos)
+void Eliminar_curso (Cursos **Los_cursos,Personas *p)
 {
 	int codigo_mat,cont=0;
 	if (*Los_cursos)
@@ -1531,6 +1537,11 @@ void Eliminar_curso (Cursos **Los_cursos)
 		ingresarDato(&codigo_mat,"Codigo del curso a eliminar",maxEntero,1);
 		if ((consulta->Codigo_del_curso) == codigo_mat)
 		{
+			while(p)
+			 {
+				 Eliminar_persona_curso(&(p->Record),codigo_mat);
+				 p=p->prx;
+			 }
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
 			delete temp;
@@ -1540,7 +1551,12 @@ void Eliminar_curso (Cursos **Los_cursos)
 			{
 				if (consulta->prx->Codigo_del_curso == codigo_mat)
 				{
-					temp = consulta->prx;
+                  while(p)
+			      {
+				    Eliminar_persona_curso(&(p->Record),codigo_mat);
+				    p=p->prx;
+			        }					
+                     temp = consulta->prx;
 					consulta->prx = temp->prx;
 					delete temp;
 					cont +=1;
@@ -1605,23 +1621,38 @@ void Eliminar_persona (Personas **Las_personas)
 		{printf("\n\tNO HAY PERSONAS PARA ELIMINAR\n");system("pause");}
 }
 
-void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat)
+void Eliminar_curso_materia (Cursos **Los_cursos, int codigo_mat, Personas *p)
 {
 	if (*Los_cursos)
 	{
 		Cursos *consulta=*Los_cursos, *temp=NULL;
+		Personas *aux=p;
 		if ((consulta->Codigo_de_la_Materia) == codigo_mat)
 		{
+			while(aux)
+			{
+				int ch=consulta->Codigo_del_curso;
+				Eliminar_persona_curso(&(aux->Record),ch);
+				aux=aux->prx;
+		      } 
 			temp = *Los_cursos;
 			*Los_cursos = (*Los_cursos)->prx;
 			delete temp;
-			Eliminar_curso_materia (Los_cursos, codigo_mat);
+			Eliminar_curso_materia (Los_cursos, codigo_mat,p);
 		}else
 		{
+			Personas *o=aux;
 			while(consulta->prx)
 			{
 				if (consulta->prx->Codigo_de_la_Materia == codigo_mat)
 				{
+					while(aux)
+			        {
+				     int ch=consulta->prx->Codigo_del_curso;
+				     Eliminar_persona_curso(&(aux->Record),ch);
+					 aux=aux->prx;
+		             } 
+					aux=o;
 					temp = consulta->prx;
 					consulta->prx = temp->prx;
 					delete temp;
@@ -1838,6 +1869,7 @@ void Modificar_cod_persona(Participacion *p, Cursos **cu)
 		{
 			p->Codigo_del_curso=nuevocod;
             printf("\tEl estudiante ahora esta inscrito en el curso [%i]\n",nuevocod);
+			p->status=IngresarEstatus();
 		}
 		else
 			printf("\tEl curso seleccionado no se encuentra en el sistema\n");
@@ -1876,8 +1908,16 @@ void Modificar_Curso_persona(Personas **persona, Cursos **c){
 				switch(opciones_de_Modificacion[0])
 				{
 					case '1'://Nota
-						ingresarDato(&Respaldo->Record->nota," Nueva nota del curso",20,0);
-						printf_s("\tNota del curso [%i] modificada exitosamente a [%i]\n",Ele2,Respaldo->Record->nota);system("pause");
+						if((Respaldo->Record->status == 'N')||(Respaldo->Record->status == 'n'))
+						 {
+						  ingresarDato(&Respaldo->Record->nota," Nueva nota del curso",20,0);
+						  printf_s("\tNota del curso [%i] modificada exitosamente a [%i]\n",Respaldo->Record->Codigo_del_curso,Respaldo->Record->nota);system("pause");
+						 }
+						else
+						{
+							printf("Este estudiante no curso normalmente la materia, por lo que su nota no se modificara\n");
+							system("pause");
+						}
 						break;
 
 					case '2'://Fecha de nacimiento
