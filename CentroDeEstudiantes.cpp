@@ -209,6 +209,10 @@ int main ()
 							}while (opciones_mantenimiento_Materia[0]!='0');
 							if (Exportar_Materias(Materia,Ruta));
 							else printf("\t se genero un error al exportar las materias, no se guardo en memoria secundaria\n");
+							if (Exportar_Cursos(Curso,Ruta));
+							else printf("\t se genero un error al exportar los Cursos no se guardo en memoria secundaria\n");
+							if (Exportar_Personas(Persona,Ruta));
+							else printf("\t se genero un error al exportar las Personas, no se guardo en memoria secundaria\n");
 							break;
 						}
 						case '2':
@@ -245,7 +249,9 @@ int main ()
 								}
 							}while (opciones_mantenimiento_Cursos[0]!='0');
 							if (Exportar_Cursos(Curso,Ruta));
-							else printf("\t se genero un error al exportar los cursos, no se guardo en memoria secundaria\n");
+							else printf("\t se genero un error al exportar los Cursos no se guardo en memoria secundaria\n");
+							if (Exportar_Personas(Persona,Ruta));
+							else printf("\t se genero un error al exportar las Personas, no se guardo en memoria secundaria\n");
 							break;
 						}
 						case '3':
