@@ -312,7 +312,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU CONTROL DE ESTUDIOS");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "CONTROL DE ESTUDIOS/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- *Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
+					printf(" 1- Agregar alumnos \n 2- Modificar alumnos \n 3- Eliminar alumnos\n\n 0- SALIR\n\n Escriba su opcion (0-3) =  ");
 					fflush(stdin);fgets(opciones_control_estudios,2,stdin);cambio(opciones_control_estudios);fflush(stdin);
 					if(opciones_control_estudios[1]!='\0')
 						printf(" \n Esta opcion no es valida\n\n");	
@@ -1500,11 +1500,14 @@ void Eliminar_materia (Materias **Las_materias, Cursos **El_curso,Personas *Las_
 		ingresarDato(&codigo_mat,"Codigo de materia a eliminar",maxEntero,1);
 		if(*El_curso)
 			Eliminar_curso_materia(El_curso,codigo_mat,Las_Personas);
+		system("cls");
 		if ((consulta->Codigo_de_la_Materia) == codigo_mat)
 		{
 			temp = *Las_materias;
 			*Las_materias = (*Las_materias)->prx;
 			delete temp;
+			printf("\n\tMATERIA ELIMINADA CORRECTAMENTE!\n");
+		        system("pause");
 		}else
 		{
 			while(consulta->prx)
@@ -1540,6 +1543,7 @@ void Eliminar_curso (Cursos **Los_cursos,Personas *p)
 			while(p)
 			 {
 				 Eliminar_persona_curso(&(p->Record),codigo_mat);
+				 system("cls");
 				 p=p->prx;
 			 }
 			temp = *Los_cursos;
@@ -1554,9 +1558,10 @@ void Eliminar_curso (Cursos **Los_cursos,Personas *p)
                   while(p)
 			      {
 				    Eliminar_persona_curso(&(p->Record),codigo_mat);
+				    system("cls");
 				    p=p->prx;
 			        }					
-                     temp = consulta->prx;
+                                        temp = consulta->prx;
 					consulta->prx = temp->prx;
 					delete temp;
 					cont +=1;
