@@ -1412,11 +1412,11 @@ void C_Cursos(Materias* Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 			Inscritoencurso=Aux->Record;
 			while(Inscritoencurso)
 			{
-				if((Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)&&((Inscritoencurso->status == 'N'))||(Inscritoencurso->status == 'n'))
+				if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
 				{
 					Inscritos++;
 					FormatoPersona(Aux,false);
-					printf("\t Nota: %i\n\n",Inscritoencurso->nota);
+					printf("\t Nota: %i  Estatus: %c\n\n",Inscritoencurso->nota,Inscritoencurso->status);
 				}
 				Inscritoencurso=Inscritoencurso->prx;
 			}
