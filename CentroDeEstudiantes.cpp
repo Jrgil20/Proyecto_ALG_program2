@@ -1725,10 +1725,10 @@ int Inscribe_o_no(Cursos *c,Participacion *p){
 	 while(p){
 		 int n=Regresa_cod_mat(c,p->Codigo_del_curso);
 		  Participacion *q=p->prx;
-		  if((p->nota <= 9)&&(p->status=='N'||p->status=='n'))
+		  if(((p->nota <= 9)&&(p->status=='N'||p->status=='n'))||(p->status=='I'||p->status=='i'))
 			 cont+=1;
 		 while(q){
-			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9)&&(p->status=='N'||p->status=='n'))
+			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&((q->nota <= 9)&&(p->status=='N'||p->status=='n')||(p->status=='I'||p->status=='i')||(p->status=='I'||p->status=='i')))
 			   cont+=1;
 			 q=q->prx;
 		 }
