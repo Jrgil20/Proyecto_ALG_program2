@@ -94,11 +94,11 @@ int Regresa_cod_mat(Cursos *, int x);
 int Inscribe_o_no(Cursos *, Participacion *);
 void C_NombreMateria(Materias* ,Cursos* );
 void c_Materia(Materias*,Cursos*,Personas*);
-void c_CursosDe(Materias*,Cursos*,Personas*);
+void c_CursosDePeriodo(Materias*,Cursos*,Personas*);
 void C_NombreAlumno(Personas*);
 void C_Aprobados(Personas*,Cursos*);
 void C_Cursos(Materias* ,Cursos*,Personas*);
-void C_CursosPeriodo(Cursos*,Personas*);
+void C_CursosDeAnyoLapso(Materias*,Cursos*,Personas*);
 void C_Alumno(Personas*);
 char IngresarEstatus();
 int validarStatus(char);
@@ -352,7 +352,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-Cursos de cierto semestre\n 4-Datos de materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-cursos de cierto a%co y lapso\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ",164);
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					if(opciones_consultas[1]!='\0')
 						printf(" \n Esta opcion no es valida\n\n");	
@@ -370,8 +370,8 @@ int main ()
 							break;
 
 						case '3'://Dado un anyo y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-							printf("\n\tDado un semestre mostrar cursos \n\n");
-							c_CursosDe(Materia,Curso,Persona);
+							printf("\n\tDado un a%co(AAAA) y lapso mostrar cursos \n\n",164);
+							C_CursosDeAnyoLapso(Materia,Curso,Persona);
 							break;
 
 						case '4': //Dado un codigo de materia mostrar todos los cursos que la han dictado (nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
@@ -390,9 +390,9 @@ int main ()
 							system("Pause");
 							break;
 
-						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
+						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo(Semestre) dado.
 							printf("\n\ttTodos los cursos de un periodo con personas y notas \n\n");
-							C_CursosPeriodo(Curso,Persona);
+							c_CursosDePeriodo(Materia,Curso,Persona);
 							break;
 
 						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
@@ -1253,7 +1253,7 @@ void C_NombreAlumno(Personas*consulta)
 void c_Materia(Materias*M,Cursos*cursosDados,Personas*PersonasInscritas)
 {
 	Personas *Aux;Participacion *Inscritoencurso; int CodigoDado,cursosdelamateria=0,Inscritos=0,Aprobados=0;
-	ingresarDato(&CodigoDado,"Codio de la materia",maxEntero,0);
+	ingresarDato(&CodigoDado,"Codigo de la materia",maxEntero,0);
 	while (M && M->Codigo_de_la_Materia!=CodigoDado)
 		M=M->prx;
 	if(M)
@@ -1297,7 +1297,7 @@ void c_Materia(Materias*M,Cursos*cursosDados,Personas*PersonasInscritas)
 	system("Pause");
 }
 
-void c_CursosDe(Materias*Mats,Cursos*cursosDados,Personas*PersonasInscritas)
+void c_CursosDePeriodo(Materias*Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 {
 	Materias*MATERIASDELSEMESTRE=Mats;Personas *Aux;Participacion *Inscritoencurso; int CursosDeLaFecha=0,Inscritos,Aprobados,SemestreDado;
 	SemestreDado=Verificar_Semestre();
@@ -1431,47 +1431,52 @@ void C_Cursos(Materias* Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 	system("Pause");
 }
 
-void C_CursosPeriodo(Cursos*cursosDados,Personas*PersonasInscritas)
+void C_CursosDeAnyoLapso(Materias* Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 {
-	Personas *Aux;Participacion *Inscritoencurso; int Inscritos,ComienzoDelPeriodo,FinDelPeriodo,DelPeriodo=0;
-	ingresarDato(&ComienzoDelPeriodo,"Comienzo Del periodo",2100,1900);
-	ingresarDato(&FinDelPeriodo,"Fin Del periodo",2100,1900);
+	Personas *Aux;Participacion *Inscritoencurso; int CursosDeLaFecha=0,Inscritos,Aprobados,AAAA,lapso;
+	ingresarDato(&AAAA,"AAAA: ",2100,1900);
+	ingresarDato(&lapso,"Lapso: ",3,1);
+	printf("\n\tCursos del lapso %i en %i:\n\n\n",lapso,AAAA);
 	while (cursosDados)
 	{
-		if(cursosDados->AAAA>=ComienzoDelPeriodo && cursosDados->AAAA<=FinDelPeriodo)
+		if(cursosDados->AAAA==AAAA && cursosDados->lapso==lapso)
 		{
-			DelPeriodo++;
-			printf("\tCurso=\n\n");
+			Materias *M=Mats;
+			HC();CursosDeLaFecha++;
 			FormatoCurso(cursosDados);
+			if (M)
+				while (M)
+				{
+					if(M->Codigo_de_la_Materia==cursosDados->Codigo_de_la_Materia)
+					{	
+						printf("\tMateria del curso=\n\n");FormatoMateria(M);
+						break;
+					}
+					M=M->prx;
+				}
 			Aux=PersonasInscritas;
-			Inscritos=0;
-			printf("\tPersonas del curso=\n\n");
+			Inscritos=0;Aprobados=0;
 			while(Aux)
 			{
 				Inscritoencurso=Aux->Record;
 				while(Inscritoencurso)
-				{
-					if((Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)&&((Inscritoencurso->status =='N')||(Inscritoencurso->status == 'n')))
 					{
-						Inscritos++;
-						FormatoPersona(Aux,false);
-						printf("\t Nota: %i\n\n",Inscritoencurso->nota);
+						if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+							{
+								Inscritos++;
+								if(Inscritoencurso->nota>9)
+									Aprobados++;
+							}
+						Inscritoencurso=Inscritoencurso->prx;
 					}
-					Inscritoencurso=Inscritoencurso->prx;
-				}
 				Aux=Aux->prx;
 			}
-			if(Inscritos)
-				printf("\n\t *Total de inscritos: %i\n\n\n",Inscritos);
-			else
-				printf("\t Este curso no tiene personas inscritas\n\n");
+			printf("\n\t *Inscritos: %i *Aprobados: %i *Reprobados: %i\n\n\n",Inscritos,Aprobados,Inscritos-Aprobados);
 		}
 		cursosDados=cursosDados->prx;
 	}
-	if (DelPeriodo==0)
-	{
-		printf("\n\tNo hay cursos en este periodo\n\n");
-	}
+	if (CursosDeLaFecha==0)
+		printf("\tNo hay cursos en la fecha solicitada\n\n");
 	system("Pause");
 }
 
@@ -1725,10 +1730,10 @@ int Inscribe_o_no(Cursos *c,Participacion *p){
 	 while(p){
 		 int n=Regresa_cod_mat(c,p->Codigo_del_curso);
 		  Participacion *q=p->prx;
-		  if((p->nota <= 9)&&(p->status=='N'||p->status=='n'))
+		  if(n == Regresa_cod_mat(c,p->Codigo_del_curso)&&(((p->nota <= 9)&&(p->status=='N'||p->status=='n'))||(p->status=='I'||p->status=='i')))
 			 cont+=1;
 		 while(q){
-			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(q->nota <= 9)&&(p->status=='N'||p->status=='n'))
+			 if((n == Regresa_cod_mat(c,q->Codigo_del_curso))&&(((q->nota <= 9)&&(q->status=='N'||q->status=='n'))||(q->status=='I'||q->status=='i')))
 			   cont+=1;
 			 q=q->prx;
 		 }
