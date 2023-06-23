@@ -352,7 +352,7 @@ int main ()
 					system("cls");
 					Encabezado("MENU DE REPORTES");char UbicacionMenu[80]="MENU PRINCIPAL/"; strcat(UbicacionMenu, "REPORTES/");
 					printf("Ruta = %s \n", UbicacionMenu);
-					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-cursos de cierto Semestre\n 4-Datos de Materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
+					printf(" \n\n 1-Buscar codigos por nombre\n 2-Buscar cedula por nombre\n 3-Cursos de cierto semestre\n 4-Datos de materia \n 5-Todos los cursos \n 6-Alumnos aprobados en una materia \n 7-Cursos de un periodo \n 8-Notas por cedula\n 0- SALIR\n\n  ");
 					fflush(stdin);fgets(opciones_consultas,2,stdin);cambio(opciones_consultas);fflush(stdin);
 					if(opciones_consultas[1]!='\0')
 						printf(" \n Esta opcion no es valida\n\n");	
@@ -365,12 +365,12 @@ int main ()
 							break;
 
 						case '2'://Dado un nombre de alumno buscar su(s) c�dula(s) asociada(s) y dem�s datos (sin�nimos para ubicar la c�dula que nos interesa).
-							printf("\n\tDado un nombre Buscar Cedulas asociadas\n\n");
+							printf("\n\tDado un nombre buscar cedulas asociadas\n\n");
 							C_NombreAlumno(Persona);
 							break;
 
 						case '3'://Dado un anyo y un lapso ubicar todos los cursos dictados ( nombre de curso, materia, cantidad de alumnos aprobados y reprobados)
-							printf("\n\tDado un Semestre mostrar cursos \n\n");
+							printf("\n\tDado un semestre mostrar cursos \n\n");
 							c_CursosDe(Materia,Curso,Persona);
 							break;
 
@@ -380,23 +380,23 @@ int main ()
 							break;
 
 						case '5'://Dado un codigo de curso mostrar todos los datos del mismo con la materia y los alumnos con sus notas
-							printf("\n\tTodos los cursos con Materia, Personas y notas \n\n");			
+							printf("\n\tTodos los cursos con materia, personas y notas \n\n");			
 							C_Cursos(Materia,Curso,Persona);
 							break;
 
 						case '6'://Dada una materia ( codigo ) mostrar los alumnos que la han aprobado (cedula, apellido y nombre con su nota )
-							printf("\n\tDada Materia mostrar alumnos aprobados \n\n");
+							printf("\n\tDada una materia mostrar alumnos aprobados \n\n");
 							C_Aprobados(Persona,Curso);
 							system("Pause");
 							break;
 
 						case '7'://Todos los cursos (con sus alumnos y notas) dictados en un periodo dado.
-							printf("\n\ttTodos los cursos De un periodo Con Personas y notas \n\n");
+							printf("\n\ttTodos los cursos de un periodo con personas y notas \n\n");
 							C_CursosPeriodo(Curso,Persona);
 							break;
 
 						case '8'://Dada una cedula mostrar todos los cursos con sus notas tomadas por esa persona
-							printf("\n\tDada una cedula mostrar Datos con cursos y notas \n\n");
+							printf("\n\tDada una cedula mostrar datos con cursos y notas \n\n");
 							C_Alumno(Persona);
 							break;
 
@@ -592,9 +592,9 @@ void Modificar_Materia(Materias **materia)
 								printf("\nDebe haber una descripcion ");
 							else
 								if (validar_numero(Respaldo->Descripcion_de_la_Materia))
-									printf("\tAdvertencia: la descripcion de la materia es Numerica\n");
+									printf("\tAdvertencia: La descripcion de la materia es Numerica\n");
 						}while(!strcmp(Respaldo->Descripcion_de_la_Materia,""));
-						printf("\nDescripcion de [%s] modificado a [%s]  ",Respaldo->Nombre_de_la_Materia,Respaldo->Descripcion_de_la_Materia);system("Pause");
+						printf("\nDescripcion de [%s] modificada a [%s]  ",Respaldo->Nombre_de_la_Materia,Respaldo->Descripcion_de_la_Materia);system("Pause");
 						break;
 
 					case '3'://Semestre
@@ -697,7 +697,7 @@ void Modificar_Persona(Personas **persona)
 							printf("\n Ingrese el nuevo nombre nombre y apellido de la persona: ");
 							fflush(stdin);fgets(Respaldo->nombre_apellido,40,stdin);cambio(Respaldo->nombre_apellido);fflush(stdin);
 							if (!strcmp(Respaldo->nombre_apellido,""))
-								printf("\nLa Persona debe tener un nombre ");
+								printf("\nLa persona debe tener un nombre ");
 							else
 								if (validar_numero(Respaldo->nombre_apellido))
 									printf("\t El nombre de la Persona es Numerico\n");
@@ -708,7 +708,7 @@ void Modificar_Persona(Personas **persona)
 
 					case '2'://Fecha de nacimiento
 						Ingresar_Fecha(&Respaldo->Fecha_de_Nacimiento.yyyy,&Respaldo->Fecha_de_Nacimiento.mm,&Respaldo->Fecha_de_Nacimiento.dd);
-						printf("\nFecha de nacimiento de [%i] modificado  ",Respaldo->cedula);system("Pause");
+						printf("\nFecha de nacimiento de [%i] modificada  ",Respaldo->cedula);system("Pause");
 						break;
 
 					case '3'://Direccion
@@ -719,9 +719,9 @@ void Modificar_Persona(Personas **persona)
 								printf("\nLa direccion debe tener un nombre ");
 							else
 								if (validar_numero(Respaldo->direccion))
-									printf("advertencia: la direcion es Numerica\n");
+									printf("Advertencia: La direcion es Numerica\n");
 						}while(!strcmp(Respaldo->direccion,""));
-						printf("\nDireccion de [%i] modificado a [%s]  ",Respaldo->cedula, Respaldo->direccion);system("Pause");
+						printf("\nDireccion de [%i] modificada a [%s]  ",Respaldo->cedula, Respaldo->direccion);system("Pause");
 						break;
 
 					default:
@@ -1253,7 +1253,7 @@ void C_NombreAlumno(Personas*consulta)
 void c_Materia(Materias*M,Cursos*cursosDados,Personas*PersonasInscritas)
 {
 	Personas *Aux;Participacion *Inscritoencurso; int CodigoDado,cursosdelamateria=0,Inscritos=0,Aprobados=0;
-	ingresarDato(&CodigoDado,"Codido de la materia",maxEntero,0);
+	ingresarDato(&CodigoDado,"Codio de la materia",maxEntero,0);
 	while (M && M->Codigo_de_la_Materia!=CodigoDado)
 		M=M->prx;
 	if(M)
@@ -1275,7 +1275,7 @@ void c_Materia(Materias*M,Cursos*cursosDados,Personas*PersonasInscritas)
 						if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
 						{
 							Inscritos++;
-							if(Inscritoencurso->nota>9)
+							if((Inscritoencurso->nota>9)&&((Inscritoencurso->status == 'N'))||(Inscritoencurso->status == 'n'))
 								Aprobados++;
 						}
 						Inscritoencurso=Inscritoencurso->prx;
@@ -1329,7 +1329,7 @@ void c_CursosDe(Materias*Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 						Inscritoencurso=Aux->Record;
 						while(Inscritoencurso)
 						{
-							if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+							if((Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)&&((Inscritoencurso->status == 'N'))||(Inscritoencurso->status == 'n'))
 							{
 								Inscritos++;
 								if(Inscritoencurso->nota>9)
@@ -1365,7 +1365,7 @@ void C_Aprobados(Personas* aprobado,Cursos* Cursomateria)
 				{
 					if (Aux->Codigo_del_curso==Cursomateria->Codigo_del_curso)
 					{
-						if(Aux->nota>9)
+						if((Aux->nota>9)&&((Aux->status == 'N')||(Aux->status == 'n')))
 						{
 							FormatoPersona(aprobado,false);
 							Aprobados++;
@@ -1412,7 +1412,7 @@ void C_Cursos(Materias* Mats,Cursos*cursosDados,Personas*PersonasInscritas)
 			Inscritoencurso=Aux->Record;
 			while(Inscritoencurso)
 			{
-				if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+				if((Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)&&((Inscritoencurso->status == 'N'))||(Inscritoencurso->status == 'n'))
 				{
 					Inscritos++;
 					FormatoPersona(Aux,false);
@@ -1451,7 +1451,7 @@ void C_CursosPeriodo(Cursos*cursosDados,Personas*PersonasInscritas)
 				Inscritoencurso=Aux->Record;
 				while(Inscritoencurso)
 				{
-					if(Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)
+					if((Inscritoencurso->Codigo_del_curso==cursosDados->Codigo_del_curso)&&((Inscritoencurso->status =='N')||(Inscritoencurso->status == 'n')))
 					{
 						Inscritos++;
 						FormatoPersona(Aux,false);
@@ -1790,7 +1790,7 @@ char IngresarEstatus()
 	char Estatus[12];
 	while(true)
 	{
-		printf("\n\tIntroduzca El estatus actual del Alumno(Normal,Inasistente,retirado)\n");
+		printf("\n\tIntroduzca el estatus actual del alumno(Normal,Inasistente,retirado)\n");
 		printf("\t:");
 		fflush(stdin);fgets(Estatus,11,stdin);fflush(stdin);
 		if(Estatus[1]!='\0')
@@ -1853,7 +1853,7 @@ void Agregar_Curso_persona(Personas *Listaper, Cursos *listacur, Materias *lista
 		 }else
 			printf("\tEste estudiante reprobo mas de 4 veces una materia\n\tPor lo que ya no puede ser inscrito en el instituto\n");
 		}else
-            printf("\tEse estudiante no se encuentra en el sistema\n");
+            printf("\tEste estudiante no se encuentra en el sistema\n");
 	}else
 		printf("\tNo se cumplen las condiciones para registrar a un estudiante en un curso\n");
 	system("pause");
@@ -2052,7 +2052,7 @@ void calificaciones(Participacion* calificacion)
 {if (calificacion!=NULL)
 		{
 			Participacion* inscripcion=calificacion;
-			printf("\n\t    inscrito en [Curso] (nota) 'Status'\n");
+			printf("\n\t    Inscrito en [Curso] (nota) 'Status'\n");
 			while (inscripcion)
 			{
 				printf("\t\t\t[%d] (%i/20)  '%c'\n",inscripcion->Codigo_del_curso,inscripcion->nota,inscripcion->status);
@@ -2060,7 +2060,7 @@ void calificaciones(Participacion* calificacion)
 			}printf("\n");
 		}
 		else
-			printf("\n\t sin inscripciones\n\n");}
+			printf("\n\t Sin inscripciones\n\n");}
 
 int Exportar_Materias(Materias *nodos,char ruta[])
 {/* Exporta en un archivo el contenido de las materias*/
