@@ -1,0 +1,6 @@
+2001,Programacion,5,2,Fundamentos programacion
+2002,Calculo II,5,2,Derivadas integrales
+2003,Lenguaje,2,2,lectura y escritura
+3001,Programacion,4,3,Estructura de datos
+3002,Calculo III,4,3,Ecuaciones diferencia
+3003,estudios gene,2,3,Ciencia Tecnologia
