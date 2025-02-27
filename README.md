@@ -1,80 +1,96 @@
 # CentroDeEstudiantes
+Este es el proyecto academico desarrollado en la materia de algoritmos y programacion 2, basado en el lenguaje de programacion C, el cual tiene como objetivo la gestion de registros de estudiantes, cursos y materias.
 
-## Project Overview and Purpose
+bajo la supervision del profesor: Omar Jesus Hernandez
+ 
 
-The `CentroDeEstudiantes` project is designed to manage student records, courses, and subjects. It provides functionalities to add, modify, and delete records for students, courses, and subjects. The project aims to facilitate the management of student information and academic records in an educational institution.
+## Descripción General y Propósito
 
-## Structures
+El proyecto `CentroDeEstudiantes` está diseñado para gestionar registros de estudiantes, cursos y materias en una institución educativa. Proporciona funcionalidades para agregar, modificar, eliminar y consultar información sobre estudiantes, cursos y materias. El objetivo principal es facilitar la administración académica y el seguimiento del desempeño estudiantil.
+
+## Estructuras
 
 ### Materias
 
-The `Materias` structure represents a subject in the educational institution. It includes the following fields:
-- `Codigo_de_la_Materia`: Unique code for the subject.
-- `Nombre_de_la_Materia`: Name of the subject.
-- `Descripcion_de_la_Materia`: Description of the subject.
-- `Semestre`: Semester in which the subject is offered.
-- `SemestreEnRomano`: Semester in Roman numerals.
-- `Creditos_de_la_Materia`: Number of credits for the subject.
+La estructura `Materias` representa una asignatura académica e incluye los siguientes campos:
+- `Codigo_de_la_Materia`: Código único de la materia (no se puede repetir).
+- `Nombre_de_la_Materia`: Nombre de la materia (no debe estar vacío).
+- `Descripcion_de_la_Materia`: Descripción detallada de la materia (no debe estar vacía).
+- `Semestre`: Semestre en el que se ofrece la materia (rango: 1 a 10).
+- `SemestreEnRomano`: Representación del semestre en números romanos (I a X).
+- `Creditos_de_la_Materia`: Créditos académicos de la materia (rango: 2 a 5).
+- `prx`: Puntero a la siguiente materia en la lista.
 
 ### Cursos
 
-The `Cursos` structure represents a course in the educational institution. It includes the following fields:
-- `Codigo_del_curso`: Unique code for the course.
-- `Codigo_de_la_Materia`: Code of the subject associated with the course.
-- `AAAA`: Year in which the course is offered.
-- `lapso`: Term in which the course is offered.
+La estructura `Cursos` representa un curso específico de una materia y incluye:
+- `Codigo_del_curso`: Código único del curso.
+- `Codigo_de_la_Materia`: Código de la materia asociada (debe existir previamente).
+- `AAAA`: Año en que se ofrece el curso (rango: 1900 a 2100).
+- `lapso`: Período académico en que se ofrece (rango: 1 a 3).
+- `prx`: Puntero al siguiente curso en la lista.
 
 ### Personas
 
-The `Personas` structure represents a person (student) in the educational institution. It includes the following fields:
-- `cedula`: Unique identification number for the person.
-- `nombre_apellido`: Name and surname of the person.
-- `Fecha_de_Nacimiento`: Date of birth of the person.
-- `direccion`: Address of the person.
-- `Record`: Pointer to the participation records of the person.
+La estructura `Personas` representa a un estudiante e incluye:
+- `cedula`: Número de identificación único (cédula) del estudiante (no se puede modificar).
+- `nombre_apellido`: Nombre y apellido del estudiante.
+- `Fecha_de_Nacimiento`: Fecha de nacimiento del estudiante.
+- `direccion`: Dirección del estudiante.
+- `Record`: Puntero a la lista de participaciones del estudiante en cursos.
+- `prx`: Puntero a la siguiente persona en la lista.
 
 ### Participacion
 
-The `Participacion` structure represents the participation of a person in a course. It includes the following fields:
-- `Codigo_del_curso`: Code of the course in which the person is participating.
-- `nota`: Grade obtained by the person in the course.
-- `status`: Status of the person's participation in the course.
-- `prx`: Pointer to the next participation record.
+La estructura `Participacion` representa la inscripción de un estudiante en un curso:
+- `Codigo_del_curso`: Código del curso en el que participa el estudiante.
+- `nota`: Calificación obtenida por el estudiante (0-20).
+- `status`: Estado del estudiante en el curso ('N' normal, 'I' inasistente, 'R' retirado).
+- `prx`: Puntero a la siguiente participación del estudiante.
 
-## Main Functions
+## Funciones Principales
 
-### Adding Records
+### Agregar Registros
 
-The project provides functions to add records for subjects, courses, and persons. These functions include:
-- `Agregar_Materia`: Adds a new subject to the list of subjects.
-- `Agregar_Curso`: Adds a new course to the list of courses.
-- `Agregar_Persona`: Adds a new person to the list of persons.
+El proyecto proporciona funciones para agregar nuevos registros:
+- `Agregar_Materia`: Agrega una nueva materia a la lista de materias.
+- `Agregar_Curso`: Agrega un nuevo curso a la lista de cursos.
+- `Agregar_Persona`: Agrega un nuevo estudiante a la lista de personas.
+- `Agregar_Curso_persona`: Inscribe a un estudiante en un curso.
 
-### Modifying Records
+### Modificar Registros
 
-The project provides functions to modify records for subjects, courses, and persons. These functions include:
-- `Modificar_Materia`: Modifies the details of an existing subject.
-- `Modificar_Curso`: Modifies the details of an existing course.
-- `Modificar_Persona`: Modifies the details of an existing person.
+El proyecto proporciona funciones para modificar registros existentes:
+- `Modificar_Materia`: Modifica los detalles de una materia existente.
+- `Modificar_Curso`: Modifica los detalles de un curso existente.
+- `Modificar_Persona`: Modifica los detalles de un estudiante existente.
+- `Modificar_Curso_persona`: Modifica la inscripción de un estudiante en un curso.
 
-### Deleting Records
+### Eliminar Registros
 
-The project provides functions to delete records for subjects, courses, and persons. These functions include:
-- `Eliminar_materia`: Deletes an existing subject and its associated courses.
-- `Eliminar_curso`: Deletes an existing course and its references in the system.
-- `Eliminar_persona`: Deletes an existing person and their references in the system.
+El proyecto proporciona funciones para eliminar registros:
+- `Eliminar_materia`: Elimina una materia y sus cursos asociados.
+- `Eliminar_curso`: Elimina un curso y sus referencias en el sistema.
+- `Eliminar_persona`: Elimina un estudiante y sus participaciones.
+- `Eliminar_curso_persona`: Elimina la participación de un estudiante en un curso.
 
-## Other Key Functions
+## Otras Funciones Importantes
 
-The project also includes other key functions to manage and query the records. These functions include:
-- `Consultar_materia`: Queries and displays the details of subjects.
-- `Consultar_curso`: Queries and displays the details of courses.
-- `Consultar_Personas`: Queries and displays the details of persons.
-- `C_NombreMateria`: Searches for subjects by name and displays their associated courses.
-- `C_NombreAlumno`: Searches for persons by name and displays their details.
-- `c_Materia`: Displays the details of a subject and its associated courses.
-- `c_CursosDePeriodo`: Displays the courses offered in a specific term.
-- `C_Aprobados`: Displays the persons who have passed a specific subject.
-- `C_Cursos`: Displays all courses and their associated persons and grades.
-- `C_CursosDeAnyoLapso`: Displays the courses offered in a specific year and term.
-- `C_Alumno`: Displays the courses and grades of a specific person.
+El proyecto también incluye funciones para consultar y generar reportes:
+- `Consultar_materia`: Consulta y muestra detalles de materias.
+- `Consultar_curso`: Consulta y muestra detalles de cursos.
+- `Consultar_Personas`: Consulta y muestra detalles de estudiantes.
+- `C_NombreMateria`: Busca materias por nombre y muestra sus cursos asociados.
+- `C_NombreAlumno`: Busca estudiantes por nombre y muestra sus detalles.
+- `c_Materia`: Muestra los detalles de una materia y sus cursos asociados.
+- `c_CursosDePeriodo`: Muestra los cursos ofrecidos en un semestre específico.
+- `C_Aprobados`: Muestra los estudiantes que han aprobado una materia.
+- `C_Cursos`: Muestra todos los cursos con sus estudiantes y calificaciones.
+- `C_CursosDeAnyoLapso`: Muestra los cursos de un año y lapso específicos.
+- `C_Alumno`: Muestra los cursos y calificaciones de un estudiante específico.
+
+### Importación y Exportación
+
+El sistema permite guardar y cargar datos desde archivos:
+- `Exportar_Materias`, `Exportar_Cursos`, `Exportar_Personas`: Guardan datos en archivos.
+- `Importar_Materias`, `Importar_Cursos`, `Importar_Personas`: Cargan datos desde archivos.
